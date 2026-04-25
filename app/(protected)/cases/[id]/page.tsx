@@ -188,7 +188,7 @@ export default function CaseDetailPage() {
             Client: {record.client_name} | Type: {record.case_type}
           </Typography>
           <Box className="mt-3 flex flex-wrap gap-2">
-            <Chip label={record.status} color={record.status === "closed" ? "success" : "warning"} />
+            <Chip label={record.status} color={record.status === "closed" ? "default" : record.status === "ongoing" ? "success" : "warning"} />
             <Chip label={`Court: ${record.court}`} variant="outlined" />
             <Chip label={`Judge: ${record.judge}`} variant="outlined" />
           </Box>
@@ -328,7 +328,7 @@ export default function CaseDetailPage() {
                 <Box
                   key={`${event.type}-${event.date}-${index}`}
                   className="rounded-lg px-3 py-2"
-                  sx={{ backgroundColor: "rgba(0,95,115,0.08)" }}
+                  sx={{ backgroundColor: "rgba(0,33,71,0.05)", border: "none" }}
                 >
                   <Typography sx={{ fontWeight: 700 }}>
                     {event.type.toUpperCase()} - {new Date(event.date).toLocaleDateString()}
@@ -356,8 +356,8 @@ export default function CaseDetailPage() {
                   key={document._id}
                   className="rounded-lg px-3 py-2"
                   sx={{
-                    border: "1px solid rgba(0,0,0,0.08)",
-                    backgroundColor: "#fff",
+                    border: "none",
+                    backgroundColor: "rgba(0,33,71,0.02)",
                   }}
                 >
                   <Typography sx={{ fontWeight: 700 }}>{document.original_name}</Typography>

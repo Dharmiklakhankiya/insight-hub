@@ -23,19 +23,17 @@ type DashboardPayload = {
 function StatCard({
   label,
   value,
-  accent,
 }: {
   label: string;
   value: string;
-  accent: string;
 }) {
   return (
-    <Card elevation={0} sx={{ borderLeft: `6px solid ${accent}` }}>
+    <Card elevation={0} sx={{ height: "100%", bgcolor: "background.paper" }}>
       <CardContent>
-        <Typography color="text.secondary" variant="body2">
+        <Typography color="text.secondary" variant="body2" sx={{ fontFamily: "var(--font-inter)", fontWeight: 600 }}>
           {label}
         </Typography>
-        <Typography variant="h4" sx={{ mt: 1, fontWeight: 800 }}>
+        <Typography sx={{ mt: 1, fontWeight: 800, fontSize: "2.5rem", fontFamily: "var(--font-manrope)", color: "primary.main" }}>
           {value}
         </Typography>
       </CardContent>
@@ -119,28 +117,24 @@ export default function DashboardPage() {
           <StatCard
             label="Total Cases"
             value={String(data.analytics.totalCases)}
-            accent="#005f73"
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             label="Active Cases"
             value={String(data.analytics.activeCount)}
-            accent="#0a9396"
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             label="Closed Cases"
             value={String(data.analytics.closedCount)}
-            accent="#ca6702"
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatCard
             label="Avg Duration"
             value={`${Math.round(data.analytics.averageCaseDuration)} days`}
-            accent="#ae2012"
           />
         </Grid>
       </Grid>
@@ -160,8 +154,8 @@ export default function DashboardPage() {
                   key={insight}
                   className="rounded-lg px-3 py-2"
                   sx={{
-                    backgroundColor: "rgba(0,95,115,0.08)",
-                    border: "1px solid rgba(0,95,115,0.15)",
+                    backgroundColor: "rgba(0,33,71,0.05)",
+                    border: "none",
                   }}
                 >
                   <Typography>{insight}</Typography>

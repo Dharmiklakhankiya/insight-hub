@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, Manrope } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 
 import AppThemeProvider from "@/components/app-theme-provider";
 
@@ -10,10 +10,9 @@ const manrope = Manrope({
   subsets: ["latin"],
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
-  variable: "--font-ibm-plex-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const metadataBase = process.env.APP_URL
@@ -34,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${ibmPlexSans.variable} h-full antialiased`}
+      className={`${manrope.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <AppThemeProvider>

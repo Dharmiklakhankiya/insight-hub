@@ -12,31 +12,40 @@ export default function AppThemeProvider({
         palette: {
           mode: "light",
           primary: {
-            main: "#005f73",
+            main: "#002147",
+            light: "#2d476f",
+            dark: "#000a1e",
           },
           secondary: {
-            main: "#ca6702",
+            main: "#4c616c",
           },
           background: {
-            default: "#f8f3e9",
+            default: "#f8f9fa",
             paper: "#ffffff",
           },
           text: {
-            primary: "#1f2937",
+            primary: "#191c1d",
+            secondary: "#44474e",
           },
         },
         shape: {
-          borderRadius: 12,
+          borderRadius: 8,
         },
         typography: {
-          fontFamily: "var(--font-manrope), var(--font-ibm-plex-sans), sans-serif",
+          fontFamily: "var(--font-inter), sans-serif",
           h1: {
+            fontFamily: "var(--font-manrope), sans-serif",
             fontWeight: 800,
             letterSpacing: "-0.02em",
           },
           h2: {
+            fontFamily: "var(--font-manrope), sans-serif",
             fontWeight: 700,
             letterSpacing: "-0.02em",
+          },
+          h3: {
+            fontFamily: "var(--font-manrope), sans-serif",
+            fontWeight: 700,
           },
           button: {
             textTransform: "none",
@@ -47,7 +56,17 @@ export default function AppThemeProvider({
           MuiCard: {
             styleOverrides: {
               root: {
-                border: "1px solid rgba(0,0,0,0.06)",
+                border: "none",
+                boxShadow: "0px 4px 20px rgba(25, 28, 29, 0.05)",
+                backgroundColor: "#ffffff",
+              },
+            },
+          },
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                borderRadius: 6,
+                boxShadow: "none",
               },
             },
           },

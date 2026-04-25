@@ -130,7 +130,7 @@ export default function LoginPage() {
         className="px-6 py-8"
         sx={{
           background:
-            "linear-gradient(130deg, rgba(0,95,115,0.95) 0%, rgba(10,147,150,0.84) 55%, rgba(202,103,2,0.9) 100%)",
+            "linear-gradient(130deg, rgba(0,10,30,1) 0%, rgba(0,33,71,1) 100%)",
           color: "white",
         }}
       >

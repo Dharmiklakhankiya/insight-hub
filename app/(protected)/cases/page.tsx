@@ -75,10 +75,14 @@ function statusColor(status: CaseItem["status"]):
   | "error"
   | "warning" {
   if (status === "closed") {
-    return "success";
+    return "default";
   }
 
   if (status === "ongoing") {
+    return "success";
+  }
+
+  if (status === "pending") {
     return "warning";
   }
 

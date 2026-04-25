@@ -2,6 +2,7 @@
 
 import {
   Alert,
+  Box,
   Card,
   CardContent,
   CircularProgress,
@@ -140,9 +141,16 @@ export default function AnalyticsPage() {
           </Typography>
           <Stack spacing={1}>
             {data.insights.map((insight) => (
-              <Alert severity="info" key={insight}>
-                {insight}
-              </Alert>
+              <Box
+                key={insight}
+                className="rounded-lg px-3 py-2"
+                sx={{
+                  backgroundColor: "rgba(0,33,71,0.05)",
+                  border: "none",
+                }}
+              >
+                <Typography>{insight}</Typography>
+              </Box>
             ))}
           </Stack>
         </CardContent>
