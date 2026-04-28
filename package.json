@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:unit": "vitest run --dir tests/unit",
     "test:integration": "vitest run --dir tests/integration",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write .",
+    "check": "prettier --check ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -26,7 +28,6 @@
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "vitest": "^4.1.4",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -39,7 +40,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "prettier": "^3.8.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }
