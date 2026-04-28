@@ -404,71 +404,139 @@ export default async function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="max-w-2xl">
+        <div className="mb-16">
           <div className="text-sm font-bold uppercase tracking-[0.24em] text-slate-500">
             Testimonials
           </div>
-          <h2 className="mt-4 font-heading text-4xl font-extrabold text-slate-950">
+          <h2 className="mt-4 font-heading text-5xl font-extrabold text-slate-950">
             Trusted by professionals who manage high-stakes cases.
           </h2>
         </div>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[
-            {
-              quote:
-                "InsightHub replaced three systems and reduced our case retrieval time dramatically.",
-              author: "Senior Partner, Litigation Firm",
-            },
-            {
-              quote: "The audit trail alone justified the adoption for our compliance team.",
-              author: "Head of Legal Ops",
-            },
-            {
-              quote: "We finally have visibility across every active matter.",
-              author: "Corporate Counsel",
-            },
-            {
-              quote:
-                "Implementation was seamless. Our team was productive within days, not weeks.",
-              author: "Managing Director, Corporate Legal",
-            },
-            {
-              quote:
-                "The search functionality alone saves us hours every week. It's a game-changer.",
-              author: "Senior Associate, IP Practice",
-            },
-            {
-              quote:
-                "Our clients love how quickly we can now surface case history and documents.",
-              author: "Partner, Regulatory Practice",
-            },
-            {
-              quote:
-                "Role-based access means partners and paralegals see exactly what they need.",
-              author: "COO, Mid-Market Firm",
-            },
-            {
-              quote:
-                "We reduced document errors by 40% thanks to the structured filing system.",
-              author: "Operations Manager",
-            },
-            {
-              quote:
-                "A single source of truth for every active matter. Finally.",
-              author: "Chief Operating Officer",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
-            >
-              <p className="leading-7 text-slate-700">"{item.quote}"</p>
-              <div className="mt-4 text-sm font-semibold text-slate-500">
-                {item.author}
+        <div className="space-y-8">
+          {/* Featured Testimonial */}
+          <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-10 shadow-lg">
+            <div className="flex gap-1 mb-6">
+              {[...Array(5)].map((_, i) => (
+                <span key={i} className="text-amber-400 text-lg">★</span>
+              ))}
+            </div>
+            <p className="font-heading text-2xl font-bold leading-relaxed text-slate-950 mb-8 italic">
+              "InsightHub replaced three systems and reduced our case retrieval time dramatically."
+            </p>
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-2xl bg-slate-950 flex items-center justify-center text-white font-heading font-bold text-sm">
+                SP
+              </div>
+              <div>
+                <div className="font-heading font-bold text-slate-950">Senior Partner</div>
+                <div className="text-sm text-slate-500">Litigation Firm</div>
               </div>
             </div>
-          ))}
+          </div>
+
+          {/* Grid of Additional Testimonials */}
+          <div className="grid gap-6 md:grid-cols-2">
+            {[
+              {
+                quote: "The audit trail alone justified the adoption for our compliance team.",
+                author: "Head of Legal Ops",
+                role: "Compliance & Risk",
+                featured: true,
+              },
+              {
+                quote:
+                  "Implementation was seamless. Our team was productive within days, not weeks.",
+                author: "Managing Director",
+                role: "Corporate Legal",
+              },
+              {
+                quote:
+                  "The search functionality alone saves us hours every week. It's a game-changer.",
+                author: "Senior Associate",
+                role: "IP Practice",
+              },
+              {
+                quote:
+                  "Our clients love how quickly we can now surface case history and documents.",
+                author: "Partner",
+                role: "Regulatory Practice",
+              },
+              {
+                quote:
+                  "Role-based access means partners and paralegals see exactly what they need.",
+                author: "COO",
+                role: "Mid-Market Firm",
+              },
+              {
+                quote:
+                  "We reduced document errors by 40% thanks to the structured filing system.",
+                author: "Operations Manager",
+                role: "Legal Operations",
+              },
+            ].map((item, i) => (
+              <div
+                key={i}
+                className={`rounded-2xl p-6 border ${
+                  item.featured
+                    ? "border-slate-200 bg-slate-950 text-white"
+                    : "border-slate-200 bg-white"
+                } shadow-sm hover:shadow-md transition-shadow`}
+              >
+                <div className="flex gap-1 mb-4">
+                  {[...Array(5)].map((_, j) => (
+                    <span
+                      key={j}
+                      className={`text-lg ${
+                        item.featured ? "text-amber-300" : "text-amber-400"
+                      }`}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+                <p
+                  className={`leading-7 mb-6 ${
+                    item.featured
+                      ? "text-white/90"
+                      : "text-slate-700"
+                  }`}
+                >
+                  "{item.quote}"
+                </p>
+                <div className={`text-sm font-semibold ${
+                  item.featured ? "text-white/70" : "text-slate-500"
+                }`}>
+                  {item.author}
+                </div>
+                <div
+                  className={`text-xs uppercase tracking-widest ${
+                    item.featured
+                      ? "text-white/50"
+                      : "text-slate-400"
+                  }`}
+                >
+                  {item.role}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Social Proof Section */}
+          <div className="mt-12 pt-8 border-t border-slate-200 text-center">
+            <div className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-6">
+              Trusted by leading legal firms
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-8 opacity-40">
+              {["Litigation Partners", "Corporate Legal Group", "Regulatory Counsel"].map(
+                (name) => (
+                  <div key={name} className="text-sm font-semibold text-slate-600">
+                    {name}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
