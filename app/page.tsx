@@ -89,9 +89,7 @@ export default async function Home() {
       <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/75 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
           <Link href="#top" className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-950/20">
-              <GavelOutlined fontSize="small" />
-            </span>
+            <img src="/icon.svg" alt="InsightHub" className="h-10 w-10" />
             <span className="flex flex-col leading-tight">
               <span className="font-heading text-xl font-extrabold tracking-tight text-slate-950">
                 InsightHub
@@ -713,9 +711,7 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[1.1fr_0.9fr_0.9fr] lg:px-8">
           <div>
             <div className="flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white">
-                <GavelOutlined fontSize="small" />
-              </span>
+              <img src="/icon.svg" alt="InsightHub" className="h-10 w-10" />
               <div>
                 <div className="font-heading text-xl font-extrabold text-slate-950">InsightHub</div>
                 <div className="text-sm text-slate-500">Legal intelligence workspace</div>
