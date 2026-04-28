@@ -89,7 +89,9 @@ export default async function Home() {
       <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/75 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
           <Link href="#top" className="flex items-center gap-3">
-            <img src="/icon.svg" alt="InsightHub" className="h-10 w-10" />
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-950/20">
+              <GavelOutlined fontSize="small" />
+            </span>
             <span className="flex flex-col leading-tight">
               <span className="font-heading text-xl font-extrabold tracking-tight text-slate-950">
                 InsightHub
@@ -475,44 +477,39 @@ export default async function Home() {
             ].map((item, i) => (
               <div
                 key={i}
-                className={`rounded-2xl p-6 border ${
-                  item.featured
+                className={`rounded-2xl p-6 border ${item.featured
                     ? "border-slate-200 bg-slate-950 text-white"
                     : "border-slate-200 bg-white"
-                } shadow-sm hover:shadow-md transition-shadow`}
+                  } shadow-sm hover:shadow-md transition-shadow`}
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, j) => (
                     <span
                       key={j}
-                      className={`text-lg ${
-                        item.featured ? "text-amber-300" : "text-amber-400"
-                      }`}
+                      className={`text-lg ${item.featured ? "text-amber-300" : "text-amber-400"
+                        }`}
                     >
                       ★
                     </span>
                   ))}
                 </div>
                 <p
-                  className={`leading-7 mb-6 ${
-                    item.featured
+                  className={`leading-7 mb-6 ${item.featured
                       ? "text-white/90"
                       : "text-slate-700"
-                  }`}
+                    }`}
                 >
                   "{item.quote}"
                 </p>
-                <div className={`text-sm font-semibold ${
-                  item.featured ? "text-white/70" : "text-slate-500"
-                }`}>
+                <div className={`text-sm font-semibold ${item.featured ? "text-white/70" : "text-slate-500"
+                  }`}>
                   {item.author}
                 </div>
                 <div
-                  className={`text-xs uppercase tracking-widest ${
-                    item.featured
+                  className={`text-xs uppercase tracking-widest ${item.featured
                       ? "text-white/50"
                       : "text-slate-400"
-                  }`}
+                    }`}
                 >
                   {item.role}
                 </div>
@@ -711,7 +708,9 @@ export default async function Home() {
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-12 lg:grid-cols-[1.1fr_0.9fr_0.9fr] lg:px-8">
           <div>
             <div className="flex items-center gap-3">
-              <img src="/icon.svg" alt="InsightHub" className="h-10 w-10" />
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-950/20">
+                <GavelOutlined fontSize="small" />
+              </span>             
               <div>
                 <div className="font-heading text-xl font-extrabold text-slate-950">InsightHub</div>
                 <div className="text-sm text-slate-500">Legal intelligence workspace</div>
