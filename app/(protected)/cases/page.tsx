@@ -67,13 +67,9 @@ function mapZodErrors(error: ZodError): Record<string, string> {
   }, {});
 }
 
-function statusColor(status: CaseItem["status"]):
-  | "default"
-  | "primary"
-  | "secondary"
-  | "success"
-  | "error"
-  | "warning" {
+function statusColor(
+  status: CaseItem["status"],
+): "default" | "primary" | "secondary" | "success" | "error" | "warning" {
   if (status === "closed") {
     return "default";
   }
@@ -128,7 +124,9 @@ export default function CasesPage() {
       params.set("page", "1");
       params.set("limit", "20");
 
-      const response = await apiGet<PaginatedCases>(`/api/cases?${params.toString()}`);
+      const response = await apiGet<PaginatedCases>(
+        `/api/cases?${params.toString()}`,
+      );
       setListData(response);
     } catch {
       setListError("Failed to load cases.");
@@ -276,14 +274,19 @@ export default function CasesPage() {
 
           <Stack component="form" spacing={2} onSubmit={handleCreateCase}>
             {createError ? <Alert severity="error">{createError}</Alert> : null}
-            {createSuccess ? <Alert severity="success">{createSuccess}</Alert> : null}
+            {createSuccess ? (
+              <Alert severity="success">{createSuccess}</Alert>
+            ) : null}
 
             <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
               <TextField
                 label="Title"
                 value={caseForm.title}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, title: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    title: event.target.value,
+                  }))
                 }
                 error={Boolean(formErrors.title)}
                 helperText={formErrors.title}
@@ -294,7 +297,10 @@ export default function CasesPage() {
                 label="Client Name"
                 value={caseForm.client_name}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, client_name: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    client_name: event.target.value,
+                  }))
                 }
                 error={Boolean(formErrors.client_name)}
                 helperText={formErrors.client_name}
@@ -308,7 +314,10 @@ export default function CasesPage() {
                 label="Case Type"
                 value={caseForm.case_type}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, case_type: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    case_type: event.target.value,
+                  }))
                 }
                 error={Boolean(formErrors.case_type)}
                 helperText={formErrors.case_type}
@@ -319,7 +328,10 @@ export default function CasesPage() {
                 label="Court"
                 value={caseForm.court}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, court: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    court: event.target.value,
+                  }))
                 }
                 error={Boolean(formErrors.court)}
                 helperText={formErrors.court}
@@ -330,7 +342,10 @@ export default function CasesPage() {
                 label="Judge"
                 value={caseForm.judge}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, judge: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    judge: event.target.value,
+                  }))
                 }
                 error={Boolean(formErrors.judge)}
                 helperText={formErrors.judge}
@@ -379,7 +394,10 @@ export default function CasesPage() {
                 type="date"
                 value={caseForm.filing_date}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, filing_date: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    filing_date: event.target.value,
+                  }))
                 }
                 slotProps={{
                   inputLabel: {
@@ -395,7 +413,10 @@ export default function CasesPage() {
                 type="date"
                 value={caseForm.closing_date}
                 onChange={(event) =>
-                  setCaseForm((prev) => ({ ...prev, closing_date: event.target.value }))
+                  setCaseForm((prev) => ({
+                    ...prev,
+                    closing_date: event.target.value,
+                  }))
                 }
                 slotProps={{
                   inputLabel: {

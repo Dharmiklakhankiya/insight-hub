@@ -27,15 +27,27 @@ describe("uploadPolicy fileFilter", () => {
 
     expect(multerFactory).toHaveBeenCalled();
     const policy = uploadPolicy as {
-      fileFilter: (req: any, file: { mimetype: string; fieldname: string }, cb: (err: any, ok?: boolean) => void) => void;
+      fileFilter: (
+        req: any,
+        file: { mimetype: string; fieldname: string },
+        cb: (err: any, ok?: boolean) => void,
+      ) => void;
     };
 
     const allowCb = vi.fn();
-    policy.fileFilter({}, { mimetype: "application/pdf", fieldname: "file" }, allowCb);
+    policy.fileFilter(
+      {},
+      { mimetype: "application/pdf", fieldname: "file" },
+      allowCb,
+    );
     expect(allowCb).toHaveBeenCalledWith(null, true);
 
     const rejectCb = vi.fn();
-    policy.fileFilter({}, { mimetype: "text/plain", fieldname: "file" }, rejectCb);
+    policy.fileFilter(
+      {},
+      { mimetype: "text/plain", fieldname: "file" },
+      rejectCb,
+    );
     const [firstArg] = rejectCb.mock.calls[0];
     expect(firstArg).toBeInstanceOf(FakeMulterError);
   });

@@ -1,9 +1,6 @@
 import { type NextRequest } from "next/server";
 
-import {
-  AUTH_COOKIE_NAME,
-  USER_ROLES,
-} from "@/lib/constants";
+import { AUTH_COOKIE_NAME, USER_ROLES } from "@/lib/constants";
 import {
   type SessionPayload,
   type UserRole,

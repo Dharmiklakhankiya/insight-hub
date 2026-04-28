@@ -18,17 +18,17 @@ A full-stack legal case management platform built with **Next.js 16**, **MongoDB
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| UI | MUI (Material UI) v9 + Tailwind CSS v4 |
-| Database | MongoDB via Mongoose |
-| Auth | JWT (`jsonwebtoken`) + `bcryptjs` |
-| Validation | Zod |
-| File uploads | Multer |
-| HTTP client | Axios |
-| Testing | Vitest |
+| Layer        | Technology                             |
+| ------------ | -------------------------------------- |
+| Framework    | Next.js 16 (App Router)                |
+| Language     | TypeScript                             |
+| UI           | MUI (Material UI) v9 + Tailwind CSS v4 |
+| Database     | MongoDB via Mongoose                   |
+| Auth         | JWT (`jsonwebtoken`) + `bcryptjs`      |
+| Validation   | Zod                                    |
+| File uploads | Multer                                 |
+| HTTP client  | Axios                                  |
+| Testing      | Vitest                                 |
 
 ---
 
@@ -106,72 +106,75 @@ Open [http://localhost:3000](http://localhost:3000) in your browser. You will be
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start the Next.js development server |
-| `pnpm build` | Build for production |
-| `pnpm start` | Start the production server |
-| `pnpm lint` | Run ESLint |
-| `pnpm test` | Run all tests with Vitest |
-| `pnpm test:unit` | Run unit tests only |
-| `pnpm test:integration` | Run integration tests only |
-| `pnpm test:coverage` | Run tests with coverage report |
+| Command                 | Description                          |
+| ----------------------- | ------------------------------------ |
+| `pnpm dev`              | Start the Next.js development server |
+| `pnpm build`            | Build for production                 |
+| `pnpm start`            | Start the production server          |
+| `pnpm lint`             | Run ESLint                           |
+| `pnpm test`             | Run all tests with Vitest            |
+| `pnpm test:unit`        | Run unit tests only                  |
+| `pnpm test:integration` | Run integration tests only           |
+| `pnpm test:coverage`    | Run tests with coverage report       |
 
 ---
 
 ## API Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/auth/login` | Log in and receive auth cookie |
-| `POST` | `/api/auth/logout` | Clear auth cookie |
-| `GET` | `/api/auth/me` | Get current authenticated user |
-| `GET` | `/api/csrf` | Get CSRF token |
-| `GET` | `/api/cases` | List cases |
-| `POST` | `/api/cases` | Create a new case |
-| `GET` | `/api/cases/[id]` | Get a single case |
-| `PATCH` | `/api/cases/[id]` | Update a case |
-| `DELETE` | `/api/cases/[id]` | Delete a case |
-| `POST` | `/api/cases/[id]/documents` | Upload a document to a case |
-| `GET` | `/api/analytics` | Get analytics summary |
-| `GET` | `/api/search` | Full-text search across cases |
+| Method   | Path                        | Description                    |
+| -------- | --------------------------- | ------------------------------ |
+| `POST`   | `/api/auth/login`           | Log in and receive auth cookie |
+| `POST`   | `/api/auth/logout`          | Clear auth cookie              |
+| `GET`    | `/api/auth/me`              | Get current authenticated user |
+| `GET`    | `/api/csrf`                 | Get CSRF token                 |
+| `GET`    | `/api/cases`                | List cases                     |
+| `POST`   | `/api/cases`                | Create a new case              |
+| `GET`    | `/api/cases/[id]`           | Get a single case              |
+| `PATCH`  | `/api/cases/[id]`           | Update a case                  |
+| `DELETE` | `/api/cases/[id]`           | Delete a case                  |
+| `POST`   | `/api/cases/[id]/documents` | Upload a document to a case    |
+| `GET`    | `/api/analytics`            | Get analytics summary          |
+| `GET`    | `/api/search`               | Full-text search across cases  |
 
 ---
 
 ## Data Models
 
 ### User
-| Field | Type | Notes |
-|---|---|---|
-| `name` | String | 2–80 chars |
-| `email` | String | Unique, lowercase |
-| `passwordHash` | String | bcrypt hash |
-| `role` | `admin` \| `lawyer` \| `clerk` | Default: `clerk` |
+
+| Field          | Type                           | Notes             |
+| -------------- | ------------------------------ | ----------------- |
+| `name`         | String                         | 2–80 chars        |
+| `email`        | String                         | Unique, lowercase |
+| `passwordHash` | String                         | bcrypt hash       |
+| `role`         | `admin` \| `lawyer` \| `clerk` | Default: `clerk`  |
 
 ### Case
-| Field | Type | Notes |
-|---|---|---|
-| `title` | String | 3–140 chars |
-| `client_name` | String | 3–120 chars |
-| `case_type` | String | e.g. `Civil`, `Criminal` |
-| `court` | String | Court name |
-| `judge` | String | Judge name |
-| `status` | `ongoing` \| `pending` \| `closed` | — |
-| `assigned_lawyers` | String[] | At least one required |
-| `filing_date` | Date | — |
-| `closing_date` | Date | Optional |
-| `timeline` | TimelineEvent[] | `filing`, `hearing`, `adjournment`, `judgment` |
-| `created_by` | ObjectId | Ref → User |
+
+| Field              | Type                               | Notes                                          |
+| ------------------ | ---------------------------------- | ---------------------------------------------- |
+| `title`            | String                             | 3–140 chars                                    |
+| `client_name`      | String                             | 3–120 chars                                    |
+| `case_type`        | String                             | e.g. `Civil`, `Criminal`                       |
+| `court`            | String                             | Court name                                     |
+| `judge`            | String                             | Judge name                                     |
+| `status`           | `ongoing` \| `pending` \| `closed` | —                                              |
+| `assigned_lawyers` | String[]                           | At least one required                          |
+| `filing_date`      | Date                               | —                                              |
+| `closing_date`     | Date                               | Optional                                       |
+| `timeline`         | TimelineEvent[]                    | `filing`, `hearing`, `adjournment`, `judgment` |
+| `created_by`       | ObjectId                           | Ref → User                                     |
 
 ### Document
-| Field | Type | Notes |
-|---|---|---|
-| `case_id` | ObjectId | Ref → Case |
-| `tags` | String[] | At least one required |
-| `file_path` | String | Server-side path |
-| `mime_type` | String | PDF, DOCX, PNG, JPEG |
-| `original_name` | String | Original filename |
-| `uploaded_by` | ObjectId | Ref → User |
+
+| Field           | Type     | Notes                 |
+| --------------- | -------- | --------------------- |
+| `case_id`       | ObjectId | Ref → Case            |
+| `tags`          | String[] | At least one required |
+| `file_path`     | String   | Server-side path      |
+| `mime_type`     | String   | PDF, DOCX, PNG, JPEG  |
+| `original_name` | String   | Original filename     |
+| `uploaded_by`   | ObjectId | Ref → User            |
 
 ---
 

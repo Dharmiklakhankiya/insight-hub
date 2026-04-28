@@ -37,7 +37,9 @@ describe("auth.service", () => {
   });
 
   it("rejects duplicate registration", async () => {
-    findOneMock.mockReturnValue({ lean: vi.fn().mockResolvedValue({ _id: "x" }) });
+    findOneMock.mockReturnValue({
+      lean: vi.fn().mockResolvedValue({ _id: "x" }),
+    });
 
     await expect(
       registerUser({
@@ -46,7 +48,10 @@ describe("auth.service", () => {
         password: "StrongPass123",
         role: "lawyer",
       }),
-    ).rejects.toMatchObject<AppError>({ message: "Email is already registered", statusCode: 409 });
+    ).rejects.toMatchObject<AppError>({
+      message: "Email is already registered",
+      statusCode: 409,
+    });
 
     expect(createMock).not.toHaveBeenCalled();
   });
@@ -69,7 +74,10 @@ describe("auth.service", () => {
 
     expect(hashPasswordMock).toHaveBeenCalledWith("StrongPass123");
     expect(createMock).toHaveBeenCalledWith(
-      expect.objectContaining({ email: "neha@example.com", passwordHash: "hashed" }),
+      expect.objectContaining({
+        email: "neha@example.com",
+        passwordHash: "hashed",
+      }),
     );
     expect(signSessionTokenMock).toHaveBeenCalledWith({
       sub: "user-1",
@@ -92,7 +100,10 @@ describe("auth.service", () => {
 
     await expect(
       loginUser({ email: "missing@example.com", password: "StrongPass123" }),
-    ).rejects.toMatchObject<AppError>({ message: "Invalid credentials", statusCode: 401 });
+    ).rejects.toMatchObject<AppError>({
+      message: "Invalid credentials",
+      statusCode: 401,
+    });
   });
 
   it("fails login for password mismatch", async () => {
@@ -107,7 +118,10 @@ describe("auth.service", () => {
 
     await expect(
       loginUser({ email: "aarav@example.com", password: "WrongPass123" }),
-    ).rejects.toMatchObject<AppError>({ message: "Invalid credentials", statusCode: 401 });
+    ).rejects.toMatchObject<AppError>({
+      message: "Invalid credentials",
+      statusCode: 401,
+    });
   });
 
   it("logs in valid user", async () => {
@@ -120,7 +134,10 @@ describe("auth.service", () => {
     });
     comparePasswordMock.mockResolvedValue(true);
 
-    const result = await loginUser({ email: "ADMIN@EXAMPLE.COM", password: "StrongPass123" });
+    const result = await loginUser({
+      email: "ADMIN@EXAMPLE.COM",
+      password: "StrongPass123",
+    });
 
     expect(findOneMock).toHaveBeenCalledWith({ email: "admin@example.com" });
     expect(signSessionTokenMock).toHaveBeenCalledWith({

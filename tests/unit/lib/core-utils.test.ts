@@ -66,10 +66,15 @@ describe("request parsing", () => {
       body: JSON.stringify({ name: "Neha" }),
     });
 
-    await expect(parseJsonBody(request, schema)).resolves.toEqual({ name: "Neha" });
+    await expect(parseJsonBody(request, schema)).resolves.toEqual({
+      name: "Neha",
+    });
 
     const querySchema = z.object({ page: z.coerce.number().int() }).strict();
-    const parsed = parseQuery(new URLSearchParams([["page", "2"]]), querySchema);
+    const parsed = parseQuery(
+      new URLSearchParams([["page", "2"]]),
+      querySchema,
+    );
     expect(parsed.page).toBe(2);
   });
 
@@ -108,7 +113,10 @@ describe("rate limiting", () => {
 
   it("falls back to x-real-ip and unknown IP, and resets after window expiration", () => {
     const nowSpy = vi.spyOn(Date, "now");
-    nowSpy.mockReturnValueOnce(1000).mockReturnValueOnce(1001).mockReturnValueOnce(2100);
+    nowSpy
+      .mockReturnValueOnce(1000)
+      .mockReturnValueOnce(1001)
+      .mockReturnValueOnce(2100);
 
     const realIpRequest = {
       headers: new Headers({ "x-real-ip": "127.0.0.1" }),

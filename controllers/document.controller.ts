@@ -9,7 +9,10 @@ import {
   documentTagQuerySchema,
 } from "@/lib/validators/document.schema";
 import { objectIdSchema } from "@/lib/validators/common";
-import { listDocumentsByCase, uploadDocument } from "@/services/document.service";
+import {
+  listDocumentsByCase,
+  uploadDocument,
+} from "@/services/document.service";
 
 function parseTags(rawTags: FormDataEntryValue | null): string[] {
   if (typeof rawTags !== "string") {

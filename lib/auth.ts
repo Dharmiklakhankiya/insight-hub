@@ -18,7 +18,10 @@ export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
 }
 
-export async function comparePassword(password: string, hash: string): Promise<boolean> {
+export async function comparePassword(
+  password: string,
+  hash: string,
+): Promise<boolean> {
   return bcrypt.compare(password, hash);
 }
 
@@ -37,11 +40,19 @@ export function verifySessionToken(token: string): SessionPayload {
       issuer: "insight-hub",
     }) as JwtPayload;
 
-    if (typeof decoded.sub !== "string" || typeof decoded.role !== "string" || typeof decoded.email !== "string") {
+    if (
+      typeof decoded.sub !== "string" ||
+      typeof decoded.role !== "string" ||
+      typeof decoded.email !== "string"
+    ) {
       throw new AppError("Invalid session", 401);
     }
 
-    if (!(["admin", "lawyer", "clerk"] as const).includes(decoded.role as UserRole)) {
+    if (
+      !(["admin", "lawyer", "clerk"] as const).includes(
+        decoded.role as UserRole,
+      )
+    ) {
       throw new AppError("Invalid session role", 401);
     }
 
@@ -80,7 +91,10 @@ export async function getSessionFromCookies(): Promise<SessionPayload | null> {
   }
 }
 
-export function requireRole(userRole: UserRole, allowedRoles: UserRole[]): void {
+export function requireRole(
+  userRole: UserRole,
+  allowedRoles: UserRole[],
+): void {
   if (!allowedRoles.includes(userRole)) {
     throw new AppError("Forbidden", 403);
   }

@@ -4,7 +4,10 @@ import { errorResponse, successResponse } from "@/lib/api";
 import { requireSessionRole } from "@/lib/api-auth";
 import { validateCsrf } from "@/lib/csrf";
 import { parseJsonBody, parseQuery } from "@/lib/request";
-import { caseCreateSchema, caseUpdateSchema } from "@/lib/validators/case.schema";
+import {
+  caseCreateSchema,
+  caseUpdateSchema,
+} from "@/lib/validators/case.schema";
 import { objectIdSchema } from "@/lib/validators/common";
 import { searchQuerySchema } from "@/lib/validators/search.schema";
 import {
@@ -56,10 +59,7 @@ export async function handleGetCaseById(request: NextRequest, caseId: string) {
   }
 }
 
-export async function handleUpdateCase(
-  request: NextRequest,
-  caseId: string,
-) {
+export async function handleUpdateCase(request: NextRequest, caseId: string) {
   try {
     await validateCsrf(request);
     requireSessionRole(request, ["admin", "lawyer"]);
@@ -74,10 +74,7 @@ export async function handleUpdateCase(
   }
 }
 
-export async function handleDeleteCase(
-  request: NextRequest,
-  caseId: string,
-) {
+export async function handleDeleteCase(request: NextRequest, caseId: string) {
   try {
     await validateCsrf(request);
     requireSessionRole(request, ["admin", "lawyer"]);

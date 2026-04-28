@@ -52,7 +52,11 @@ export function errorResponse(error: unknown): NextResponse {
   );
 }
 
-export function assert(condition: unknown, message: string, statusCode = 400): asserts condition {
+export function assert(
+  condition: unknown,
+  message: string,
+  statusCode = 400,
+): asserts condition {
   if (!condition) {
     throw new AppError(message, statusCode);
   }

@@ -46,7 +46,9 @@ describe("next config", () => {
     const config = configModule.default;
 
     const headers = await config.headers?.();
-    const csp = headers?.[0].headers.find((h) => h.key === "Content-Security-Policy")?.value;
+    const csp = headers?.[0].headers.find(
+      (h) => h.key === "Content-Security-Policy",
+    )?.value;
     expect(csp).toContain("'unsafe-eval'");
     expect(config.poweredByHeader).toBe(false);
   });
@@ -58,7 +60,9 @@ describe("next config", () => {
     const config = configModule.default;
 
     const headers = await config.headers?.();
-    const csp = headers?.[0].headers.find((h) => h.key === "Content-Security-Policy")?.value;
+    const csp = headers?.[0].headers.find(
+      (h) => h.key === "Content-Security-Policy",
+    )?.value;
     expect(csp).not.toContain("'unsafe-eval'");
     expect(headers?.[0].source).toBe("/:path*");
   });

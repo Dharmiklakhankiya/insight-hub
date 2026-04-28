@@ -18,7 +18,11 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...rest }: PropsWithChildren<{ href: string }>) => (
+  default: ({
+    children,
+    href,
+    ...rest
+  }: PropsWithChildren<{ href: string }>) => (
     <a href={href} {...rest}>
       {children}
     </a>
@@ -47,7 +51,9 @@ describe("protected layout integration", () => {
 
     expect(screen.getByText("Insight Hub")).toBeInTheDocument();
     expect(screen.getByText("Protected Content")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Sign out" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Sign out" }),
+    ).toBeInTheDocument();
   });
 
   it("opens mobile drawer menu", () => {

@@ -1,9 +1,6 @@
 import { type NextRequest } from "next/server";
 
-import {
-  AUTH_COOKIE_NAME,
-  CSRF_COOKIE_NAME,
-} from "@/lib/constants";
+import { AUTH_COOKIE_NAME, CSRF_COOKIE_NAME } from "@/lib/constants";
 import { getAuthCookieOptions } from "@/lib/auth";
 import { requireSession } from "@/lib/api-auth";
 import { errorResponse, successResponse } from "@/lib/api";

@@ -96,7 +96,8 @@ export async function getAnalyticsSummary() {
       ]),
     ]);
 
-  const closedCount = statusGroups.find((item) => item._id === "closed")?.count ?? 0;
+  const closedCount =
+    statusGroups.find((item) => item._id === "closed")?.count ?? 0;
   const activeCount = totalCases - closedCount;
 
   const caseTypeDistribution = typeGroups.map((item) => ({

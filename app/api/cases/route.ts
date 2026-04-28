@@ -1,6 +1,9 @@
 import { type NextRequest } from "next/server";
 
-import { handleCreateCase, handleListCases } from "@/controllers/case.controller";
+import {
+  handleCreateCase,
+  handleListCases,
+} from "@/controllers/case.controller";
 
 export const dynamic = "force-dynamic";
 

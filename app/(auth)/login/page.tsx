@@ -111,7 +111,9 @@ export default function LoginPage() {
       router.push(nextPath);
       router.refresh();
     } catch {
-      setApiError("Authentication failed. Check your credentials and try again.");
+      setApiError(
+        "Authentication failed. Check your credentials and try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -138,7 +140,8 @@ export default function LoginPage() {
           Insight Hub
         </Typography>
         <Typography sx={{ opacity: 0.92, mt: 1 }}>
-          Legal intelligence, case operations, and analytics in one secure workspace.
+          Legal intelligence, case operations, and analytics in one secure
+          workspace.
         </Typography>
       </Box>
 
@@ -165,7 +168,10 @@ export default function LoginPage() {
                 label="Full Name"
                 value={registerForm.name}
                 onChange={(event) =>
-                  setRegisterForm((prev) => ({ ...prev, name: event.target.value }))
+                  setRegisterForm((prev) => ({
+                    ...prev,
+                    name: event.target.value,
+                  }))
                 }
                 error={Boolean(fieldErrors.name)}
                 helperText={fieldErrors.name}
@@ -178,7 +184,10 @@ export default function LoginPage() {
                 type="email"
                 value={registerForm.email}
                 onChange={(event) =>
-                  setRegisterForm((prev) => ({ ...prev, email: event.target.value }))
+                  setRegisterForm((prev) => ({
+                    ...prev,
+                    email: event.target.value,
+                  }))
                 }
                 error={Boolean(fieldErrors.email)}
                 helperText={fieldErrors.email}
@@ -228,7 +237,10 @@ export default function LoginPage() {
                 type="email"
                 value={loginForm.email}
                 onChange={(event) =>
-                  setLoginForm((prev) => ({ ...prev, email: event.target.value }))
+                  setLoginForm((prev) => ({
+                    ...prev,
+                    email: event.target.value,
+                  }))
                 }
                 error={Boolean(fieldErrors.email)}
                 helperText={fieldErrors.email}
@@ -241,7 +253,10 @@ export default function LoginPage() {
                 type="password"
                 value={loginForm.password}
                 onChange={(event) =>
-                  setLoginForm((prev) => ({ ...prev, password: event.target.value }))
+                  setLoginForm((prev) => ({
+                    ...prev,
+                    password: event.target.value,
+                  }))
                 }
                 error={Boolean(fieldErrors.password)}
                 helperText={fieldErrors.password}
@@ -251,7 +266,12 @@ export default function LoginPage() {
             </>
           )}
 
-          <Button type="submit" variant="contained" size="large" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={isSubmitting}
+          >
             {isSubmitting
               ? "Please wait..."
               : mode === "login"
@@ -262,7 +282,8 @@ export default function LoginPage() {
           <Divider />
 
           <Typography variant="body2" color="text.secondary">
-            This system enforces strict validation, CSRF checks, secure cookies, and role-based access.
+            This system enforces strict validation, CSRF checks, secure cookies,
+            and role-based access.
           </Typography>
         </Stack>
       </CardContent>

@@ -60,7 +60,11 @@ export default function CaseDetailPage() {
       const response = await apiGet<CaseDetailResponse>(`/api/cases/${caseId}`);
       setRecord(response.case);
       setStatus(response.case.status);
-      setClosingDate(response.case.closing_date ? response.case.closing_date.slice(0, 10) : "");
+      setClosingDate(
+        response.case.closing_date
+          ? response.case.closing_date.slice(0, 10)
+          : "",
+      );
     } catch {
       setError("Failed to load case details.");
     } finally {
@@ -106,7 +110,9 @@ export default function CaseDetailPage() {
 
     const parsed = caseUpdateSchema.safeParse(payload);
     if (!parsed.success) {
-      setUpdateError(parsed.error.issues[0]?.message ?? "Invalid case update data.");
+      setUpdateError(
+        parsed.error.issues[0]?.message ?? "Invalid case update data.",
+      );
       return;
     }
 
@@ -149,7 +155,10 @@ export default function CaseDetailPage() {
     formData.set("tags", tags.join(","));
 
     try {
-      await apiUpload<DocumentResponse>(`/api/cases/${caseId}/documents`, formData);
+      await apiUpload<DocumentResponse>(
+        `/api/cases/${caseId}/documents`,
+        formData,
+      );
       setSelectedFile(null);
       setFileTags("");
       setUploadSuccess("Document uploaded successfully.");
@@ -188,7 +197,16 @@ export default function CaseDetailPage() {
             Client: {record.client_name} | Type: {record.case_type}
           </Typography>
           <Box className="mt-3 flex flex-wrap gap-2">
-            <Chip label={record.status} color={record.status === "closed" ? "default" : record.status === "ongoing" ? "success" : "warning"} />
+            <Chip
+              label={record.status}
+              color={
+                record.status === "closed"
+                  ? "default"
+                  : record.status === "ongoing"
+                    ? "success"
+                    : "warning"
+              }
+            />
             <Chip label={`Court: ${record.court}`} variant="outlined" />
             <Chip label={`Judge: ${record.judge}`} variant="outlined" />
           </Box>
@@ -202,13 +220,17 @@ export default function CaseDetailPage() {
           </Typography>
           <Stack component="form" spacing={2} onSubmit={handleUpdateCase}>
             {updateError ? <Alert severity="error">{updateError}</Alert> : null}
-            {updateSuccess ? <Alert severity="success">{updateSuccess}</Alert> : null}
+            {updateSuccess ? (
+              <Alert severity="success">{updateSuccess}</Alert>
+            ) : null}
 
             <TextField
               select
               label="Status"
               value={status}
-              onChange={(event) => setStatus(event.target.value as CaseItem["status"])}
+              onChange={(event) =>
+                setStatus(event.target.value as CaseItem["status"])
+              }
             >
               <MenuItem value="ongoing">Ongoing</MenuItem>
               <MenuItem value="pending">Pending</MenuItem>
@@ -287,7 +309,9 @@ export default function CaseDetailPage() {
           </Typography>
           <Stack component="form" spacing={2} onSubmit={handleUpload}>
             {uploadError ? <Alert severity="error">{uploadError}</Alert> : null}
-            {uploadSuccess ? <Alert severity="success">{uploadSuccess}</Alert> : null}
+            {uploadSuccess ? (
+              <Alert severity="success">{uploadSuccess}</Alert>
+            ) : null}
 
             <Button variant="outlined" component="label">
               {selectedFile ? selectedFile.name : "Choose File"}
@@ -331,7 +355,8 @@ export default function CaseDetailPage() {
                   sx={{ backgroundColor: "rgba(0,33,71,0.05)", border: "none" }}
                 >
                   <Typography sx={{ fontWeight: 700 }}>
-                    {event.type.toUpperCase()} - {new Date(event.date).toLocaleDateString()}
+                    {event.type.toUpperCase()} -{" "}
+                    {new Date(event.date).toLocaleDateString()}
                   </Typography>
                   <Typography>{event.note}</Typography>
                 </Box>
@@ -360,11 +385,16 @@ export default function CaseDetailPage() {
                     backgroundColor: "rgba(0,33,71,0.02)",
                   }}
                 >
-                  <Typography sx={{ fontWeight: 700 }}>{document.original_name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {document.mime_type} | {new Date(document.createdAt).toLocaleString()}
+                  <Typography sx={{ fontWeight: 700 }}>
+                    {document.original_name}
                   </Typography>
-                  <Typography variant="body2">Tags: {document.tags.join(", ")}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {document.mime_type} |{" "}
+                    {new Date(document.createdAt).toLocaleString()}
+                  </Typography>
+                  <Typography variant="body2">
+                    Tags: {document.tags.join(", ")}
+                  </Typography>
                 </Box>
               ))}
             </Stack>

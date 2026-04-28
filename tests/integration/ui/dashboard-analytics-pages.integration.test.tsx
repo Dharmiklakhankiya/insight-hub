@@ -50,7 +50,9 @@ describe("dashboard and analytics pages integration", () => {
       expect(screen.getByText("Welcome back, Neha Singh")).toBeInTheDocument();
       expect(screen.getByText("Total Cases")).toBeInTheDocument();
       expect(screen.getByText("10")).toBeInTheDocument();
-      expect(screen.getByText("Most frequent case type is Commercial (4 cases).")).toBeInTheDocument();
+      expect(
+        screen.getByText("Most frequent case type is Commercial (4 cases)."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -62,7 +64,9 @@ describe("dashboard and analytics pages integration", () => {
     const { unmount } = render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No insights available yet.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No insights available yet."),
+      ).toBeInTheDocument();
     });
 
     unmount();
@@ -71,7 +75,9 @@ describe("dashboard and analytics pages integration", () => {
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Failed to load dashboard data.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to load dashboard data."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -87,7 +93,9 @@ describe("dashboard and analytics pages integration", () => {
       expect(screen.getByText("Commercial")).toBeInTheDocument();
       expect(screen.getByText("Lawyer Workload")).toBeInTheDocument();
       expect(screen.getByText("Neha")).toBeInTheDocument();
-      expect(screen.getByText("Most frequent case type is Commercial (4 cases).")).toBeInTheDocument();
+      expect(
+        screen.getByText("Most frequent case type is Commercial (4 cases)."),
+      ).toBeInTheDocument();
     });
 
     unmount();
@@ -101,8 +109,12 @@ describe("dashboard and analytics pages integration", () => {
     render(<AnalyticsPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No case type distribution data available.")).toBeInTheDocument();
-      expect(screen.getByText("No lawyer workload data available.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No case type distribution data available."),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("No lawyer workload data available."),
+      ).toBeInTheDocument();
       expect(screen.getByText("Fallback insight")).toBeInTheDocument();
     });
 

@@ -12,7 +12,14 @@ vi.mock("@/lib/client-api", () => ({
   apiPost: apiPostMock,
 }));
 vi.mock("next/link", () => ({
-  default: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
+  default: ({
+    children,
+    href,
+    ...rest
+  }: {
+    children: React.ReactNode;
+    href: string;
+  }) => (
     <a href={href} {...rest}>
       {children}
     </a>
@@ -33,7 +40,9 @@ function submitCreateCaseForm() {
 
 function setSearchStatus(value: string) {
   const searchForm = document.querySelectorAll("form")[0] as HTMLFormElement;
-  const statusInput = searchForm.querySelector("input.MuiSelect-nativeInput") as HTMLInputElement;
+  const statusInput = searchForm.querySelector(
+    "input.MuiSelect-nativeInput",
+  ) as HTMLInputElement;
   fireEvent.change(statusInput, { target: { value } });
 }
 
@@ -57,13 +66,21 @@ function fillCreateCaseForm(values: {
   const textInputs = form.querySelectorAll('input[type="text"]');
   const dateInputs = form.querySelectorAll('input[type="date"]');
 
-  fireEvent.change(textInputs[0] as HTMLInputElement, { target: { value: values.title } });
+  fireEvent.change(textInputs[0] as HTMLInputElement, {
+    target: { value: values.title },
+  });
   fireEvent.change(textInputs[1] as HTMLInputElement, {
     target: { value: values.clientName },
   });
-  fireEvent.change(textInputs[2] as HTMLInputElement, { target: { value: values.caseType } });
-  fireEvent.change(textInputs[3] as HTMLInputElement, { target: { value: values.court } });
-  fireEvent.change(textInputs[4] as HTMLInputElement, { target: { value: values.judge } });
+  fireEvent.change(textInputs[2] as HTMLInputElement, {
+    target: { value: values.caseType },
+  });
+  fireEvent.change(textInputs[3] as HTMLInputElement, {
+    target: { value: values.court },
+  });
+  fireEvent.change(textInputs[4] as HTMLInputElement, {
+    target: { value: values.judge },
+  });
   fireEvent.change(textInputs[5] as HTMLInputElement, {
     target: { value: values.assignedLawyers },
   });
@@ -145,18 +162,32 @@ describe("cases page integration", () => {
 
   it("renders empty state and filtered searches", async () => {
     apiGetMock
-      .mockResolvedValueOnce({ items: [], page: 1, limit: 20, total: 0, totalPages: 1 })
+      .mockResolvedValueOnce({
+        items: [],
+        page: 1,
+        limit: 20,
+        total: 0,
+        totalPages: 1,
+      })
       .mockResolvedValueOnce(listPayload);
 
     render(<CasesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No cases found for current filters.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No cases found for current filters."),
+      ).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByLabelText("Search"), { target: { value: "breach" } });
-    fireEvent.change(screen.getByLabelText("Court"), { target: { value: "Delhi" } });
-    fireEvent.change(screen.getByLabelText("Judge"), { target: { value: "Rao" } });
+    fireEvent.change(screen.getByLabelText("Search"), {
+      target: { value: "breach" },
+    });
+    fireEvent.change(screen.getByLabelText("Court"), {
+      target: { value: "Delhi" },
+    });
+    fireEvent.change(screen.getByLabelText("Judge"), {
+      target: { value: "Rao" },
+    });
     setSearchStatus("closed");
 
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
@@ -187,12 +218,20 @@ describe("cases page integration", () => {
       .spyOn(caseCreateSchema, "safeParse")
       .mockReturnValue(rootIssueResult as never);
 
-    apiGetMock.mockResolvedValueOnce({ items: [], page: 1, limit: 20, total: 0, totalPages: 1 });
+    apiGetMock.mockResolvedValueOnce({
+      items: [],
+      page: 1,
+      limit: 20,
+      total: 0,
+      totalPages: 1,
+    });
 
     render(<CasesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No cases found for current filters.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No cases found for current filters."),
+      ).toBeInTheDocument();
     });
 
     submitCreateCaseForm();
@@ -206,7 +245,13 @@ describe("cases page integration", () => {
 
   it("shows validation errors, create success, and create failure", async () => {
     apiGetMock
-      .mockResolvedValueOnce({ items: [], page: 1, limit: 20, total: 0, totalPages: 1 })
+      .mockResolvedValueOnce({
+        items: [],
+        page: 1,
+        limit: 20,
+        total: 0,
+        totalPages: 1,
+      })
       .mockResolvedValueOnce(listPayload)
       .mockResolvedValueOnce(listPayload);
     apiPostMock.mockResolvedValueOnce({ case: { _id: "new" } });
@@ -214,13 +259,16 @@ describe("cases page integration", () => {
     render(<CasesPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No cases found for current filters.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No cases found for current filters."),
+      ).toBeInTheDocument();
     });
 
     submitCreateCaseForm();
 
     await waitFor(() => {
-      const firstTextInput = getCreateCaseForm().querySelector('input[type="text"]');
+      const firstTextInput =
+        getCreateCaseForm().querySelector('input[type="text"]');
       expect(firstTextInput).toHaveAttribute("aria-invalid", "true");
       expect(apiPostMock).not.toHaveBeenCalled();
     });
@@ -235,9 +283,12 @@ describe("cases page integration", () => {
       filingDate: "2026-04-10",
     });
     setCreateStatus("closed");
-    fireEvent.change(getCreateCaseForm().querySelectorAll('input[type="date"]')[1], {
-      target: { value: "2026-04-20" },
-    });
+    fireEvent.change(
+      getCreateCaseForm().querySelectorAll('input[type="date"]')[1],
+      {
+        target: { value: "2026-04-20" },
+      },
+    );
 
     submitCreateCaseForm();
 
@@ -246,7 +297,9 @@ describe("cases page integration", () => {
         "/api/cases",
         expect.objectContaining({ title: "Corporate Breach" }),
       );
-      expect(screen.getByText("Case created successfully.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Case created successfully."),
+      ).toBeInTheDocument();
     });
 
     apiPostMock.mockRejectedValueOnce(new Error("create failed"));
@@ -261,9 +314,12 @@ describe("cases page integration", () => {
       filingDate: "2026-05-01",
     });
     setCreateStatus("pending");
-    fireEvent.change(getCreateCaseForm().querySelectorAll('input[type="date"]')[1], {
-      target: { value: "2026-05-20" },
-    });
+    fireEvent.change(
+      getCreateCaseForm().querySelectorAll('input[type="date"]')[1],
+      {
+        target: { value: "2026-05-20" },
+      },
+    );
 
     submitCreateCaseForm();
 

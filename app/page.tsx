@@ -103,16 +103,28 @@ export default async function Home() {
           </Link>
 
           <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
-            <Link href="#features" className="transition-colors hover:text-slate-950">
+            <Link
+              href="#features"
+              className="transition-colors hover:text-slate-950"
+            >
               Features
             </Link>
-            <Link href="#workflow" className="transition-colors hover:text-slate-950">
+            <Link
+              href="#workflow"
+              className="transition-colors hover:text-slate-950"
+            >
               Workflow
             </Link>
-            <Link href="#security" className="transition-colors hover:text-slate-950">
+            <Link
+              href="#security"
+              className="transition-colors hover:text-slate-950"
+            >
               Security
             </Link>
-            <Link href="#footer" className="transition-colors hover:text-slate-950">
+            <Link
+              href="#footer"
+              className="transition-colors hover:text-slate-950"
+            >
               Contact
             </Link>
           </nav>
@@ -128,7 +140,10 @@ export default async function Home() {
         </div>
       </header>
 
-      <section id="top" className="mx-auto max-w-7xl px-6 pb-20 pt-14 lg:px-8 lg:pb-28 lg:pt-20">
+      <section
+        id="top"
+        className="mx-auto max-w-7xl px-6 pb-20 pt-14 lg:px-8 lg:pb-28 lg:pt-20"
+      >
         <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-xs font-bold uppercase tracking-[0.22em] text-slate-700 shadow-sm">
@@ -141,8 +156,9 @@ export default async function Home() {
             </h1>
 
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
-              InsightHub gives law firms one secure place to manage cases, coordinate documents,
-              and surface analytics that help teams move faster with confidence.
+              InsightHub gives law firms one secure place to manage cases,
+              coordinate documents, and surface analytics that help teams move
+              faster with confidence.
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -163,9 +179,16 @@ export default async function Home() {
 
             <div className="mt-10 grid gap-4 sm:grid-cols-3">
               {stats.map((stat) => (
-                <div key={stat.label} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="text-3xl font-heading font-extrabold text-slate-950">{stat.value}</div>
-                  <div className="mt-1 text-sm text-slate-500">{stat.label}</div>
+                <div
+                  key={stat.label}
+                  className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+                >
+                  <div className="text-3xl font-heading font-extrabold text-slate-950">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-sm text-slate-500">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -197,9 +220,14 @@ export default async function Home() {
                     ["Closed this quarter", "91"],
                     ["Open alerts", "12"],
                   ].map(([label, value]) => (
-                    <div key={label} className="rounded-2xl border border-white/10 bg-white/6 p-4">
+                    <div
+                      key={label}
+                      className="rounded-2xl border border-white/10 bg-white/6 p-4"
+                    >
                       <div className="text-sm text-white/65">{label}</div>
-                      <div className="mt-2 text-3xl font-heading font-extrabold">{value}</div>
+                      <div className="mt-2 text-3xl font-heading font-extrabold">
+                        {value}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -215,8 +243,14 @@ export default async function Home() {
                       "Review hearing notes",
                       "Update assigned counsel",
                     ].map((item) => (
-                      <div key={item} className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3">
-                        <CheckCircleRounded fontSize="small" className="text-emerald-300" />
+                      <div
+                        key={item}
+                        className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3"
+                      >
+                        <CheckCircleRounded
+                          fontSize="small"
+                          className="text-emerald-300"
+                        />
                         <span className="text-sm text-white/88">{item}</span>
                       </div>
                     ))}
@@ -227,11 +261,17 @@ export default async function Home() {
               <div className="grid gap-4 bg-[#fbfaf8] p-6 sm:grid-cols-[1.1fr_0.9fr]">
                 <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-slate-500">Search snapshot</span>
-                    <SearchOutlined fontSize="small" className="text-slate-400" />
+                    <span className="text-sm font-semibold text-slate-500">
+                      Search snapshot
+                    </span>
+                    <SearchOutlined
+                      fontSize="small"
+                      className="text-slate-400"
+                    />
                   </div>
                   <div className="mt-4 rounded-2xl bg-slate-950 px-4 py-3 text-sm text-slate-100">
-                    <span className="text-slate-400">Query:</span> breach of contract filings
+                    <span className="text-slate-400">Query:</span> breach of
+                    contract filings
                   </div>
                   <div className="mt-4 space-y-3">
                     {[
@@ -239,19 +279,31 @@ export default async function Home() {
                       ["Atlas Holdings matter", "Pending • 4 attachments"],
                       ["State compliance review", "Closed • Judgment entered"],
                     ].map(([title, meta]) => (
-                      <div key={title} className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 px-4 py-3">
+                      <div
+                        key={title}
+                        className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 px-4 py-3"
+                      >
                         <div>
-                          <div className="font-semibold text-slate-950">{title}</div>
-                          <div className="mt-1 text-sm text-slate-500">{meta}</div>
+                          <div className="font-semibold text-slate-950">
+                            {title}
+                          </div>
+                          <div className="mt-1 text-sm text-slate-500">
+                            {meta}
+                          </div>
                         </div>
-                        <TrendingUpOutlined fontSize="small" className="mt-1 text-emerald-600" />
+                        <TrendingUpOutlined
+                          fontSize="small"
+                          className="mt-1 text-emerald-600"
+                        />
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <div className="text-sm font-semibold text-slate-500">Access governance</div>
+                  <div className="text-sm font-semibold text-slate-500">
+                    Access governance
+                  </div>
                   <div className="mt-4 space-y-3">
                     {[
                       "Role-based permissions",
@@ -259,8 +311,14 @@ export default async function Home() {
                       "Case-level file tagging",
                       "CSRF protected session flow",
                     ].map((item) => (
-                      <div key={item} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                        <CheckCircleRounded fontSize="small" className="text-slate-950" />
+                      <div
+                        key={item}
+                        className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-700"
+                      >
+                        <CheckCircleRounded
+                          fontSize="small"
+                          className="text-slate-950"
+                        />
                         {item}
                       </div>
                     ))}
@@ -282,7 +340,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="features" className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section
+        id="features"
+        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+      >
         <div className="max-w-2xl">
           <div className="text-sm font-bold uppercase tracking-[0.24em] text-slate-500">
             Platform overview
@@ -306,7 +367,9 @@ export default async function Home() {
                 <h3 className="mt-6 font-heading text-2xl font-extrabold text-slate-950">
                   {feature.title}
                 </h3>
-                <p className="mt-3 leading-7 text-slate-600">{feature.description}</p>
+                <p className="mt-3 leading-7 text-slate-600">
+                  {feature.description}
+                </p>
               </article>
             );
           })}
@@ -418,18 +481,23 @@ export default async function Home() {
           <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-10 shadow-lg">
             <div className="flex gap-1 mb-6">
               {[...Array(5)].map((_, i) => (
-                <span key={i} className="text-amber-400 text-lg">★</span>
+                <span key={i} className="text-amber-400 text-lg">
+                  ★
+                </span>
               ))}
             </div>
             <p className="font-heading text-2xl font-bold leading-relaxed text-slate-950 mb-8 italic">
-              "InsightHub replaced three systems and reduced our case retrieval time dramatically."
+              "InsightHub replaced three systems and reduced our case retrieval
+              time dramatically."
             </p>
             <div className="flex items-center gap-4">
               <div className="h-14 w-14 rounded-2xl bg-slate-950 flex items-center justify-center text-white font-heading font-bold text-sm">
                 SP
               </div>
               <div>
-                <div className="font-heading font-bold text-slate-950">Senior Partner</div>
+                <div className="font-heading font-bold text-slate-950">
+                  Senior Partner
+                </div>
                 <div className="text-sm text-slate-500">Litigation Firm</div>
               </div>
             </div>
@@ -439,7 +507,8 @@ export default async function Home() {
           <div className="grid gap-6 md:grid-cols-2">
             {[
               {
-                quote: "The audit trail alone justified the adoption for our compliance team.",
+                quote:
+                  "The audit trail alone justified the adoption for our compliance team.",
                 author: "Head of Legal Ops",
                 role: "Compliance & Risk",
                 featured: true,
@@ -477,39 +546,42 @@ export default async function Home() {
             ].map((item, i) => (
               <div
                 key={i}
-                className={`rounded-2xl p-6 border ${item.featured
+                className={`rounded-2xl p-6 border ${
+                  item.featured
                     ? "border-slate-200 bg-slate-950 text-white"
                     : "border-slate-200 bg-white"
-                  } shadow-sm hover:shadow-md transition-shadow`}
+                } shadow-sm hover:shadow-md transition-shadow`}
               >
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, j) => (
                     <span
                       key={j}
-                      className={`text-lg ${item.featured ? "text-amber-300" : "text-amber-400"
-                        }`}
+                      className={`text-lg ${
+                        item.featured ? "text-amber-300" : "text-amber-400"
+                      }`}
                     >
                       ★
                     </span>
                   ))}
                 </div>
                 <p
-                  className={`leading-7 mb-6 ${item.featured
-                      ? "text-white/90"
-                      : "text-slate-700"
-                    }`}
+                  className={`leading-7 mb-6 ${
+                    item.featured ? "text-white/90" : "text-slate-700"
+                  }`}
                 >
                   "{item.quote}"
                 </p>
-                <div className={`text-sm font-semibold ${item.featured ? "text-white/70" : "text-slate-500"
-                  }`}>
+                <div
+                  className={`text-sm font-semibold ${
+                    item.featured ? "text-white/70" : "text-slate-500"
+                  }`}
+                >
                   {item.author}
                 </div>
                 <div
-                  className={`text-xs uppercase tracking-widest ${item.featured
-                      ? "text-white/50"
-                      : "text-slate-400"
-                    }`}
+                  className={`text-xs uppercase tracking-widest ${
+                    item.featured ? "text-white/50" : "text-slate-400"
+                  }`}
                 >
                   {item.role}
                 </div>
@@ -523,19 +595,27 @@ export default async function Home() {
               Trusted by leading legal firms
             </div>
             <div className="flex flex-wrap items-center justify-center gap-8 opacity-40">
-              {["Litigation Partners", "Corporate Legal Group", "Regulatory Counsel"].map(
-                (name) => (
-                  <div key={name} className="text-sm font-semibold text-slate-600">
-                    {name}
-                  </div>
-                )
-              )}
+              {[
+                "Litigation Partners",
+                "Corporate Legal Group",
+                "Regulatory Counsel",
+              ].map((name) => (
+                <div
+                  key={name}
+                  className="text-sm font-semibold text-slate-600"
+                >
+                  {name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      <section id="workflow" className="mx-auto max-w-7xl px-6 py-6 lg:px-8 lg:py-12">
+      <section
+        id="workflow"
+        className="mx-auto max-w-7xl px-6 py-6 lg:px-8 lg:py-12"
+      >
         <div className="grid gap-6 rounded-[2rem] bg-slate-950 p-8 text-white lg:grid-cols-[0.95fr_1.05fr] lg:p-12">
           <div>
             <div className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-400">
@@ -545,21 +625,29 @@ export default async function Home() {
               A clean path from intake to final resolution.
             </h2>
             <p className="mt-4 max-w-xl text-white/70 leading-7">
-              The platform keeps every case organized, so teams can move from first filing to
-              closeout without losing context or documents along the way.
+              The platform keeps every case organized, so teams can move from
+              first filing to closeout without losing context or documents along
+              the way.
             </p>
           </div>
 
           <div className="grid gap-4">
             {workflow.map((item) => (
-              <div key={item.step} className="rounded-3xl border border-white/10 bg-white/6 p-5">
+              <div
+                key={item.step}
+                className="rounded-3xl border border-white/10 bg-white/6 p-5"
+              >
                 <div className="flex items-start gap-4">
                   <div className="rounded-2xl bg-white px-3 py-2 text-sm font-extrabold text-slate-950">
                     {item.step}
                   </div>
                   <div>
-                    <div className="font-heading text-xl font-extrabold">{item.title}</div>
-                    <p className="mt-2 text-sm leading-6 text-white/70">{item.description}</p>
+                    <div className="font-heading text-xl font-extrabold">
+                      {item.title}
+                    </div>
+                    <p className="mt-2 text-sm leading-6 text-white/70">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -568,7 +656,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="security" className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
+      <section
+        id="security"
+        className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28"
+      >
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm lg:p-10">
             <div className="text-sm font-bold uppercase tracking-[0.24em] text-slate-500">
@@ -578,8 +669,9 @@ export default async function Home() {
               The same precision you expect from enterprise legal software.
             </h2>
             <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-              InsightHub combines JWT authentication, CSRF protection, rate limiting, and secure
-              role-aware access so your team can focus on the matter instead of the middleware.
+              InsightHub combines JWT authentication, CSRF protection, rate
+              limiting, and secure role-aware access so your team can focus on
+              the matter instead of the middleware.
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -589,8 +681,14 @@ export default async function Home() {
                 "Document uploads with validation",
                 "Audit-friendly data model",
               ].map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
-                  <CheckCircleRounded fontSize="small" className="text-emerald-600" />
+                <div
+                  key={item}
+                  className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700"
+                >
+                  <CheckCircleRounded
+                    fontSize="small"
+                    className="text-emerald-600"
+                  />
                   {item}
                 </div>
               ))}
@@ -600,14 +698,16 @@ export default async function Home() {
           <div className="rounded-[2rem] bg-gradient-to-br from-[#f0e4d4] to-[#dce8ff] p-8 shadow-sm lg:p-10">
             <div className="flex items-center gap-3 text-slate-950">
               <WorkOutlineOutlined />
-              <span className="text-sm font-semibold uppercase tracking-[0.22em]">Ready to start</span>
+              <span className="text-sm font-semibold uppercase tracking-[0.22em]">
+                Ready to start
+              </span>
             </div>
             <h3 className="mt-6 max-w-md font-heading text-3xl font-extrabold tracking-tight text-slate-950">
               Bring your team into one focused workspace.
             </h3>
             <p className="mt-4 leading-7 text-slate-700">
-              Open the secure login flow to continue into the dashboard, or use the same entry
-              point to onboard a new matter quickly.
+              Open the secure login flow to continue into the dashboard, or use
+              the same entry point to onboard a new matter quickly.
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <Link
@@ -646,7 +746,9 @@ export default async function Home() {
                 key={plan.name}
                 className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
               >
-                <div className="text-xl font-bold text-slate-950">{plan.name}</div>
+                <div className="text-xl font-bold text-slate-950">
+                  {plan.name}
+                </div>
                 <div className="mt-4 text-3xl font-extrabold text-slate-950">
                   {plan.price}
                 </div>
@@ -696,7 +798,10 @@ export default async function Home() {
               a: "Most teams are productive within days thanks to our streamlined onboarding.",
             },
           ].map((item) => (
-            <div key={item.q} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div
+              key={item.q}
+              className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+            >
               <div className="font-semibold text-slate-950">{item.q}</div>
               <p className="mt-2 text-slate-600">{item.a}</p>
             </div>
@@ -710,15 +815,19 @@ export default async function Home() {
             <div className="flex items-center gap-3">
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-950/20">
                 <GavelOutlined fontSize="small" />
-              </span>             
+              </span>
               <div>
-                <div className="font-heading text-xl font-extrabold text-slate-950">InsightHub</div>
-                <div className="text-sm text-slate-500">Legal intelligence workspace</div>
+                <div className="font-heading text-xl font-extrabold text-slate-950">
+                  InsightHub
+                </div>
+                <div className="text-sm text-slate-500">
+                  Legal intelligence workspace
+                </div>
               </div>
             </div>
             <p className="mt-4 max-w-md leading-7 text-slate-600">
-              A polished control plane for law firms that need case management, secure document
-              handling, and analytics in one place.
+              A polished control plane for law firms that need case management,
+              secure document handling, and analytics in one place.
             </p>
           </div>
 
@@ -738,10 +847,16 @@ export default async function Home() {
               Access
             </div>
             <div className="mt-4 flex flex-col gap-3">
-              <Link href="/login?next=/dashboard" className="text-slate-700 transition hover:text-slate-950">
+              <Link
+                href="/login?next=/dashboard"
+                className="text-slate-700 transition hover:text-slate-950"
+              >
                 Sign in
               </Link>
-              <Link href="/login?next=/dashboard" className="text-slate-700 transition hover:text-slate-950">
+              <Link
+                href="/login?next=/dashboard"
+                className="text-slate-700 transition hover:text-slate-950"
+              >
                 Start session
               </Link>
             </div>

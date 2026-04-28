@@ -2,7 +2,11 @@ import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AUTH_COOKIE_NAME, CSRF_COOKIE_NAME, CSRF_HEADER_NAME } from "@/lib/constants";
+import {
+  AUTH_COOKIE_NAME,
+  CSRF_COOKIE_NAME,
+  CSRF_HEADER_NAME,
+} from "@/lib/constants";
 import { AppError } from "@/lib/errors";
 
 const cookiesMock = vi.hoisted(() => vi.fn());
@@ -17,7 +21,11 @@ import {
   successResponse,
   validationErrorResponse,
 } from "@/lib/api";
-import { isValidRole, requireSession, requireSessionRole } from "@/lib/api-auth";
+import {
+  isValidRole,
+  requireSession,
+  requireSessionRole,
+} from "@/lib/api-auth";
 import {
   comparePassword,
   getAuthCookieOptions,
@@ -53,7 +61,8 @@ describe("api helpers", () => {
       .object({})
       .refine(() => false, { message: "root issue" })
       .safeParse({});
-    if (rootIssueResult.success) throw new Error("expected root validation failure");
+    if (rootIssueResult.success)
+      throw new Error("expected root validation failure");
 
     const rootValidation = validationErrorResponse(rootIssueResult.error);
     await expect(rootValidation.json()).resolves.toMatchObject({
@@ -62,7 +71,9 @@ describe("api helpers", () => {
   });
 
   it("handles AppError, ZodError, and unknown errors", async () => {
-    const zodResult = z.object({ id: z.string().uuid() }).safeParse({ id: "bad" });
+    const zodResult = z
+      .object({ id: z.string().uuid() })
+      .safeParse({ id: "bad" });
     if (zodResult.success) throw new Error("expected zod failure");
 
     const zodResponse = errorResponse(zodResult.error);
@@ -76,13 +87,17 @@ describe("api helpers", () => {
       details: { reason: "role" },
     });
 
-    const appErrorWithoutDetails = errorResponse(new AppError("bad request", 400));
+    const appErrorWithoutDetails = errorResponse(
+      new AppError("bad request", 400),
+    );
     await expect(appErrorWithoutDetails.json()).resolves.toEqual({
       error: "bad request",
       details: null,
     });
 
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const consoleSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
     const unknownResponse = errorResponse(new Error("boom"));
     expect(unknownResponse.status).toBe(500);
     await expect(unknownResponse.json()).resolves.toEqual({
@@ -132,11 +147,9 @@ describe("auth and api-auth", () => {
 
     expect(() => verifySessionToken(malformed)).toThrowError("Unauthorized");
 
-    const missingEmail = jwt.sign(
-      { sub: "x", role: "admin" },
-      env.JWT_SECRET,
-      { issuer: "insight-hub" },
-    );
+    const missingEmail = jwt.sign({ sub: "x", role: "admin" }, env.JWT_SECRET, {
+      issuer: "insight-hub",
+    });
 
     expect(() => verifySessionToken(missingEmail)).toThrowError("Unauthorized");
     expect(() => verifySessionToken("not-a-jwt")).toThrowError("Unauthorized");
@@ -194,14 +207,18 @@ describe("auth and api-auth", () => {
 
     expect(requireSession(request)).toMatchObject({ sub: "user-3" });
     expect(requireSessionRole(request, ["clerk"]).role).toBe("clerk");
-    expect(() => requireSessionRole(request, ["admin"])).toThrowError("Forbidden");
+    expect(() => requireSessionRole(request, ["admin"])).toThrowError(
+      "Forbidden",
+    );
 
     const unauthorizedRequest = {
       cookies: {
         get: () => undefined,
       },
     } as never;
-    expect(() => requireSession(unauthorizedRequest)).toThrowError("Unauthorized");
+    expect(() => requireSession(unauthorizedRequest)).toThrowError(
+      "Unauthorized",
+    );
 
     expect(isValidRole("admin")).toBe(true);
     expect(isValidRole("guest")).toBe(false);

@@ -67,7 +67,9 @@ export default function AnalyticsPage() {
   }
 
   if (error || !data) {
-    return <Alert severity="error">{error ?? "Failed to load analytics."}</Alert>;
+    return (
+      <Alert severity="error">{error ?? "Failed to load analytics."}</Alert>
+    );
   }
 
   return (
@@ -83,7 +85,9 @@ export default function AnalyticsPage() {
           </Typography>
 
           {data.caseTypeDistribution.length === 0 ? (
-            <Alert severity="info">No case type distribution data available.</Alert>
+            <Alert severity="info">
+              No case type distribution data available.
+            </Alert>
           ) : (
             <Table size="small">
               <TableHead>

@@ -3,9 +3,7 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { type PropsWithChildren, useMemo } from "react";
 
-export default function AppThemeProvider({
-  children,
-}: PropsWithChildren) {
+export default function AppThemeProvider({ children }: PropsWithChildren) {
   const theme = useMemo(
     () =>
       createTheme({

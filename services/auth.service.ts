@@ -32,7 +32,9 @@ export async function registerUser(input: RegisterInput): Promise<{
   await connectDb();
 
   const normalizedEmail = input.email.toLowerCase();
-  const existingUser = await UserModel.findOne({ email: normalizedEmail }).lean();
+  const existingUser = await UserModel.findOne({
+    email: normalizedEmail,
+  }).lean();
   if (existingUser) {
     throw new AppError("Email is already registered", 409);
   }
@@ -75,7 +77,10 @@ export async function loginUser(input: LoginInput): Promise<{
     throw new AppError("Invalid credentials", 401);
   }
 
-  const passwordMatches = await comparePassword(input.password, user.passwordHash);
+  const passwordMatches = await comparePassword(
+    input.password,
+    user.passwordHash,
+  );
   if (!passwordMatches) {
     throw new AppError("Invalid credentials", 401);
   }

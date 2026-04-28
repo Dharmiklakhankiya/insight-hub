@@ -29,9 +29,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/analytics", label: "Analytics" },
 ];
 
-export default function ProtectedLayout({
-  children,
-}: PropsWithChildren) {
+export default function ProtectedLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);

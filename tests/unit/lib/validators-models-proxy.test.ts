@@ -1,7 +1,22 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { AppError } from "@/lib/errors";
-import { caseCreateSchema, caseUpdateSchema, documentMetaSchema, documentTagQuerySchema, loginSchema, objectIdSchema, registerSchema, safeText, searchQuerySchema, assertUploadFile, isoDateSchema, CaseModel, DocumentModel, UserModel } from "./validators-models-proxy.test-imports";
+import {
+  caseCreateSchema,
+  caseUpdateSchema,
+  documentMetaSchema,
+  documentTagQuerySchema,
+  loginSchema,
+  objectIdSchema,
+  registerSchema,
+  safeText,
+  searchQuerySchema,
+  assertUploadFile,
+  isoDateSchema,
+  CaseModel,
+  DocumentModel,
+  UserModel,
+} from "./validators-models-proxy.test-imports";
 
 // The import aggregation above keeps this file concise while still executing all source modules.
 
@@ -10,7 +25,9 @@ describe("validators", () => {
     expect(objectIdSchema.parse("507f1f77bcf86cd799439011")).toBe(
       "507f1f77bcf86cd799439011",
     );
-    expect(() => objectIdSchema.parse("bad-id")).toThrow("Invalid identifier format");
+    expect(() => objectIdSchema.parse("bad-id")).toThrow(
+      "Invalid identifier format",
+    );
 
     const nameSchema = safeText("name", 2, 20);
     expect(nameSchema.parse("  Neha   Singh ")).toBe("Neha Singh");
@@ -42,7 +59,9 @@ describe("validators", () => {
       email: "x@y.com",
       password: "abc",
     });
-    expect(() => loginSchema.parse({ email: "bad-email", password: "" })).toThrow();
+    expect(() =>
+      loginSchema.parse({ email: "bad-email", password: "" }),
+    ).toThrow();
   });
 
   it("validates case, search, and document schemas", () => {
@@ -64,7 +83,8 @@ describe("validators", () => {
     expect(caseCreateSchema.parse(baseCase).title).toBe("Corporate Breach");
 
     expect(
-      caseCreateSchema.parse({ ...baseCase, closing_date: "2026-04-20" }).closing_date,
+      caseCreateSchema.parse({ ...baseCase, closing_date: "2026-04-20" })
+        .closing_date,
     ).toBe("2026-04-20");
 
     expect(() =>
@@ -76,29 +96,43 @@ describe("validators", () => {
       timeline: [],
     });
     expect(
-      caseUpdateSchema.parse({ filing_date: "2026-01-01", closing_date: "2026-02-01" }),
+      caseUpdateSchema.parse({
+        filing_date: "2026-01-01",
+        closing_date: "2026-02-01",
+      }),
     ).toEqual({
       filing_date: "2026-01-01",
       closing_date: "2026-02-01",
       timeline: [],
     });
     expect(() =>
-      caseUpdateSchema.parse({ filing_date: "2026-10-01", closing_date: "2026-01-01" }),
+      caseUpdateSchema.parse({
+        filing_date: "2026-10-01",
+        closing_date: "2026-01-01",
+      }),
     ).toThrow("closing_date must be after filing_date");
 
     const searchDefaults = searchQuerySchema.parse({});
-    expect(searchDefaults).toMatchObject({ page: 1, limit: 10, sortOrder: "desc" });
+    expect(searchDefaults).toMatchObject({
+      page: 1,
+      limit: 10,
+      sortOrder: "desc",
+    });
 
-    expect(searchQuerySchema.parse({ page: "2", limit: "5", sortOrder: "asc" })).toMatchObject({
+    expect(
+      searchQuerySchema.parse({ page: "2", limit: "5", sortOrder: "asc" }),
+    ).toMatchObject({
       page: 2,
       limit: 5,
       sortOrder: "asc",
     });
 
-    expect(documentMetaSchema.parse({
-      case_id: "507f1f77bcf86cd799439011",
-      tags: ["evidence"],
-    })).toMatchObject({ tags: ["evidence"] });
+    expect(
+      documentMetaSchema.parse({
+        case_id: "507f1f77bcf86cd799439011",
+        tags: ["evidence"],
+      }),
+    ).toMatchObject({ tags: ["evidence"] });
 
     expect(documentTagQuerySchema.parse({ tag: "brief" }).tag).toBe("brief");
   });
@@ -110,9 +144,13 @@ describe("validators", () => {
     const badType = new File(["x"], "bad.txt", { type: "text/plain" });
     expect(() => assertUploadFile(badType)).toThrowError(AppError);
 
-    const oversized = new File([new Uint8Array(10 * 1024 * 1024 + 1)], "large.pdf", {
-      type: "application/pdf",
-    });
+    const oversized = new File(
+      [new Uint8Array(10 * 1024 * 1024 + 1)],
+      "large.pdf",
+      {
+        type: "application/pdf",
+      },
+    );
     expect(() => assertUploadFile(oversized)).toThrowError(AppError);
   });
 });
@@ -166,7 +204,9 @@ describe("models and middleware", () => {
       cookies: { get: () => undefined },
     } as never);
     expect(unauthorizedPage.status).toBe(307);
-    expect(unauthorizedPage.headers.get("location")).toContain("/login?next=%2Fdashboard");
+    expect(unauthorizedPage.headers.get("location")).toContain(
+      "/login?next=%2Fdashboard",
+    );
 
     verifyMock.mockImplementation(() => {
       throw new Error("bad token");
@@ -184,9 +224,15 @@ describe("models and middleware", () => {
       cookies: { get: () => ({ value: "invalid" }) },
     } as never);
     expect(invalidPage.status).toBe(307);
-    expect(invalidPage.headers.get("location")).toContain("/login?next=%2Fdashboard");
+    expect(invalidPage.headers.get("location")).toContain(
+      "/login?next=%2Fdashboard",
+    );
 
-    verifyMock.mockReturnValue({ sub: "1", role: "admin", email: "a@b.com" } as never);
+    verifyMock.mockReturnValue({
+      sub: "1",
+      role: "admin",
+      email: "a@b.com",
+    } as never);
     const allowed = proxy({
       nextUrl: { pathname: "/cases" },
       url: "http://localhost:3000/cases",

@@ -22,9 +22,13 @@ import { caseUpdateSchema } from "@/lib/validators/case.schema";
 
 function setUpdateFormSelects(status: string, eventType?: string) {
   const updateForm = document.querySelectorAll("form")[0] as HTMLFormElement;
-  const selectInputs = updateForm.querySelectorAll("input.MuiSelect-nativeInput");
+  const selectInputs = updateForm.querySelectorAll(
+    "input.MuiSelect-nativeInput",
+  );
 
-  fireEvent.change(selectInputs[0] as HTMLInputElement, { target: { value: status } });
+  fireEvent.change(selectInputs[0] as HTMLInputElement, {
+    target: { value: status },
+  });
 
   if (eventType) {
     fireEvent.change(selectInputs[1] as HTMLInputElement, {
@@ -72,18 +76,26 @@ describe("case detail page integration", () => {
     render(<CaseDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Failed to load case details.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to load case details."),
+      ).toBeInTheDocument();
     });
   });
 
   it("renders case details with empty timeline/docs branches", async () => {
-    apiGetMock.mockResolvedValueOnce({ case: { ...baseCase, timeline: [], documents: [] } });
+    apiGetMock.mockResolvedValueOnce({
+      case: { ...baseCase, timeline: [], documents: [] },
+    });
     render(<CaseDetailPage />);
 
     await waitFor(() => {
       expect(screen.getByText("Corporate Contract Breach")).toBeInTheDocument();
-      expect(screen.getByText("No timeline events available.")).toBeInTheDocument();
-      expect(screen.getByText("No documents uploaded for this case.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No timeline events available."),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("No documents uploaded for this case."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -124,17 +136,23 @@ describe("case detail page integration", () => {
     render(<CaseDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("Failed to load case details.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to load case details."),
+      ).toBeInTheDocument();
     });
   });
 
   it("shows document fallback when documents field is missing", async () => {
-    apiGetMock.mockResolvedValueOnce({ case: { ...baseCase, documents: undefined } });
+    apiGetMock.mockResolvedValueOnce({
+      case: { ...baseCase, documents: undefined },
+    });
 
     render(<CaseDetailPage />);
 
     await waitFor(() => {
-      expect(screen.getByText("No documents uploaded for this case.")).toBeInTheDocument();
+      expect(
+        screen.getByText("No documents uploaded for this case."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -153,7 +171,9 @@ describe("case detail page integration", () => {
       target: { value: "2026-04-25" },
     });
 
-    fireEvent.change(screen.getByLabelText("Event Date"), { target: { value: "2026-04-20" } });
+    fireEvent.change(screen.getByLabelText("Event Date"), {
+      target: { value: "2026-04-20" },
+    });
     fireEvent.change(screen.getByLabelText("Event Note"), {
       target: { value: "<script>alert(1)</script>" },
     });
@@ -161,7 +181,9 @@ describe("case detail page integration", () => {
     fireEvent.click(screen.getByRole("button", { name: "Save Changes" }));
 
     await waitFor(() => {
-      expect(screen.getByText("note contains unsafe content")).toBeInTheDocument();
+      expect(
+        screen.getByText("note contains unsafe content"),
+      ).toBeInTheDocument();
     });
 
     fireEvent.change(screen.getByLabelText("Event Note"), {
@@ -172,7 +194,9 @@ describe("case detail page integration", () => {
 
     await waitFor(() => {
       expect(apiPatchMock).toHaveBeenCalled();
-      expect(screen.getByText("Case updated successfully.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Case updated successfully."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -232,7 +256,9 @@ describe("case detail page integration", () => {
       expect(screen.getByText("Update Case and Timeline")).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByLabelText("Event Date"), { target: { value: "2026-04-22" } });
+    fireEvent.change(screen.getByLabelText("Event Date"), {
+      target: { value: "2026-04-22" },
+    });
     fireEvent.change(screen.getByLabelText("Event Note"), {
       target: { value: "Adjourned for additional documents" },
     });
@@ -256,7 +282,9 @@ describe("case detail page integration", () => {
       expect(screen.getByText("Select a file to upload.")).toBeInTheDocument();
     });
 
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const fileInput = document.querySelector(
+      'input[type="file"]',
+    ) as HTMLInputElement;
     fireEvent.change(fileInput, { target: { files: [] } });
 
     const file = new File(["pdf"], "brief.pdf", { type: "application/pdf" });
@@ -264,7 +292,9 @@ describe("case detail page integration", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Upload" }));
     await waitFor(() => {
-      expect(screen.getByText("At least one tag is required.")).toBeInTheDocument();
+      expect(
+        screen.getByText("At least one tag is required."),
+      ).toBeInTheDocument();
     });
 
     fireEvent.change(screen.getByLabelText("Tags (comma separated)"), {
@@ -274,7 +304,9 @@ describe("case detail page integration", () => {
 
     await waitFor(() => {
       expect(apiUploadMock).toHaveBeenCalled();
-      expect(screen.getByText("Document uploaded successfully.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Document uploaded successfully."),
+      ).toBeInTheDocument();
     });
 
     apiUploadMock.mockRejectedValueOnce(new Error("upload failed"));
@@ -285,7 +317,9 @@ describe("case detail page integration", () => {
     fireEvent.click(screen.getByRole("button", { name: "Upload" }));
 
     await waitFor(() => {
-      expect(screen.getByText("Failed to upload document.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Failed to upload document."),
+      ).toBeInTheDocument();
     });
   });
 });

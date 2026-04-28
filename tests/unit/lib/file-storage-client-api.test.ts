@@ -21,16 +21,22 @@ describe("file storage", () => {
   it("creates upload directory", async () => {
     const { ensureUploadsDir } = await import("@/lib/file-storage");
     await ensureUploadsDir();
-    expect(mkdirMock).toHaveBeenCalledWith(expect.any(String), { recursive: true });
+    expect(mkdirMock).toHaveBeenCalledWith(expect.any(String), {
+      recursive: true,
+    });
   });
 
   it("persists uploaded files and normalizes returned paths", async () => {
-    const randomSpy = vi.spyOn(crypto, "randomUUID").mockReturnValue("uuid-123");
+    const randomSpy = vi
+      .spyOn(crypto, "randomUUID")
+      .mockReturnValue("uuid-123");
     vi.spyOn(Date, "now").mockReturnValue(1700000000000);
     writeFileMock.mockResolvedValue(undefined);
 
     const { persistUploadedFile } = await import("@/lib/file-storage");
-    const file = new File(["hello"], "Evidence.PDF", { type: "application/pdf" });
+    const file = new File(["hello"], "Evidence.PDF", {
+      type: "application/pdf",
+    });
 
     const saved = await persistUploadedFile(file);
 
@@ -90,7 +96,10 @@ async function importClientApiWithAxiosMocks(): Promise<{
   }));
 
   const clientApiModule = await import("@/lib/client-api");
-  return { clientApiModule, mocks: { createMock, getMock, postMock, patchMock, deleteMock } };
+  return {
+    clientApiModule,
+    mocks: { createMock, getMock, postMock, patchMock, deleteMock },
+  };
 }
 
 describe("client api", () => {
@@ -98,7 +107,9 @@ describe("client api", () => {
     const { clientApiModule, mocks } = await importClientApiWithAxiosMocks();
     mocks.getMock.mockResolvedValue({ data: { ok: true } });
 
-    await expect(clientApiModule.apiGet("/api/health")).resolves.toEqual({ ok: true });
+    await expect(clientApiModule.apiGet("/api/health")).resolves.toEqual({
+      ok: true,
+    });
     expect(mocks.getMock).toHaveBeenCalledWith("/api/health", undefined);
     expect(mocks.createMock).toHaveBeenCalledTimes(1);
   });
@@ -108,10 +119,14 @@ describe("client api", () => {
     mocks.getMock.mockResolvedValue({ data: { csrfToken: "csrf-1" } });
     mocks.postMock.mockResolvedValue({ data: { success: true } });
 
-    await expect(clientApiModule.apiPost("/api/cases", { title: "x" })).resolves.toEqual({
+    await expect(
+      clientApiModule.apiPost("/api/cases", { title: "x" }),
+    ).resolves.toEqual({
       success: true,
     });
-    await expect(clientApiModule.apiPost("/api/cases", { title: "y" })).resolves.toEqual({
+    await expect(
+      clientApiModule.apiPost("/api/cases", { title: "y" }),
+    ).resolves.toEqual({
       success: true,
     });
 
@@ -138,18 +153,29 @@ describe("client api", () => {
     mocks.postMock.mockResolvedValue({ data: { uploaded: true } });
 
     await expect(
-      clientApiModule.apiPatch("/api/cases/1", { status: "closed" }, { headers: { "x-extra": "1" } }),
+      clientApiModule.apiPatch(
+        "/api/cases/1",
+        { status: "closed" },
+        { headers: { "x-extra": "1" } },
+      ),
     ).resolves.toEqual({ patched: true });
 
     await expect(
       clientApiModule.apiPatch("/api/cases/2", { status: "ongoing" }, {}),
     ).resolves.toEqual({ patched: true });
 
-    await expect(clientApiModule.apiDelete("/api/cases/1")).resolves.toEqual({ deleted: true });
+    await expect(clientApiModule.apiDelete("/api/cases/1")).resolves.toEqual({
+      deleted: true,
+    });
 
     const formData = new FormData();
-    formData.set("file", new File(["pdf"], "doc.pdf", { type: "application/pdf" }));
-    await expect(clientApiModule.apiUpload("/api/upload", formData)).resolves.toEqual({
+    formData.set(
+      "file",
+      new File(["pdf"], "doc.pdf", { type: "application/pdf" }),
+    );
+    await expect(
+      clientApiModule.apiUpload("/api/upload", formData),
+    ).resolves.toEqual({
       uploaded: true,
     });
 

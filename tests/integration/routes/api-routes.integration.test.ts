@@ -117,7 +117,9 @@ describe("API routes integration", () => {
 
   it("delegates case routes and resolves dynamic params", async () => {
     const request = { url: "http://localhost:3000" } as never;
-    const context = { params: Promise.resolve({ id: "507f1f77bcf86cd799439011" }) };
+    const context = {
+      params: Promise.resolve({ id: "507f1f77bcf86cd799439011" }),
+    };
 
     await casesRoute.GET(request);
     expect(handleListCasesMock).toHaveBeenCalledWith(request);
@@ -126,25 +128,42 @@ describe("API routes integration", () => {
     expect(handleCreateCaseMock).toHaveBeenCalledWith(request);
 
     await caseByIdRoute.GET(request, context);
-    expect(handleGetCaseByIdMock).toHaveBeenCalledWith(request, "507f1f77bcf86cd799439011");
+    expect(handleGetCaseByIdMock).toHaveBeenCalledWith(
+      request,
+      "507f1f77bcf86cd799439011",
+    );
 
     await caseByIdRoute.PATCH(request, context);
-    expect(handleUpdateCaseMock).toHaveBeenCalledWith(request, "507f1f77bcf86cd799439011");
+    expect(handleUpdateCaseMock).toHaveBeenCalledWith(
+      request,
+      "507f1f77bcf86cd799439011",
+    );
 
     await caseByIdRoute.DELETE(request, context);
-    expect(handleDeleteCaseMock).toHaveBeenCalledWith(request, "507f1f77bcf86cd799439011");
+    expect(handleDeleteCaseMock).toHaveBeenCalledWith(
+      request,
+      "507f1f77bcf86cd799439011",
+    );
 
     await caseDocumentsRoute.GET(request, context);
-    expect(handleListDocumentsMock).toHaveBeenCalledWith(request, "507f1f77bcf86cd799439011");
+    expect(handleListDocumentsMock).toHaveBeenCalledWith(
+      request,
+      "507f1f77bcf86cd799439011",
+    );
 
     await caseDocumentsRoute.POST(request, context);
-    expect(handleUploadDocumentMock).toHaveBeenCalledWith(request, "507f1f77bcf86cd799439011");
+    expect(handleUploadDocumentMock).toHaveBeenCalledWith(
+      request,
+      "507f1f77bcf86cd799439011",
+    );
   });
 
   it("handles csrf route success and error branches", async () => {
     await csrfRoute.GET();
     expect(getOrCreateCsrfTokenMock).toHaveBeenCalled();
-    expect(successResponseMock).toHaveBeenCalledWith({ csrfToken: "csrf-token" });
+    expect(successResponseMock).toHaveBeenCalledWith({
+      csrfToken: "csrf-token",
+    });
 
     getOrCreateCsrfTokenMock.mockRejectedValueOnce(new Error("csrf failure"));
     await csrfRoute.GET();

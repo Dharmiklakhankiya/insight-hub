@@ -11,7 +11,9 @@ const documentCreateMock = vi.hoisted(() => vi.fn());
 const documentFindMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@/lib/db", () => ({ connectDb: connectDbMock }));
-vi.mock("@/lib/file-storage", () => ({ persistUploadedFile: persistUploadedFileMock }));
+vi.mock("@/lib/file-storage", () => ({
+  persistUploadedFile: persistUploadedFileMock,
+}));
 vi.mock("@/models/Case", () => ({
   CaseModel: {
     exists: caseExistsMock,
@@ -27,10 +29,15 @@ vi.mock("@/models/Document", () => ({
 }));
 
 import { getAnalyticsSummary } from "@/services/analytics.service";
-import { listDocumentsByCase, uploadDocument } from "@/services/document.service";
+import {
+  listDocumentsByCase,
+  uploadDocument,
+} from "@/services/document.service";
 
 function mockAggregateByPipeline(mapper: (pipeline: any[]) => any) {
-  caseAggregateMock.mockImplementation((pipeline: any[]) => Promise.resolve(mapper(pipeline)));
+  caseAggregateMock.mockImplementation((pipeline: any[]) =>
+    Promise.resolve(mapper(pipeline)),
+  );
 }
 
 describe("document.service", () => {
@@ -48,7 +55,10 @@ describe("document.service", () => {
         metadata: { case_id: "507f1f77bcf86cd799439011", tags: ["evidence"] },
         uploadedBy: "507f1f77bcf86cd799439012",
       }),
-    ).rejects.toMatchObject<AppError>({ message: "Case not found", statusCode: 404 });
+    ).rejects.toMatchObject<AppError>({
+      message: "Case not found",
+      statusCode: 404,
+    });
 
     expect(documentCreateMock).not.toHaveBeenCalled();
   });
@@ -59,7 +69,9 @@ describe("document.service", () => {
       absolutePath: "C:/uploads/file.pdf",
       relativePath: "uploads/file.pdf",
     });
-    documentCreateMock.mockResolvedValue({ toObject: vi.fn().mockReturnValue({ _id: "d1" }) });
+    documentCreateMock.mockResolvedValue({
+      toObject: vi.fn().mockReturnValue({ _id: "d1" }),
+    });
 
     await expect(
       uploadDocument({
@@ -69,15 +81,28 @@ describe("document.service", () => {
       }),
     ).resolves.toEqual({ _id: "d1" });
 
-    const findChainA = { sort: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue([{ _id: "d1" }]) }) };
+    const findChainA = {
+      sort: vi
+        .fn()
+        .mockReturnValue({ lean: vi.fn().mockResolvedValue([{ _id: "d1" }]) }),
+    };
     documentFindMock.mockReturnValueOnce(findChainA);
     await expect(listDocumentsByCase("c1")).resolves.toEqual([{ _id: "d1" }]);
     expect(documentFindMock).toHaveBeenCalledWith({ case_id: "c1" });
 
-    const findChainB = { sort: vi.fn().mockReturnValue({ lean: vi.fn().mockResolvedValue([{ _id: "d2" }]) }) };
+    const findChainB = {
+      sort: vi
+        .fn()
+        .mockReturnValue({ lean: vi.fn().mockResolvedValue([{ _id: "d2" }]) }),
+    };
     documentFindMock.mockReturnValueOnce(findChainB);
-    await expect(listDocumentsByCase("c1", "evidence")).resolves.toEqual([{ _id: "d2" }]);
-    expect(documentFindMock).toHaveBeenCalledWith({ case_id: "c1", tags: "evidence" });
+    await expect(listDocumentsByCase("c1", "evidence")).resolves.toEqual([
+      { _id: "d2" },
+    ]);
+    expect(documentFindMock).toHaveBeenCalledWith({
+      case_id: "c1",
+      tags: "evidence",
+    });
   });
 });
 
@@ -92,13 +117,19 @@ describe("analytics.service", () => {
 
     mockAggregateByPipeline((pipeline) => {
       const first = pipeline[0] as Record<string, any>;
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$status") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$status"
+      ) {
         return [
           { _id: "closed", count: 2 },
           { _id: "ongoing", count: 3 },
         ];
       }
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$case_type") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$case_type"
+      ) {
         return [{ _id: "Commercial", count: 4 }];
       }
       if ("$project" in first) {
@@ -115,11 +146,22 @@ describe("analytics.service", () => {
     expect(summary.totalCases).toBe(5);
     expect(summary.closedCount).toBe(2);
     expect(summary.activeCount).toBe(3);
-    expect(summary.caseTypeDistribution).toEqual([{ case_type: "Commercial", count: 4 }]);
-    expect(summary.lawyerWorkload[0]).toEqual({ lawyer: "Lawyer A", caseCount: 4 });
-    expect(summary.insights.join(" | ")).toContain("Most frequent case type is Commercial");
-    expect(summary.insights.join(" | ")).toContain("Workload imbalance detected");
-    expect(summary.insights.join(" | ")).toContain("indicating long resolution cycles");
+    expect(summary.caseTypeDistribution).toEqual([
+      { case_type: "Commercial", count: 4 },
+    ]);
+    expect(summary.lawyerWorkload[0]).toEqual({
+      lawyer: "Lawyer A",
+      caseCount: 4,
+    });
+    expect(summary.insights.join(" | ")).toContain(
+      "Most frequent case type is Commercial",
+    );
+    expect(summary.insights.join(" | ")).toContain(
+      "Workload imbalance detected",
+    );
+    expect(summary.insights.join(" | ")).toContain(
+      "indicating long resolution cycles",
+    );
   });
 
   it("computes summary with balanced workload and expected duration insights", async () => {
@@ -127,10 +169,16 @@ describe("analytics.service", () => {
 
     mockAggregateByPipeline((pipeline) => {
       const first = pipeline[0] as Record<string, any>;
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$status") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$status"
+      ) {
         return [{ _id: "ongoing", count: 2 }];
       }
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$case_type") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$case_type"
+      ) {
         return [];
       }
       if ("$project" in first) {
@@ -148,7 +196,9 @@ describe("analytics.service", () => {
     expect(summary.activeCount).toBe(2);
     expect(summary.caseTypeDistribution).toEqual([]);
     expect(summary.averageCaseDuration).toBe(10);
-    expect(summary.insights).toContain("Lawyer workload is relatively balanced.");
+    expect(summary.insights).toContain(
+      "Lawyer workload is relatively balanced.",
+    );
     expect(summary.insights.join(" | ")).toContain("within expected range");
   });
 
@@ -157,10 +207,16 @@ describe("analytics.service", () => {
 
     mockAggregateByPipeline((pipeline) => {
       const first = pipeline[0] as Record<string, any>;
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$status") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$status"
+      ) {
         return [{ _id: "closed", count: 1 }];
       }
-      if ("$group" in first && (first.$group as Record<string, any>)._id === "$case_type") {
+      if (
+        "$group" in first &&
+        (first.$group as Record<string, any>)._id === "$case_type"
+      ) {
         return [{ _id: "Civil", count: 1 }];
       }
       if ("$project" in first) {
@@ -172,8 +228,12 @@ describe("analytics.service", () => {
     const summary = await getAnalyticsSummary();
 
     expect(summary.averageCaseDuration).toBe(0);
-    expect(summary.lawyerWorkload).toEqual([{ lawyer: "Solo Lawyer", caseCount: 1 }]);
-    expect(summary.insights).not.toContain("Lawyer workload is relatively balanced.");
+    expect(summary.lawyerWorkload).toEqual([
+      { lawyer: "Solo Lawyer", caseCount: 1 },
+    ]);
+    expect(summary.insights).not.toContain(
+      "Lawyer workload is relatively balanced.",
+    );
     expect(summary.insights.join(" | ")).toContain("within expected range");
   });
 });

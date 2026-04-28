@@ -17,7 +17,9 @@ async function loadRootLayout(appUrl?: string) {
     IBM_Plex_Sans: () => ({ variable: "font-ibm-var" }),
   }));
   vi.doMock("@/components/app-theme-provider", () => ({
-    default: ({ children }: { children: ReactNode }) => <div data-theme-wrapper>{children}</div>,
+    default: ({ children }: { children: ReactNode }) => (
+      <div data-theme-wrapper>{children}</div>
+    ),
   }));
 
   return import("@/app/layout");
@@ -31,7 +33,9 @@ describe("root layout integration", () => {
     expect(mod.metadata.description).toContain("Legal case management");
     expect(String(mod.metadata.metadataBase)).toBe("http://localhost:3000/");
 
-    const tree = mod.default({ children: <span>child</span> }) as React.ReactElement;
+    const tree = mod.default({
+      children: <span>child</span>,
+    }) as React.ReactElement;
     expect(tree.type).toBe("html");
     expect(tree.props.className).toContain("font-manrope-var");
     expect(tree.props.className).toContain("font-ibm-var");
@@ -39,6 +43,8 @@ describe("root layout integration", () => {
 
   it("uses APP_URL for metadataBase", async () => {
     const mod = await loadRootLayout("https://insight.example.com");
-    expect(String(mod.metadata.metadataBase)).toBe("https://insight.example.com/");
+    expect(String(mod.metadata.metadataBase)).toBe(
+      "https://insight.example.com/",
+    );
   });
 });

@@ -8,7 +8,9 @@ import AuthLayout from "@/app/(auth)/layout";
 import AppThemeProvider from "@/components/app-theme-provider";
 
 vi.mock("@/components/protected-layout", () => ({
-  default: ({ children }: PropsWithChildren) => <section data-testid="protected-wrapper">{children}</section>,
+  default: ({ children }: PropsWithChildren) => (
+    <section data-testid="protected-wrapper">{children}</section>
+  ),
 }));
 
 import ProtectedRouteLayout from "@/app/(protected)/layout";
@@ -31,7 +33,9 @@ describe("layout shell integration", () => {
       </ProtectedRouteLayout>,
     );
 
-    expect(screen.getByTestId("protected-wrapper")).toHaveTextContent("Protected Child");
+    expect(screen.getByTestId("protected-wrapper")).toHaveTextContent(
+      "Protected Child",
+    );
   });
 
   it("provides MUI theme context and renders children", () => {
@@ -41,6 +45,8 @@ describe("layout shell integration", () => {
       </AppThemeProvider>,
     );
 
-    expect(screen.getByRole("button", { name: "Themed Action" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Themed Action" }),
+    ).toBeInTheDocument();
   });
 });

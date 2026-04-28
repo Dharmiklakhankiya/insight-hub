@@ -15,7 +15,10 @@ export async function persistUploadedFile(file: File): Promise<{
   relativePath: string;
 }> {
   const buffer = Buffer.from(await file.arrayBuffer());
-  const safeExt = path.extname(file.name).toLowerCase().replace(/[^.a-z0-9]/g, "");
+  const safeExt = path
+    .extname(file.name)
+    .toLowerCase()
+    .replace(/[^.a-z0-9]/g, "");
   const generatedName = `${Date.now()}-${crypto.randomUUID()}${safeExt}`;
   const absolutePath = path.join(uploadsDir, generatedName);
 

@@ -29,20 +29,19 @@ const caseBaseSchema = z
   })
   .strict();
 
-export const caseCreateSchema = caseBaseSchema
-  .superRefine((data, ctx) => {
-    if (data.closing_date) {
-      const filing = new Date(data.filing_date).valueOf();
-      const closing = new Date(data.closing_date).valueOf();
-      if (closing < filing) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["closing_date"],
-          message: "closing_date must be after filing_date",
-        });
-      }
+export const caseCreateSchema = caseBaseSchema.superRefine((data, ctx) => {
+  if (data.closing_date) {
+    const filing = new Date(data.filing_date).valueOf();
+    const closing = new Date(data.closing_date).valueOf();
+    if (closing < filing) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["closing_date"],
+        message: "closing_date must be after filing_date",
+      });
     }
-  });
+  }
+});
 
 export const caseUpdateSchema = caseBaseSchema
   .partial()

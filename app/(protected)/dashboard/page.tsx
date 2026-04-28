@@ -20,20 +20,26 @@ type DashboardPayload = {
   analytics: AnalyticsSummary;
 };
 
-function StatCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <Card elevation={0} sx={{ height: "100%", bgcolor: "background.paper" }}>
       <CardContent>
-        <Typography color="text.secondary" variant="body2" sx={{ fontFamily: "var(--font-inter)", fontWeight: 600 }}>
+        <Typography
+          color="text.secondary"
+          variant="body2"
+          sx={{ fontFamily: "var(--font-inter)", fontWeight: 600 }}
+        >
           {label}
         </Typography>
-        <Typography sx={{ mt: 1, fontWeight: 800, fontSize: "2.5rem", fontFamily: "var(--font-manrope)", color: "primary.main" }}>
+        <Typography
+          sx={{
+            mt: 1,
+            fontWeight: 800,
+            fontSize: "2.5rem",
+            fontFamily: "var(--font-manrope)",
+            color: "primary.main",
+          }}
+        >
           {value}
         </Typography>
       </CardContent>
@@ -98,7 +104,9 @@ export default function DashboardPage() {
   }
 
   if (error || !data) {
-    return <Alert severity="error">{error ?? "Failed to load dashboard."}</Alert>;
+    return (
+      <Alert severity="error">{error ?? "Failed to load dashboard."}</Alert>
+    );
   }
 
   return (
@@ -108,7 +116,8 @@ export default function DashboardPage() {
           Welcome back, {data.user.name}
         </Typography>
         <Typography color="text.secondary" sx={{ mt: 0.5 }}>
-          Role: {data.user.role.toUpperCase()} | Track active caseload, outcomes, and workload distribution.
+          Role: {data.user.role.toUpperCase()} | Track active caseload,
+          outcomes, and workload distribution.
         </Typography>
       </Box>
 
@@ -146,7 +155,9 @@ export default function DashboardPage() {
           </Typography>
 
           {data.analytics.insights.length === 0 ? (
-            <Typography color="text.secondary">No insights available yet.</Typography>
+            <Typography color="text.secondary">
+              No insights available yet.
+            </Typography>
           ) : (
             <Stack spacing={1}>
               {data.analytics.insights.map((insight) => (

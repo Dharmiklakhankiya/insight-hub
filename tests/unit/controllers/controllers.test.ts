@@ -77,10 +77,17 @@ vi.mock("@/lib/validators/document.schema", () => ({
   documentMetaSchema: { parse: documentMetaParseMock },
   documentTagQuerySchema: { parse: documentTagQueryParseMock },
 }));
-vi.mock("@/lib/auth", () => ({ getAuthCookieOptions: getAuthCookieOptionsMock }));
+vi.mock("@/lib/auth", () => ({
+  getAuthCookieOptions: getAuthCookieOptionsMock,
+}));
 
 import { handleAnalytics } from "@/controllers/analytics.controller";
-import { handleLogin, handleLogout, handleMe, handleRegister } from "@/controllers/auth.controller";
+import {
+  handleLogin,
+  handleLogout,
+  handleMe,
+  handleRegister,
+} from "@/controllers/auth.controller";
 import {
   handleCreateCase,
   handleDeleteCase,
@@ -88,7 +95,10 @@ import {
   handleListCases,
   handleUpdateCase,
 } from "@/controllers/case.controller";
-import { handleListDocuments, handleUploadDocument } from "@/controllers/document.controller";
+import {
+  handleListDocuments,
+  handleUploadDocument,
+} from "@/controllers/document.controller";
 import { handleSearchCases } from "@/controllers/search.controller";
 
 function makeMockResponse() {
@@ -104,13 +114,21 @@ describe("controllers", () => {
     vi.clearAllMocks();
     successResponseMock.mockImplementation(() => makeMockResponse());
     errorResponseMock.mockImplementation((error) => ({ error }));
-    getAuthCookieOptionsMock.mockReturnValue({ httpOnly: true, path: "/", sameSite: "strict" });
+    getAuthCookieOptionsMock.mockReturnValue({
+      httpOnly: true,
+      path: "/",
+      sameSite: "strict",
+    });
   });
 
   it("handles analytics success and failure", async () => {
     getAnalyticsSummaryMock.mockResolvedValue({ totalCases: 1 });
     await handleAnalytics({} as never);
-    expect(requireSessionRoleMock).toHaveBeenCalledWith({}, ["admin", "lawyer", "clerk"]);
+    expect(requireSessionRoleMock).toHaveBeenCalledWith({}, [
+      "admin",
+      "lawyer",
+      "clerk",
+    ]);
     expect(successResponseMock).toHaveBeenCalledWith({ totalCases: 1 });
 
     requireSessionRoleMock.mockImplementationOnce(() => {
@@ -121,30 +139,60 @@ describe("controllers", () => {
   });
 
   it("handles auth register/login/logout/me flows", async () => {
-    parseJsonBodyMock.mockResolvedValueOnce({ name: "N", email: "n@example.com" });
-    registerUserMock.mockResolvedValueOnce({ user: { id: "u1" }, token: "jwt" });
+    parseJsonBodyMock.mockResolvedValueOnce({
+      name: "N",
+      email: "n@example.com",
+    });
+    registerUserMock.mockResolvedValueOnce({
+      user: { id: "u1" },
+      token: "jwt",
+    });
     getOrCreateCsrfTokenMock.mockResolvedValueOnce("csrf");
 
-    const registerResponse = (await handleRegister({} as never)) as ReturnType<typeof makeMockResponse>;
-    expect(checkRateLimitMock).toHaveBeenCalledWith({}, "auth-register", 20, 15 * 60 * 1000);
+    const registerResponse = (await handleRegister({} as never)) as ReturnType<
+      typeof makeMockResponse
+    >;
+    expect(checkRateLimitMock).toHaveBeenCalledWith(
+      {},
+      "auth-register",
+      20,
+      15 * 60 * 1000,
+    );
     expect(registerResponse.cookies.set).toHaveBeenCalled();
 
-    parseJsonBodyMock.mockResolvedValueOnce({ email: "n@example.com", password: "StrongPass123" });
-    loginUserMock.mockResolvedValueOnce({ user: { id: "u1" }, token: "jwt-login" });
+    parseJsonBodyMock.mockResolvedValueOnce({
+      email: "n@example.com",
+      password: "StrongPass123",
+    });
+    loginUserMock.mockResolvedValueOnce({
+      user: { id: "u1" },
+      token: "jwt-login",
+    });
     getOrCreateCsrfTokenMock.mockResolvedValueOnce("csrf-login");
 
-    const loginResponse = (await handleLogin({} as never)) as ReturnType<typeof makeMockResponse>;
-    expect(checkRateLimitMock).toHaveBeenCalledWith({}, "auth-login", 15, 15 * 60 * 1000);
+    const loginResponse = (await handleLogin({} as never)) as ReturnType<
+      typeof makeMockResponse
+    >;
+    expect(checkRateLimitMock).toHaveBeenCalledWith(
+      {},
+      "auth-login",
+      15,
+      15 * 60 * 1000,
+    );
     expect(loginResponse.cookies.set).toHaveBeenCalled();
 
-    const logoutResponse = (await handleLogout({} as never)) as ReturnType<typeof makeMockResponse>;
+    const logoutResponse = (await handleLogout({} as never)) as ReturnType<
+      typeof makeMockResponse
+    >;
     expect(validateCsrfMock).toHaveBeenCalled();
     expect(logoutResponse.cookies.set).toHaveBeenCalledTimes(2);
 
     requireSessionMock.mockReturnValue({ sub: "u1" });
     getUserByIdMock.mockResolvedValue({ id: "u1", email: "n@example.com" });
     await handleMe({} as never);
-    expect(successResponseMock).toHaveBeenCalledWith({ user: { id: "u1", email: "n@example.com" } });
+    expect(successResponseMock).toHaveBeenCalledWith({
+      user: { id: "u1", email: "n@example.com" },
+    });
 
     checkRateLimitMock.mockImplementationOnce(() => {
       throw new Error("rate limit");
@@ -215,10 +263,15 @@ describe("controllers", () => {
     listDocumentsByCaseMock.mockResolvedValue([{ _id: "d1" }]);
 
     await handleListDocuments(
-      { url: "http://localhost:3000/api/cases/1/documents?tag=evidence" } as never,
+      {
+        url: "http://localhost:3000/api/cases/1/documents?tag=evidence",
+      } as never,
       "507f1f77bcf86cd799439011",
     );
-    expect(listDocumentsByCaseMock).toHaveBeenCalledWith("507f1f77bcf86cd799439011", "evidence");
+    expect(listDocumentsByCaseMock).toHaveBeenCalledWith(
+      "507f1f77bcf86cd799439011",
+      "evidence",
+    );
 
     documentTagQueryParseMock.mockReturnValueOnce({ tag: undefined });
     listDocumentsByCaseMock.mockResolvedValueOnce([]);
@@ -245,17 +298,26 @@ describe("controllers", () => {
     uploadForm.set("file", file);
     uploadForm.set("tags", '["evidence","affidavit"]');
 
-    documentMetaParseMock.mockReturnValue({ case_id: "507f1f77bcf86cd799439011", tags: ["evidence"] });
+    documentMetaParseMock.mockReturnValue({
+      case_id: "507f1f77bcf86cd799439011",
+      tags: ["evidence"],
+    });
     uploadDocumentMock.mockResolvedValue({ _id: "d2" });
 
-    await handleUploadDocument({ formData: async () => uploadForm } as never, "507f1f77bcf86cd799439011");
+    await handleUploadDocument(
+      { formData: async () => uploadForm } as never,
+      "507f1f77bcf86cd799439011",
+    );
     expect(assertUploadFileMock).toHaveBeenCalledWith(file);
     expect(uploadDocumentMock).toHaveBeenCalled();
 
     const invalidJsonTagsForm = new FormData();
     invalidJsonTagsForm.set("file", file);
     invalidJsonTagsForm.set("tags", "[invalid");
-    await handleUploadDocument({ formData: async () => invalidJsonTagsForm } as never, "507f1f77bcf86cd799439011");
+    await handleUploadDocument(
+      { formData: async () => invalidJsonTagsForm } as never,
+      "507f1f77bcf86cd799439011",
+    );
     expect(documentMetaParseMock).toHaveBeenCalledWith(
       expect.objectContaining({ tags: [] }),
     );
@@ -285,15 +347,24 @@ describe("controllers", () => {
     const commaTagsForm = new FormData();
     commaTagsForm.set("file", file);
     commaTagsForm.set("tags", "a,b");
-    await handleUploadDocument({ formData: async () => commaTagsForm } as never, "507f1f77bcf86cd799439011");
+    await handleUploadDocument(
+      { formData: async () => commaTagsForm } as never,
+      "507f1f77bcf86cd799439011",
+    );
     expect(documentMetaParseMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ tags: ["a", "b"] }),
     );
 
     const nonStringTagsForm = new FormData();
     nonStringTagsForm.set("file", file);
-    nonStringTagsForm.set("tags", new File(["x"], "x.txt", { type: "text/plain" }));
-    await handleUploadDocument({ formData: async () => nonStringTagsForm } as never, "507f1f77bcf86cd799439011");
+    nonStringTagsForm.set(
+      "tags",
+      new File(["x"], "x.txt", { type: "text/plain" }),
+    );
+    await handleUploadDocument(
+      { formData: async () => nonStringTagsForm } as never,
+      "507f1f77bcf86cd799439011",
+    );
     expect(documentMetaParseMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ tags: [] }),
     );
@@ -305,7 +376,10 @@ describe("controllers", () => {
     );
 
     listDocumentsByCaseMock.mockRejectedValueOnce(new Error("oops"));
-    await handleListDocuments({ url: "http://localhost:3000/api/cases/1/documents" } as never, "bad-id");
+    await handleListDocuments(
+      { url: "http://localhost:3000/api/cases/1/documents" } as never,
+      "bad-id",
+    );
     expect(errorResponseMock).toHaveBeenCalled();
   });
 
@@ -313,11 +387,15 @@ describe("controllers", () => {
     parseQueryMock.mockReturnValue({ query: "breach" });
     searchCasesMock.mockResolvedValue({ items: [{ _id: "c1" }] });
 
-    await handleSearchCases({ url: "http://localhost:3000/api/search?query=breach" } as never);
+    await handleSearchCases({
+      url: "http://localhost:3000/api/search?query=breach",
+    } as never);
     expect(searchCasesMock).toHaveBeenCalledWith({ query: "breach" });
 
     searchCasesMock.mockRejectedValueOnce(new Error("search failed"));
-    await handleSearchCases({ url: "http://localhost:3000/api/search?query=breach" } as never);
+    await handleSearchCases({
+      url: "http://localhost:3000/api/search?query=breach",
+    } as never);
     expect(errorResponseMock).toHaveBeenCalled();
   });
 });

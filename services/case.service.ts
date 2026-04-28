@@ -2,7 +2,10 @@ import { Types } from "mongoose";
 
 import { connectDb } from "@/lib/db";
 import { AppError } from "@/lib/errors";
-import type { CaseCreateInput, CaseUpdateInput } from "@/lib/validators/case.schema";
+import type {
+  CaseCreateInput,
+  CaseUpdateInput,
+} from "@/lib/validators/case.schema";
 import type { SearchQueryInput } from "@/lib/validators/search.schema";
 import { CaseModel } from "@/models/Case";
 import { DocumentModel } from "@/models/Document";
@@ -13,7 +16,7 @@ function parseCaseDates(input: CaseCreateInput | CaseUpdateInput) {
     filing_date: input.filing_date ? new Date(input.filing_date) : undefined,
     closing_date: input.closing_date
       ? new Date(input.closing_date)
-      : input.closing_date ?? undefined,
+      : (input.closing_date ?? undefined),
   };
 }
 
@@ -64,7 +67,10 @@ export async function listCases(input: SearchQueryInput) {
     : { [input.sortBy]: sortDirection };
 
   const [items, total] = await Promise.all([
-    CaseModel.find(query, input.query ? { score: { $meta: "textScore" } } : undefined)
+    CaseModel.find(
+      query,
+      input.query ? { score: { $meta: "textScore" } } : undefined,
+    )
       .sort(sort)
       .skip(skip)
       .limit(input.limit)

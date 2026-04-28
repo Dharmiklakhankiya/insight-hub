@@ -1,10 +1,7 @@
 import multer from "multer";
 import { z } from "zod";
 
-import {
-  ALLOWED_UPLOAD_MIME_TYPES,
-  MAX_UPLOAD_BYTES,
-} from "@/lib/constants";
+import { ALLOWED_UPLOAD_MIME_TYPES, MAX_UPLOAD_BYTES } from "@/lib/constants";
 import { AppError } from "@/lib/errors";
 import { objectIdSchema, safeText } from "@/lib/validators/common";
 
@@ -31,7 +28,10 @@ export const uploadPolicy = multer({
 export const documentMetaSchema = z
   .object({
     case_id: objectIdSchema,
-    tags: z.array(safeText("tag", 2, 40)).min(1).max(20),
+    tags: z
+      .array(safeText("tag", 2, 40))
+      .min(1)
+      .max(20),
   })
   .strict();
 

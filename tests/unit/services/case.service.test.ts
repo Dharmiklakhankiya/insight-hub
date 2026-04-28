@@ -30,7 +30,13 @@ vi.mock("@/models/Document", () => ({
   },
 }));
 
-import { createCase, deleteCase, getCaseById, listCases, updateCase } from "@/services/case.service";
+import {
+  createCase,
+  deleteCase,
+  getCaseById,
+  listCases,
+  updateCase,
+} from "@/services/case.service";
 
 function makeCaseFindChain(result: any) {
   const lean = vi.fn().mockResolvedValue(result);
@@ -53,7 +59,9 @@ describe("case.service", () => {
   });
 
   it("creates a case and transforms date fields", async () => {
-    caseCreateMock.mockResolvedValue({ toObject: vi.fn().mockReturnValue({ id: "c1" }) });
+    caseCreateMock.mockResolvedValue({
+      toObject: vi.fn().mockReturnValue({ id: "c1" }),
+    });
 
     const result = await createCase(
       {
@@ -130,11 +138,18 @@ describe("case.service", () => {
 
     expect(caseFindMock).toHaveBeenCalledWith({}, undefined);
     expect(chain.sort).toHaveBeenCalledWith({ title: 1 });
-    expect(result).toMatchObject({ page: 2, limit: 5, total: 0, totalPages: 1 });
+    expect(result).toMatchObject({
+      page: 2,
+      limit: 5,
+      total: 0,
+      totalPages: 1,
+    });
   });
 
   it("fetches case by id with documents and throws when missing", async () => {
-    caseFindByIdMock.mockReturnValueOnce({ lean: vi.fn().mockResolvedValue(null) });
+    caseFindByIdMock.mockReturnValueOnce({
+      lean: vi.fn().mockResolvedValue(null),
+    });
     await expect(getCaseById("missing")).rejects.toMatchObject<any>({
       message: "Case not found",
       statusCode: 404,
@@ -154,8 +169,12 @@ describe("case.service", () => {
   });
 
   it("updates or deletes cases and throws when records are missing", async () => {
-    caseFindByIdAndUpdateMock.mockReturnValueOnce({ lean: vi.fn().mockResolvedValue(null) });
-    await expect(updateCase("c3", { status: "closed" })).rejects.toMatchObject<any>({
+    caseFindByIdAndUpdateMock.mockReturnValueOnce({
+      lean: vi.fn().mockResolvedValue(null),
+    });
+    await expect(
+      updateCase("c3", { status: "closed" }),
+    ).rejects.toMatchObject<any>({
       message: "Case not found",
       statusCode: 404,
     });
@@ -163,18 +182,24 @@ describe("case.service", () => {
     caseFindByIdAndUpdateMock.mockReturnValueOnce({
       lean: vi.fn().mockResolvedValue({ _id: "c3", status: "closed" }),
     });
-    await expect(updateCase("c3", { status: "closed", closing_date: "2026-04-01" })).resolves.toEqual({
+    await expect(
+      updateCase("c3", { status: "closed", closing_date: "2026-04-01" }),
+    ).resolves.toEqual({
       _id: "c3",
       status: "closed",
     });
 
-    caseFindByIdAndDeleteMock.mockReturnValueOnce({ lean: vi.fn().mockResolvedValue(null) });
+    caseFindByIdAndDeleteMock.mockReturnValueOnce({
+      lean: vi.fn().mockResolvedValue(null),
+    });
     await expect(deleteCase("c4")).rejects.toMatchObject<any>({
       message: "Case not found",
       statusCode: 404,
     });
 
-    caseFindByIdAndDeleteMock.mockReturnValueOnce({ lean: vi.fn().mockResolvedValue({ _id: "c4" }) });
+    caseFindByIdAndDeleteMock.mockReturnValueOnce({
+      lean: vi.fn().mockResolvedValue({ _id: "c4" }),
+    });
     documentDeleteManyMock.mockResolvedValue({ deletedCount: 2 });
     await expect(deleteCase("c4")).resolves.toEqual({ _id: "c4" });
     expect(documentDeleteManyMock).toHaveBeenCalledWith({ case_id: "c4" });
