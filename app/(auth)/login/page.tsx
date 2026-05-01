@@ -1,16 +1,13 @@
 "use client";
 
 import {
-  Alert,
   Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import LockIcon from "@mui/icons-material/Lock";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import ShieldIcon from "@mui/icons-material/Shield";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import { ZodError } from "zod";
@@ -19,17 +16,22 @@ import { apiPost } from "@/lib/client-api";
 import type { User } from "@/lib/types";
 import { loginSchema } from "@/lib/validators/auth.schema";
 
-type LoginFormState = {
-  email: string;
-  password: string;
+const C = {
+  primary: "#000a1e",
+  primaryContainer: "#002147",
+  onPrimaryContainer: "#708ab5",
+  surfTint: "#465f88",
+  surface: "#f8f9fa",
+  surfHighest: "#e1e3e4",
+  onSurface: "#191c1d",
+  onSurfaceVar: "#44474e",
+  outlineVar: "#c4c6cf",
 };
 
 function mapZodErrors(error: ZodError): Record<string, string> {
   return error.issues.reduce<Record<string, string>>((acc, issue) => {
     const key = issue.path[0] ? String(issue.path[0]) : "root";
-    if (!acc[key]) {
-      acc[key] = issue.message;
-    }
+    if (!acc[key]) acc[key] = issue.message;
     return acc;
   }, {});
 }
@@ -37,135 +39,343 @@ function mapZodErrors(error: ZodError): Record<string, string> {
 export default function LoginPage() {
   const router = useRouter();
   const [nextPath, setNextPath] = useState("/dashboard");
-
-  useEffect(() => {
-    const next = new URLSearchParams(window.location.search).get("next");
-    if (next && next.startsWith("/")) {
-      setNextPath(next);
-    }
-  }, []);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [loginForm, setLoginForm] = useState<LoginFormState>({
-    email: "",
-    password: "",
-  });
+  useEffect(() => {
+    const next = new URLSearchParams(window.location.search).get("next");
+    if (next && next.startsWith("/")) setNextPath(next);
+  }, []);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setApiError(null);
     setFieldErrors({});
     setIsSubmitting(true);
 
     try {
-      const parsed = loginSchema.safeParse(loginForm);
+      const parsed = loginSchema.safeParse({ email, password });
       if (!parsed.success) {
         setFieldErrors(mapZodErrors(parsed.error));
         return;
       }
-
-      await apiPost<{ user: User }, LoginFormState>(
-        "/api/auth/login",
-        parsed.data,
-      );
-
+      await apiPost<{ user: User }>("/api/auth/login", parsed.data);
       router.push(nextPath);
       router.refresh();
     } catch {
-      setApiError(
-        "Authentication failed. Check your credentials and try again.",
-      );
+      setApiError("Authentication failed. Verify your credentials and try again.");
     } finally {
       setIsSubmitting(false);
     }
   }
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    background: C.surfHighest,
+    border: "none",
+    borderBottom: "2px solid transparent",
+    padding: "16px",
+    fontFamily: "var(--font-inter), sans-serif",
+    fontSize: 14,
+    color: C.onSurface,
+    borderRadius: 2,
+    outline: "none",
+    transition: "border-color 0.2s",
+  };
+
   return (
-    <Card
-      elevation={0}
-      sx={{
-        borderRadius: 4,
-        border: "1px solid rgba(0,0,0,0.09)",
-        overflow: "hidden",
-      }}
-    >
+    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+      {/* ---- Left: Visual Anchor ---- */}
       <Box
-        className="px-6 py-8"
         sx={{
-          background:
-            "linear-gradient(130deg, rgba(0,10,30,1) 0%, rgba(0,33,71,1) 100%)",
-          color: "white",
+          display: { xs: "none", md: "flex" },
+          width: "50%",
+          position: "relative",
+          overflow: "hidden",
+          background: `linear-gradient(160deg, ${C.primaryContainer} 0%, ${C.primary} 100%)`,
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          p: 8,
         }}
       >
-        <Typography variant="h4" sx={{ fontWeight: 800 }}>
-          Insight Hub
-        </Typography>
-        <Typography sx={{ opacity: 0.92, mt: 1 }}>
-          Legal intelligence, case operations, and analytics in one secure
-          workspace.
-        </Typography>
+        {/* Decorative pattern overlay */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.06,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 42px)",
+          }}
+        />
+        {/* Subtle radial glow */}
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(ellipse at 30% 80%, rgba(70,95,136,0.35) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(174,199,246,0.12) 0%, transparent 50%)",
+          }}
+        />
+
+        <Box sx={{ position: "relative", zIndex: 1 }}>
+          <Typography
+            sx={{
+              fontFamily: "var(--font-manrope)",
+              fontWeight: 800,
+              fontSize: "3.5rem",
+              color: "#fff",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.1,
+              mb: 3,
+              maxWidth: 420,
+            }}
+          >
+            InsightHub.
+          </Typography>
+          <Typography
+            sx={{
+              color: C.onPrimaryContainer,
+              fontSize: 16,
+              lineHeight: 1.7,
+              maxWidth: 400,
+              opacity: 0.9,
+            }}
+          >
+            Precision in record-keeping, unshakeable in security. Welcome to the centralized intelligence hub for the modern legal professional.
+          </Typography>
+
+          <Box sx={{ display: "flex", gap: 6, mt: 8 }}>
+            <Box>
+              <Typography sx={{ color: "#fff", fontFamily: "var(--font-manrope)", fontWeight: 700, fontSize: "1.5rem" }}>
+                256-bit
+              </Typography>
+              <Typography sx={{ color: C.onPrimaryContainer, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600 }}>
+                End-to-End Encryption
+              </Typography>
+            </Box>
+            <Box>
+              <Typography sx={{ color: "#fff", fontFamily: "var(--font-manrope)", fontWeight: 700, fontSize: "1.5rem" }}>
+                RBAC
+              </Typography>
+              <Typography sx={{ color: C.onPrimaryContainer, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600 }}>
+                Role-Based Access Control
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
       </Box>
 
-      <CardContent className="p-6">
-        <Typography variant="h6" sx={{ mb: 3, fontWeight: 700 }}>
-          Sign in to your account
-        </Typography>
+      {/* ---- Right: Login Form ---- */}
+      <Box
+        sx={{
+          width: { xs: "100%", md: "50%" },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: { xs: 4, md: 10 },
+          background: C.surface,
+        }}
+      >
+        <Box sx={{ width: "100%", maxWidth: 420 }}>
+          {/* Heading */}
+          <Box sx={{ mb: 6 }}>
+            {/* Mobile-only branding */}
+            <Typography
+              sx={{
+                display: { xs: "block", md: "none" },
+                fontFamily: "var(--font-manrope)",
+                fontWeight: 800,
+                fontSize: "1.5rem",
+                color: C.primary,
+                mb: 3,
+              }}
+            >
+              InsightHub
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "var(--font-manrope)",
+                fontWeight: 700,
+                fontSize: "2rem",
+                color: C.primary,
+                mb: 1,
+              }}
+            >
+              Secure Archive Access
+            </Typography>
+            <Typography sx={{ color: C.onSurfaceVar, fontSize: 14 }}>
+              Please verify your credentials to enter the sovereign database.
+            </Typography>
+          </Box>
 
-        <Stack component="form" spacing={2} onSubmit={handleSubmit}>
-          {apiError ? <Alert severity="error">{apiError}</Alert> : null}
+          {/* Form */}
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+            {/* API Error */}
+            {apiError && (
+              <Box
+                sx={{
+                  background: "#ffdad6",
+                  color: "#93000a",
+                  px: 2,
+                  py: 1.5,
+                  borderRadius: "4px",
+                  fontSize: 13,
+                  fontWeight: 500,
+                }}
+              >
+                {apiError}
+              </Box>
+            )}
 
-          <TextField
-            label="Email"
-            type="email"
-            value={loginForm.email}
-            onChange={(event) =>
-              setLoginForm((prev) => ({
-                ...prev,
-                email: event.target.value,
-              }))
-            }
-            error={Boolean(fieldErrors.email)}
-            helperText={fieldErrors.email}
-            required
-            fullWidth
-          />
+            {/* Email */}
+            <Box>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: C.onSurfaceVar,
+                  marginBottom: 8,
+                  fontFamily: "var(--font-inter)",
+                }}
+              >
+                Official Email Address
+              </label>
+              <input
+                type="email"
+                required
+                placeholder="name@organization.gov"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  ...inputStyle,
+                  borderBottomColor: fieldErrors.email ? "#ba1a1a" : "transparent",
+                }}
+                onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
+                onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.email ? "#ba1a1a" : "transparent")}
+              />
+              {fieldErrors.email && (
+                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>{fieldErrors.email}</Typography>
+              )}
+            </Box>
 
-          <TextField
-            label="Password"
-            type="password"
-            value={loginForm.password}
-            onChange={(event) =>
-              setLoginForm((prev) => ({
-                ...prev,
-                password: event.target.value,
-              }))
-            }
-            error={Boolean(fieldErrors.password)}
-            helperText={fieldErrors.password}
-            required
-            fullWidth
-          />
+            {/* Password */}
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+                <label
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.12em",
+                    color: C.onSurfaceVar,
+                    fontFamily: "var(--font-inter)",
+                  }}
+                >
+                  Security Key
+                </label>
+              </Box>
+              <input
+                type="password"
+                required
+                placeholder="••••••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                style={{
+                  ...inputStyle,
+                  borderBottomColor: fieldErrors.password ? "#ba1a1a" : "transparent",
+                }}
+                onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
+                onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.password ? "#ba1a1a" : "transparent")}
+              />
+              {fieldErrors.password && (
+                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>{fieldErrors.password}</Typography>
+              )}
+            </Box>
 
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            disabled={isSubmitting}
+            {/* Submit */}
+            <Box sx={{ pt: 1, display: "flex", flexDirection: "column", gap: 1.5 }}>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "16px 24px",
+                  background: `linear-gradient(to right, ${C.primary}, ${C.primaryContainer})`,
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 8,
+                  fontFamily: "var(--font-manrope)",
+                  fontWeight: 700,
+                  fontSize: 15,
+                  cursor: isSubmitting ? "not-allowed" : "pointer",
+                  opacity: isSubmitting ? 0.7 : 1,
+                  transition: "opacity 0.2s, transform 0.1s",
+                }}
+              >
+                <span>{isSubmitting ? "Verifying…" : "Verify Identity"}</span>
+                <ArrowForwardIcon sx={{ fontSize: 20 }} />
+              </button>
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  color: C.onSurfaceVar,
+                  fontSize: 13,
+                  mt: 1,
+                }}
+              >
+                User accounts are managed by your organization administrator.
+              </Typography>
+            </Box>
+          </form>
+
+          {/* Trust Signals */}
+          <Box
+            sx={{
+              mt: 10,
+              pt: 4,
+              borderTop: `1px solid ${C.outlineVar}33`,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 3,
+              justifyContent: "space-between",
+            }}
           >
-            {isSubmitting ? "Signing in..." : "Sign in"}
-          </Button>
-
-          <Divider />
-
-          <Typography variant="body2" color="text.secondary">
-            User accounts are managed by your organization administrator.
-            Contact your admin if you need access.
-          </Typography>
-        </Stack>
-      </CardContent>
-    </Card>
+            {[
+              { icon: <LockIcon sx={{ fontSize: 18 }} />, label: "256-bit Encryption" },
+              { icon: <VerifiedUserIcon sx={{ fontSize: 18 }} />, label: "RBAC Protocol" },
+              { icon: <ShieldIcon sx={{ fontSize: 18 }} />, label: "Tenant Isolation" },
+            ].map((item) => (
+              <Box
+                key={item.label}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.75,
+                  opacity: 0.4,
+                  filter: "grayscale(1)",
+                  transition: "all 0.2s",
+                  "&:hover": { opacity: 1, filter: "grayscale(0)" },
+                }}
+              >
+                {item.icon}
+                <Typography sx={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "-0.02em" }}>
+                  {item.label}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }

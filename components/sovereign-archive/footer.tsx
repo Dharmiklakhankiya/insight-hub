@@ -333,7 +333,7 @@ export function Footer({
                 1. Acceptance of Terms
               </h2>
               <p className="text-slate-600">
-                By accessing the Sovereign Archive (the "System"), you
+                By accessing the Sovereign Archive (the &ldquo;System&rdquo;), you
                 acknowledge that you have read, understood, and agree to be
                 bound by these Terms of Service. If you do not agree to these
                 terms, you must cease all use of the System immediately.
