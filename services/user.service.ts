@@ -3,7 +3,11 @@ import { hashPassword } from "@/lib/auth";
 import type { UserRole } from "@/lib/constants";
 import { connectDb } from "@/lib/db";
 import { AppError } from "@/lib/errors";
-import { assertCanManageUser, assertCanResetPassword, tenantFilter } from "@/lib/rbac";
+import {
+  assertCanManageUser,
+  assertCanResetPassword,
+  tenantFilter,
+} from "@/lib/rbac";
 import type {
   CreateUserInput,
   ResetPasswordInput,
@@ -21,9 +25,7 @@ export async function listUsers(session: SessionPayload): Promise<SafeUser[]> {
 
   const filter = tenantFilter(session.role, session.tenantId);
 
-  const users = await UserModel.find(filter)
-    .sort({ createdAt: -1 })
-    .lean();
+  const users = await UserModel.find(filter).sort({ createdAt: -1 }).lean();
 
   return users.map((u) =>
     toSafeUser({

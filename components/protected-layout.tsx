@@ -82,8 +82,7 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
   );
 
   const activeRoute = useMemo(
-    () =>
-      visibleNavItems.find((item) => pathname.startsWith(item.href))?.href,
+    () => visibleNavItems.find((item) => pathname.startsWith(item.href))?.href,
     [pathname, visibleNavItems],
   );
 

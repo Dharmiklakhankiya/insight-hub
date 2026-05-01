@@ -69,7 +69,12 @@ export async function handleUploadDocument(
 ) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
+    const session = requireSessionRole(request, [
+      "super_admin",
+      "admin",
+      "lawyer",
+      "clerk",
+    ]);
 
     const parsedCaseId = objectIdSchema.parse(caseId);
     const formData = await request.formData();

@@ -4,6 +4,27 @@
   --background: #f8f9fa;
   --foreground: #191c1d;
   --muted: #44474e;
+
+  /* Sovereign Archive Design Tokens */
+  --sa-primary: #000a1e;
+  --sa-primary-container: #002147;
+  --sa-on-primary-container: #708ab5;
+  --sa-secondary: #4c616c;
+  --sa-secondary-container: #cfe6f2;
+  --sa-on-secondary-container: #526772;
+  --sa-surface: #f8f9fa;
+  --sa-surface-container: #edeeef;
+  --sa-surface-container-low: #f3f4f5;
+  --sa-surface-container-high: #e7e8e9;
+  --sa-surface-container-highest: #e1e3e4;
+  --sa-surface-container-lowest: #ffffff;
+  --sa-on-surface: #191c1d;
+  --sa-on-surface-variant: #44474e;
+  --sa-outline: #74777f;
+  --sa-outline-variant: #c4c6cf;
+  --sa-surface-tint: #465f88;
+  --sa-error: #ba1a1a;
+  --sa-error-container: #ffdad6;
 }
 
 @theme inline {
@@ -11,4 +32,25 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-heading: var(--font-manrope);
+
+  /* Sovereign Archive Colors */
+  --color-sa-primary: var(--sa-primary);
+  --color-sa-primary-container: var(--sa-primary-container);
+  --color-sa-on-primary-container: var(--sa-on-primary-container);
+  --color-sa-secondary: var(--sa-secondary);
+  --color-sa-secondary-container: var(--sa-secondary-container);
+  --color-sa-on-secondary-container: var(--sa-on-secondary-container);
+  --color-sa-surface: var(--sa-surface);
+  --color-sa-surface-container: var(--sa-surface-container);
+  --color-sa-surface-low: var(--sa-surface-container-low);
+  --color-sa-surface-high: var(--sa-surface-container-high);
+  --color-sa-surface-highest: var(--sa-surface-container-highest);
+  --color-sa-surface-lowest: var(--sa-surface-container-lowest);
+  --color-sa-on-surface: var(--sa-on-surface);
+  --color-sa-on-surface-variant: var(--sa-on-surface-variant);
+  --color-sa-outline: var(--sa-outline);
+  --color-sa-outline-variant: var(--sa-outline-variant);
+  --color-sa-surface-tint: var(--sa-surface-tint);
+  --color-sa-error: var(--sa-error);
+  --color-sa-error-container: var(--sa-error-container);
 }

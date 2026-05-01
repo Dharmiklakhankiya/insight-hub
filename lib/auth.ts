@@ -49,9 +49,7 @@ export function verifySessionToken(token: string): SessionPayload {
       throw new AppError("Invalid session", 401);
     }
 
-    if (
-      !(USER_ROLES as readonly string[]).includes(decoded.role)
-    ) {
+    if (!(USER_ROLES as readonly string[]).includes(decoded.role)) {
       throw new AppError("Invalid session role", 401);
     }
 
@@ -59,8 +57,7 @@ export function verifySessionToken(token: string): SessionPayload {
       sub: decoded.sub,
       role: decoded.role as UserRole,
       email: decoded.email,
-      tenantId:
-        typeof decoded.tenantId === "string" ? decoded.tenantId : null,
+      tenantId: typeof decoded.tenantId === "string" ? decoded.tenantId : null,
     };
   } catch {
     throw new AppError("Unauthorized", 401);

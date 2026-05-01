@@ -35,7 +35,11 @@ export async function handleListCases(request: NextRequest) {
 export async function handleCreateCase(request: NextRequest) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, ["super_admin", "admin", "lawyer"]);
+    const session = requireSessionRole(request, [
+      "super_admin",
+      "admin",
+      "lawyer",
+    ]);
 
     const input = await parseJsonBody(request, caseCreateSchema);
     const created = await createCase(input, session.sub);

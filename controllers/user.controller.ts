@@ -23,10 +23,7 @@ import {
 
 export async function handleListUsers(request: NextRequest) {
   try {
-    const session = requireSessionRole(request, [
-      "super_admin",
-      "admin",
-    ]);
+    const session = requireSessionRole(request, ["super_admin", "admin"]);
     const users = await listUsers(session);
     return successResponse({ users });
   } catch (error) {
@@ -41,10 +38,7 @@ export async function handleListUsers(request: NextRequest) {
 export async function handleCreateUser(request: NextRequest) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, [
-      "super_admin",
-      "admin",
-    ]);
+    const session = requireSessionRole(request, ["super_admin", "admin"]);
     const input = await parseJsonBody(request, createUserSchema);
     const user = await createUser(session, input);
     return successResponse({ user }, 201);
@@ -57,16 +51,10 @@ export async function handleCreateUser(request: NextRequest) {
 /*  PATCH /api/users/[userId]                                          */
 /* ------------------------------------------------------------------ */
 
-export async function handleUpdateUser(
-  request: NextRequest,
-  userId: string,
-) {
+export async function handleUpdateUser(request: NextRequest, userId: string) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, [
-      "super_admin",
-      "admin",
-    ]);
+    const session = requireSessionRole(request, ["super_admin", "admin"]);
     const input = await parseJsonBody(request, updateUserSchema);
     const user = await updateUser(session, userId, input);
     return successResponse({ user });
@@ -79,16 +67,10 @@ export async function handleUpdateUser(
 /*  DELETE /api/users/[userId]                                         */
 /* ------------------------------------------------------------------ */
 
-export async function handleDeleteUser(
-  request: NextRequest,
-  userId: string,
-) {
+export async function handleDeleteUser(request: NextRequest, userId: string) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, [
-      "super_admin",
-      "admin",
-    ]);
+    const session = requireSessionRole(request, ["super_admin", "admin"]);
     await deleteUser(session, userId);
     return successResponse({ success: true });
   } catch (error) {
@@ -103,10 +85,7 @@ export async function handleDeleteUser(
 export async function handleResetPassword(request: NextRequest) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, [
-      "super_admin",
-      "admin",
-    ]);
+    const session = requireSessionRole(request, ["super_admin", "admin"]);
     const input = await parseJsonBody(request, resetPasswordSchema);
     await resetPassword(session, input);
     return successResponse({ success: true });
