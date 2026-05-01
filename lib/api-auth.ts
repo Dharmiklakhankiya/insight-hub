@@ -1,11 +1,7 @@
 import { type NextRequest } from "next/server";
 
-import { AUTH_COOKIE_NAME, USER_ROLES } from "@/lib/constants";
-import {
-  type SessionPayload,
-  type UserRole,
-  verifySessionToken,
-} from "@/lib/auth";
+import { AUTH_COOKIE_NAME, USER_ROLES, type UserRole } from "@/lib/constants";
+import { type SessionPayload, verifySessionToken } from "@/lib/auth";
 import { AppError } from "@/lib/errors";
 
 export function requireSession(request: NextRequest): SessionPayload {
@@ -29,6 +25,29 @@ export function requireSessionRole(
   return session;
 }
 
+/**
+ * Requires a session with one of the allowed roles AND validates that the
+ * user belongs to the tenant specified in the URL (or query).
+ * SUPER_ADMIN bypasses the tenant check.
+ */
+export function requireTenantAccess(
+  request: NextRequest,
+  allowedRoles: UserRole[],
+  urlTenantId?: string,
+): SessionPayload {
+  const session = requireSessionRole(request, allowedRoles);
+
+  if (session.role === "super_admin") {
+    return session;
+  }
+
+  if (urlTenantId && session.tenantId !== urlTenantId) {
+    throw new AppError("Cross-tenant access is not allowed", 403);
+  }
+
+  return session;
+}
+
 export function isValidRole(value: string): value is UserRole {
-  return USER_ROLES.includes(value as (typeof USER_ROLES)[number]);
+  return (USER_ROLES as readonly string[]).includes(value);
 }

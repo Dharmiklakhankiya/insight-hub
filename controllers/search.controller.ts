@@ -8,7 +8,7 @@ import { searchCases } from "@/services/search.service";
 
 export async function handleSearchCases(request: NextRequest) {
   try {
-    requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
 
     const url = new URL(request.url);
     const query = parseQuery(url.searchParams, searchQuerySchema);

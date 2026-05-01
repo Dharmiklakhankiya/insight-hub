@@ -7,13 +7,7 @@ import {
   Card,
   CardContent,
   Divider,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -23,20 +17,11 @@ import { ZodError } from "zod";
 
 import { apiPost } from "@/lib/client-api";
 import type { User } from "@/lib/types";
-import { loginSchema, registerSchema } from "@/lib/validators/auth.schema";
-
-type Mode = "login" | "register";
+import { loginSchema } from "@/lib/validators/auth.schema";
 
 type LoginFormState = {
   email: string;
   password: string;
-};
-
-type RegisterFormState = {
-  name: string;
-  email: string;
-  password: string;
-  role: "admin" | "lawyer" | "clerk";
 };
 
 function mapZodErrors(error: ZodError): Record<string, string> {
@@ -60,7 +45,6 @@ export default function LoginPage() {
     }
   }, []);
 
-  const [mode, setMode] = useState<Mode>("login");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -70,13 +54,6 @@ export default function LoginPage() {
     password: "",
   });
 
-  const [registerForm, setRegisterForm] = useState<RegisterFormState>({
-    name: "",
-    email: "",
-    password: "",
-    role: "clerk",
-  });
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setApiError(null);
@@ -84,29 +61,16 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      if (mode === "login") {
-        const parsed = loginSchema.safeParse(loginForm);
-        if (!parsed.success) {
-          setFieldErrors(mapZodErrors(parsed.error));
-          return;
-        }
-
-        await apiPost<{ user: User }, LoginFormState>(
-          "/api/auth/login",
-          parsed.data,
-        );
-      } else {
-        const parsed = registerSchema.safeParse(registerForm);
-        if (!parsed.success) {
-          setFieldErrors(mapZodErrors(parsed.error));
-          return;
-        }
-
-        await apiPost<{ user: User }, RegisterFormState>(
-          "/api/auth/register",
-          parsed.data,
-        );
+      const parsed = loginSchema.safeParse(loginForm);
+      if (!parsed.success) {
+        setFieldErrors(mapZodErrors(parsed.error));
+        return;
       }
+
+      await apiPost<{ user: User }, LoginFormState>(
+        "/api/auth/login",
+        parsed.data,
+      );
 
       router.push(nextPath);
       router.refresh();
@@ -146,125 +110,44 @@ export default function LoginPage() {
       </Box>
 
       <CardContent className="p-6">
-        <Tabs
-          value={mode}
-          onChange={(_event, value: Mode) => {
-            setMode(value);
-            setFieldErrors({});
-            setApiError(null);
-          }}
-          sx={{ mb: 3 }}
-        >
-          <Tab value="login" label="Sign in" />
-          <Tab value="register" label="Create account" />
-        </Tabs>
+        <Typography variant="h6" sx={{ mb: 3, fontWeight: 700 }}>
+          Sign in to your account
+        </Typography>
 
         <Stack component="form" spacing={2} onSubmit={handleSubmit}>
           {apiError ? <Alert severity="error">{apiError}</Alert> : null}
 
-          {mode === "register" ? (
-            <>
-              <TextField
-                label="Full Name"
-                value={registerForm.name}
-                onChange={(event) =>
-                  setRegisterForm((prev) => ({
-                    ...prev,
-                    name: event.target.value,
-                  }))
-                }
-                error={Boolean(fieldErrors.name)}
-                helperText={fieldErrors.name}
-                required
-                fullWidth
-              />
+          <TextField
+            label="Email"
+            type="email"
+            value={loginForm.email}
+            onChange={(event) =>
+              setLoginForm((prev) => ({
+                ...prev,
+                email: event.target.value,
+              }))
+            }
+            error={Boolean(fieldErrors.email)}
+            helperText={fieldErrors.email}
+            required
+            fullWidth
+          />
 
-              <TextField
-                label="Email"
-                type="email"
-                value={registerForm.email}
-                onChange={(event) =>
-                  setRegisterForm((prev) => ({
-                    ...prev,
-                    email: event.target.value,
-                  }))
-                }
-                error={Boolean(fieldErrors.email)}
-                helperText={fieldErrors.email}
-                required
-                fullWidth
-              />
-
-              <TextField
-                label="Password"
-                type="password"
-                value={registerForm.password}
-                onChange={(event) =>
-                  setRegisterForm((prev) => ({
-                    ...prev,
-                    password: event.target.value,
-                  }))
-                }
-                error={Boolean(fieldErrors.password)}
-                helperText={fieldErrors.password}
-                required
-                fullWidth
-              />
-
-              <FormControl fullWidth>
-                <InputLabel id="role-label">Role</InputLabel>
-                <Select
-                  labelId="role-label"
-                  label="Role"
-                  value={registerForm.role}
-                  onChange={(event) =>
-                    setRegisterForm((prev) => ({
-                      ...prev,
-                      role: event.target.value as RegisterFormState["role"],
-                    }))
-                  }
-                >
-                  <MenuItem value="admin">Admin</MenuItem>
-                  <MenuItem value="lawyer">Lawyer</MenuItem>
-                  <MenuItem value="clerk">Clerk</MenuItem>
-                </Select>
-              </FormControl>
-            </>
-          ) : (
-            <>
-              <TextField
-                label="Email"
-                type="email"
-                value={loginForm.email}
-                onChange={(event) =>
-                  setLoginForm((prev) => ({
-                    ...prev,
-                    email: event.target.value,
-                  }))
-                }
-                error={Boolean(fieldErrors.email)}
-                helperText={fieldErrors.email}
-                required
-                fullWidth
-              />
-
-              <TextField
-                label="Password"
-                type="password"
-                value={loginForm.password}
-                onChange={(event) =>
-                  setLoginForm((prev) => ({
-                    ...prev,
-                    password: event.target.value,
-                  }))
-                }
-                error={Boolean(fieldErrors.password)}
-                helperText={fieldErrors.password}
-                required
-                fullWidth
-              />
-            </>
-          )}
+          <TextField
+            label="Password"
+            type="password"
+            value={loginForm.password}
+            onChange={(event) =>
+              setLoginForm((prev) => ({
+                ...prev,
+                password: event.target.value,
+              }))
+            }
+            error={Boolean(fieldErrors.password)}
+            helperText={fieldErrors.password}
+            required
+            fullWidth
+          />
 
           <Button
             type="submit"
@@ -272,18 +155,14 @@ export default function LoginPage() {
             size="large"
             disabled={isSubmitting}
           >
-            {isSubmitting
-              ? "Please wait..."
-              : mode === "login"
-                ? "Sign in"
-                : "Create account"}
+            {isSubmitting ? "Signing in..." : "Sign in"}
           </Button>
 
           <Divider />
 
           <Typography variant="body2" color="text.secondary">
-            This system enforces strict validation, CSRF checks, secure cookies,
-            and role-based access.
+            User accounts are managed by your organization administrator.
+            Contact your admin if you need access.
           </Typography>
         </Stack>
       </CardContent>

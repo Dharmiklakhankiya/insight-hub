@@ -6,7 +6,7 @@ import { getAnalyticsSummary } from "@/services/analytics.service";
 
 export async function handleAnalytics(request: NextRequest) {
   try {
-    requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
 
     const analytics = await getAnalyticsSummary();
     return successResponse(analytics);

@@ -2,16 +2,17 @@ import bcrypt from "bcryptjs";
 import jwt, { type JwtPayload, type SignOptions } from "jsonwebtoken";
 import { cookies } from "next/headers";
 
-import { AUTH_COOKIE_NAME } from "@/lib/constants";
+import { AUTH_COOKIE_NAME, USER_ROLES, type UserRole } from "@/lib/constants";
 import { env, isProduction } from "@/lib/env";
 import { AppError } from "@/lib/errors";
 
-export type UserRole = "admin" | "lawyer" | "clerk";
+export type { UserRole };
 
 export type SessionPayload = {
   sub: string;
   role: UserRole;
   email: string;
+  tenantId: string | null;
 };
 
 export async function hashPassword(password: string): Promise<string> {
@@ -49,9 +50,7 @@ export function verifySessionToken(token: string): SessionPayload {
     }
 
     if (
-      !(["admin", "lawyer", "clerk"] as const).includes(
-        decoded.role as UserRole,
-      )
+      !(USER_ROLES as readonly string[]).includes(decoded.role)
     ) {
       throw new AppError("Invalid session role", 401);
     }
@@ -60,6 +59,8 @@ export function verifySessionToken(token: string): SessionPayload {
       sub: decoded.sub,
       role: decoded.role as UserRole,
       email: decoded.email,
+      tenantId:
+        typeof decoded.tenantId === "string" ? decoded.tenantId : null,
     };
   } catch {
     throw new AppError("Unauthorized", 401);

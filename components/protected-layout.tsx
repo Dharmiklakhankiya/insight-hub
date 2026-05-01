@@ -5,6 +5,7 @@ import {
   AppBar,
   Box,
   Button,
+  Chip,
   Container,
   Drawer,
   IconButton,
@@ -14,30 +15,76 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { type PropsWithChildren, useMemo, useState } from "react";
+import {
+  type PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import { apiPost, clearCsrfCache } from "@/lib/client-api";
+import { apiGet, apiPost, clearCsrfCache } from "@/lib/client-api";
+import type { User } from "@/lib/types";
 
 type NavItem = {
   href: string;
   label: string;
+  /** If set, only show this item for users whose role is in this list. */
+  roles?: string[];
 };
 
 const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/cases", label: "Cases" },
   { href: "/analytics", label: "Analytics" },
+  {
+    href: "/user-management",
+    label: "Users",
+    roles: ["super_admin", "admin"],
+  },
 ];
+
+const ROLE_LABELS: Record<string, string> = {
+  super_admin: "Super Admin",
+  admin: "Admin",
+  lawyer: "Lawyer",
+  clerk: "Clerk",
+};
 
 export default function ProtectedLayout({ children }: PropsWithChildren) {
   const pathname = usePathname();
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const data = await apiGet<{ user: User }>("/api/auth/me");
+      setCurrentUser(data.user);
+    } catch {
+      // If we can't fetch the user, redirect to login
+      router.push("/login");
+    }
+  }, [router]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
+
+  const visibleNavItems = useMemo(
+    () =>
+      NAV_ITEMS.filter(
+        (item) =>
+          !item.roles || (currentUser && item.roles.includes(currentUser.role)),
+      ),
+    [currentUser],
+  );
 
   const activeRoute = useMemo(
-    () => NAV_ITEMS.find((item) => pathname.startsWith(item.href))?.href,
-    [pathname],
+    () =>
+      visibleNavItems.find((item) => pathname.startsWith(item.href))?.href,
+    [pathname, visibleNavItems],
   );
 
   async function handleLogout() {
@@ -59,7 +106,7 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
 
   const navContent = (
     <Stack direction={{ xs: "column", md: "row" }} spacing={1}>
-      {NAV_ITEMS.map((item) => {
+      {visibleNavItems.map((item) => {
         const isActive = activeRoute === item.href;
 
         return (
@@ -105,11 +152,22 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
             sx={{
               display: {
                 xs: "none",
-                md: "block",
+                md: "flex",
               },
+              alignItems: "center",
+              gap: 1,
             }}
           >
             {navContent}
+
+            {currentUser && (
+              <Chip
+                label={ROLE_LABELS[currentUser.role] ?? currentUser.role}
+                size="small"
+                variant="outlined"
+                sx={{ ml: 1 }}
+              />
+            )}
           </Box>
 
           <Button
@@ -141,6 +199,15 @@ export default function ProtectedLayout({ children }: PropsWithChildren) {
             Navigation
           </Typography>
           {navContent}
+
+          {currentUser && (
+            <Chip
+              label={ROLE_LABELS[currentUser.role] ?? currentUser.role}
+              size="small"
+              variant="outlined"
+              sx={{ mt: 2 }}
+            />
+          )}
         </Box>
       </Drawer>
 

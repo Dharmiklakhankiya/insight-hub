@@ -20,7 +20,7 @@ export function Header({
     { label: "Workflow", href: "#workflow" },
     { label: "Security Protocols", href: "#security" },
   ],
-  ctaLabel = "Access Vault",
+  ctaLabel = "Continue to Platform",
   ctaHref = "/login?next=/dashboard",
 }: HeaderProps) {
   return (

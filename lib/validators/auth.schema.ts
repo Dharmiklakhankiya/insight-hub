@@ -3,6 +3,24 @@ import { z } from "zod";
 import { USER_ROLES } from "@/lib/constants";
 import { safeText } from "@/lib/validators/common";
 
+/**
+ * Login schema – unchanged; any role can log in.
+ */
+export const loginSchema = z
+  .object({
+    email: z.string().trim().email("Invalid email address").max(120),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .max(128, "Password must be at most 128 characters"),
+  })
+  .strict();
+
+/**
+ * Self-registration is disabled. Users are created by ADMIN / SUPER_ADMIN
+ * through the user management endpoints. This register schema is kept for
+ * the initial SUPER_ADMIN seed only.
+ */
 export const registerSchema = z
   .object({
     name: safeText("name", 2, 80),
@@ -15,16 +33,7 @@ export const registerSchema = z
       .regex(/[a-z]/, "Password must include a lowercase letter")
       .regex(/[\d]/, "Password must include a number"),
     role: z.enum(USER_ROLES).default("clerk"),
-  })
-  .strict();
-
-export const loginSchema = z
-  .object({
-    email: z.string().trim().email("Invalid email address").max(120),
-    password: z
-      .string()
-      .min(1, "Password is required")
-      .max(128, "Password must be at most 128 characters"),
+    tenantId: z.string().nullable().optional(),
   })
   .strict();
 

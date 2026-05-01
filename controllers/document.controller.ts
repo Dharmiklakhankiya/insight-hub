@@ -46,7 +46,7 @@ export async function handleListDocuments(
   caseId: string,
 ) {
   try {
-    requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
     const parsedCaseId = objectIdSchema.parse(caseId);
 
     const url = new URL(request.url);
@@ -69,7 +69,7 @@ export async function handleUploadDocument(
 ) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    const session = requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
 
     const parsedCaseId = objectIdSchema.parse(caseId);
     const formData = await request.formData();

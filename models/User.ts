@@ -1,4 +1,4 @@
-import { model, models, Schema, type InferSchemaType } from "mongoose";
+import { model, models, Schema, Types, type InferSchemaType } from "mongoose";
 
 import { USER_ROLES } from "@/lib/constants";
 
@@ -28,6 +28,13 @@ const userSchema = new Schema(
       enum: USER_ROLES,
       required: true,
       default: "clerk",
+    },
+    tenantId: {
+      type: Types.ObjectId,
+      ref: "Tenant",
+      required: false,
+      default: null,
+      index: true,
     },
   },
   {

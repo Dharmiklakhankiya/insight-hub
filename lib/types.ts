@@ -1,10 +1,18 @@
-export type Role = "admin" | "lawyer" | "clerk";
+import type { UserRole } from "@/lib/constants";
+
+export type Role = UserRole;
 
 export type User = {
   id: string;
   name: string;
   email: string;
   role: Role;
+  tenantId: string | null;
+};
+
+export type Tenant = {
+  id: string;
+  name: string;
 };
 
 export type TimelineEvent = {

@@ -20,7 +20,7 @@ import {
 
 export async function handleListCases(request: NextRequest) {
   try {
-    requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
 
     const url = new URL(request.url);
     const query = parseQuery(url.searchParams, searchQuerySchema);
@@ -35,7 +35,7 @@ export async function handleListCases(request: NextRequest) {
 export async function handleCreateCase(request: NextRequest) {
   try {
     await validateCsrf(request);
-    const session = requireSessionRole(request, ["admin", "lawyer"]);
+    const session = requireSessionRole(request, ["super_admin", "admin", "lawyer"]);
 
     const input = await parseJsonBody(request, caseCreateSchema);
     const created = await createCase(input, session.sub);
@@ -48,7 +48,7 @@ export async function handleCreateCase(request: NextRequest) {
 
 export async function handleGetCaseById(request: NextRequest, caseId: string) {
   try {
-    requireSessionRole(request, ["admin", "lawyer", "clerk"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer", "clerk"]);
 
     const parsedId = objectIdSchema.parse(caseId);
     const result = await getCaseById(parsedId);
@@ -62,7 +62,7 @@ export async function handleGetCaseById(request: NextRequest, caseId: string) {
 export async function handleUpdateCase(request: NextRequest, caseId: string) {
   try {
     await validateCsrf(request);
-    requireSessionRole(request, ["admin", "lawyer"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer"]);
 
     const parsedId = objectIdSchema.parse(caseId);
     const input = await parseJsonBody(request, caseUpdateSchema);
@@ -77,7 +77,7 @@ export async function handleUpdateCase(request: NextRequest, caseId: string) {
 export async function handleDeleteCase(request: NextRequest, caseId: string) {
   try {
     await validateCsrf(request);
-    requireSessionRole(request, ["admin", "lawyer"]);
+    requireSessionRole(request, ["super_admin", "admin", "lawyer"]);
 
     const parsedId = objectIdSchema.parse(caseId);
     await deleteCase(parsedId);
