@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export interface Testimonial {
   quote: string;
   author: string;
@@ -28,7 +30,7 @@ export function TestimonialsSection({
 }: TestimonialsProps) {
   const [featuredTestimonial, ...otherTestimonials] = testimonials;
 
-  const renderStars = (rating: number = 5) => {
+  const renderStars = () => {
     return Array.from({ length: 5 }).map((_, i) => (
       <span key={i} className="text-lg text-[#00D384]">
         ★
@@ -66,9 +68,7 @@ export function TestimonialsSection({
 
         {featuredTestimonial && (
           <div className="rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-10 shadow-lg">
-            <div className="mb-6 flex gap-1">
-              {renderStars(featuredTestimonial.rating)}
-            </div>
+            <div className="mb-6 flex gap-1">{renderStars()}</div>
             <p className="mb-8 text-2xl font-bold leading-relaxed text-[#002147] italic">
               {`"${featuredTestimonial.quote}"`}
             </p>
@@ -98,18 +98,18 @@ export function TestimonialsSection({
               key={idx}
               className="flex flex-col rounded-[1.75rem] border border-slate-200 p-8 shadow-sm transition hover:shadow-md"
             >
-              <div className="flex gap-1 mb-6">
-                {renderStars(testimonial.rating)}
-              </div>
+              <div className="flex gap-1 mb-6">{renderStars()}</div>
               <p className="mb-8 flex-1 font-medium leading-relaxed text-slate-700">
                 {`"${testimonial.quote}"`}
               </p>
               <div className="mt-auto flex items-center gap-4 border-t border-slate-100 pt-6">
                 {testimonial.imageSrc && (
-                  <img
+                  <Image
                     alt={testimonial.author}
                     className="h-12 w-12 rounded-full bg-slate-200 object-cover"
                     src={testimonial.imageSrc}
+                    width={48}
+                    height={48}
                   />
                 )}
                 <div>

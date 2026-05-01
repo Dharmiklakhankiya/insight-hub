@@ -1,7 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
-import { TrendingUpOutlined, CheckCircleOutlined } from "@mui/icons-material";
+import TrendingUpOutlined from "@mui/icons-material/TrendingUpOutlined";
 
 export interface PortfolioActivity {
   icon: string;
@@ -12,19 +11,12 @@ export interface PortfolioActivity {
   statusColor: string;
 }
 
-export interface ComplianceItem {
-  icon: string;
-  title: string;
-  subtitle: string;
-}
-
 interface PortfolioSectionProps {
   id?: string;
   title?: string;
   subtitle?: string;
   stats?: Array<{ label: string; value: string; color?: string }>;
   activities?: PortfolioActivity[];
-  complianceItems?: ComplianceItem[];
 }
 
 export function PortfolioSection({
@@ -52,23 +44,6 @@ export function PortfolioSection({
       timestamp: "5 hours ago",
       status: "ASSIGNED",
       statusColor: "bg-[#002147]/10 text-[#002147]",
-    },
-  ],
-  complianceItems = [
-    {
-      icon: "check_circle",
-      title: "Document Retention Compliance",
-      subtitle: "System verified 08:00 AM",
-    },
-    {
-      icon: "check_circle",
-      title: "E-Discovery Chain of Custody",
-      subtitle: "Immutable logs active",
-    },
-    {
-      icon: "check_circle",
-      title: "Access Control Audit",
-      subtitle: "No unauthorized attempts",
     },
   ],
 }: PortfolioSectionProps) {

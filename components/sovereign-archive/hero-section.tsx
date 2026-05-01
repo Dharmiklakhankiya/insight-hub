@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowForward } from "@mui/icons-material";
+import ArrowForward from "@mui/icons-material/ArrowForward";
 
 export interface HeroProps {
   badge?: string;
@@ -219,7 +220,7 @@ export function HeroSection({
 
           {imageSrc ? (
             <div className="sr-only" aria-hidden="true">
-              <img alt={imageAlt} src={imageSrc} />
+              <Image alt={imageAlt} src={imageSrc} width={1} height={1} />
             </div>
           ) : null}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GavelOutlined } from "@mui/icons-material";
+import GavelOutlined from "@mui/icons-material/GavelOutlined";
 
 export interface NavLink {
   label: string;

@@ -45,9 +45,8 @@ export default function NextAppDirEmotionCacheProvider({
       return null;
     }
     let styles = "";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     for (const name of names) {
-      styles += (cache.inserted as any)[name];
+      styles += (cache.inserted as Record<string, string>)[name];
     }
     return (
       <style

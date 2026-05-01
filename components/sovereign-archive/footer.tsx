@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GavelOutlined } from "@mui/icons-material";
+import GavelOutlined from "@mui/icons-material/GavelOutlined";
 
 export interface FooterLink {
   label: string;
@@ -36,7 +36,7 @@ export function Footer({
       links: [
         { label: "Pricing", href: "/#pricing" },
         { label: "Documentation", href: "/#workflow" },
-        { label: "Terms of Service", href: "#" },some
+        { label: "Terms of Service", href: "#" },
       ],
     },
   ],
@@ -57,10 +57,7 @@ export function Footer({
 
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-16 md:grid-cols-4 md:px-8 relative z-10">
         <div className="col-span-2 md:col-span-1">
-          <Link
-            href="#top"
-            className="mb-6 flex items-center gap-3 group"
-          >
+          <Link href="#top" className="mb-6 flex items-center gap-3 group">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#002147] to-[#003875] text-white shadow-lg shadow-blue-900/20 transition-transform group-hover:scale-105 group-hover:rotate-3 duration-300">
               <GavelOutlined fontSize="small" />
             </span>
@@ -131,8 +128,18 @@ export function Footer({
           {copyright}
         </p>
         <div className="flex gap-6 text-sm text-slate-400 dark:text-slate-500">
-          <Link href="#" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Privacy Policy</Link>
-          <Link href="#" className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors">Terms of Service</Link>
+          <Link
+            href="#"
+            className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            href="#"
+            className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          >
+            Terms of Service
+          </Link>
         </div>
       </div>
     </footer>

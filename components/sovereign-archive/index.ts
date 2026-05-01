@@ -6,7 +6,7 @@ export { HeroSection } from "./hero-section";
 export type { HeroProps } from "./hero-section";
 
 export { PortfolioSection } from "./portfolio-section";
-export type { PortfolioActivity, ComplianceItem } from "./portfolio-section";
+export type { PortfolioActivity } from "./portfolio-section";
 
 export { FeaturesGrid } from "./features-grid";
 export type { Feature } from "./features-grid";
