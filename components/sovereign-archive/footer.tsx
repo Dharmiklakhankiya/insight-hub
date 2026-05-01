@@ -1,7 +1,16 @@
 "use client";
 
+import * as React from "react";
 import Link from "next/link";
 import GavelOutlined from "@mui/icons-material/GavelOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
 
 export interface FooterLink {
   label: string;
@@ -36,7 +45,6 @@ export function Footer({
       links: [
         { label: "Pricing", href: "/#pricing" },
         { label: "Documentation", href: "/#workflow" },
-        { label: "Terms of Service", href: "#" },
       ],
     },
   ],
@@ -47,6 +55,19 @@ export function Footer({
     { icon: "mail", href: "#" },
   ],
 }: FooterProps) {
+  const [isPrivacyOpen, setIsPrivacyOpen] = React.useState(false);
+  const [isTermsOpen, setIsTermsOpen] = React.useState(false);
+
+  const openPrivacy = () => {
+    setIsTermsOpen(false);
+    setIsPrivacyOpen(true);
+  };
+
+  const openTerms = () => {
+    setIsPrivacyOpen(false);
+    setIsTermsOpen(true);
+  };
+
   return (
     <footer
       id={id}
@@ -128,20 +149,241 @@ export function Footer({
           {copyright}
         </p>
         <div className="flex gap-6 text-sm text-slate-400 dark:text-slate-500">
-          <Link
-            href="#"
+          <button
+            type="button"
+            onClick={openPrivacy}
             className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+            aria-haspopup="dialog"
           >
             Privacy Policy
-          </Link>
-          <Link
-            href="#"
+          </button>
+          <button
+            type="button"
+            onClick={openTerms}
             className="hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+            aria-haspopup="dialog"
           >
             Terms of Service
-          </Link>
+          </button>
         </div>
       </div>
+
+      <Dialog
+        open={isPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+        maxWidth="md"
+        fullWidth
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 3,
+              overflow: "hidden",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+              background: "#fff",
+            },
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            pr: 6,
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+            background: "linear-gradient(to right, #002147, #003875)",
+            color: "white",
+            fontWeight: 600,
+            letterSpacing: "0.02em",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          Privacy Policy
+          <IconButton
+            onClick={() => setIsPrivacyOpen(false)}
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.15)",
+              },
+            }}
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent
+          dividers
+          sx={{
+            px: { xs: 2.5, md: 4 },
+            py: 3,
+            lineHeight: 1.75,
+            background: "#f8fafc",
+          }}
+        >
+          <Box className="space-y-8">
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                1. Information We Collect
+              </h2>
+              <p className="text-slate-600">
+                We collect information you provide directly to us, such as when
+                you create an account, upload documents, or communicate with us.
+                We may also collect information automatically as you navigate
+                the System.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                2. Use of Information
+              </h2>
+              <p className="text-slate-600">
+                We use the information we collect to provide, maintain, and
+                improve our services, to protect our rights and the rights of
+                others, and to comply with our legal obligations.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                3. Sharing of Information
+              </h2>
+              <p className="text-slate-600">
+                We do not share your personal information with third parties
+                except as described in this Privacy Policy or with your consent.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                4. Data Security
+              </h2>
+              <p className="text-slate-600">
+                We take reasonable measures to help protect information about
+                you from loss, theft, misuse and unauthorized access,
+                disclosure, alteration, and destruction.
+              </p>
+            </section>
+          </Box>
+        </DialogContent>
+      </Dialog>
+
+      {/* ================= TERMS ================= */}
+
+      <Dialog
+        open={isTermsOpen}
+        onClose={() => setIsTermsOpen(false)}
+        maxWidth="md"
+        fullWidth
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 3,
+              overflow: "hidden",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
+              background: "#fff",
+            },
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            pr: 6,
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+            background: "linear-gradient(to right, #002147, #003875)",
+            color: "white",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          Terms of Service
+          <IconButton
+            onClick={() => setIsTermsOpen(false)}
+            sx={{
+              color: "white",
+              "&:hover": {
+                backgroundColor: "rgba(255,255,255,0.15)",
+              },
+            }}
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent
+          dividers
+          sx={{
+            px: { xs: 2.5, md: 4 },
+            py: 3,
+            lineHeight: 1.75,
+            background: "#f8fafc",
+          }}
+        >
+          <Box className="space-y-8">
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                1. Acceptance of Terms
+              </h2>
+              <p className="text-slate-600">
+                By accessing the Sovereign Archive (the "System"), you
+                acknowledge that you have read, understood, and agree to be
+                bound by these Terms of Service. If you do not agree to these
+                terms, you must cease all use of the System immediately.
+              </p>
+              <p className="text-slate-600 mt-2">
+                We reserve the right to modify these terms at any time. Your
+                continued use of the System following the posting of changes
+                constitutes your acceptance of such changes.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                2. Limitations of Liability
+              </h2>
+              <p className="text-slate-600">
+                To the maximum extent permitted by applicable law, InsightHub
+                shall not be liable for any indirect, incidental, special,
+                consequential, or punitive damages, or any loss of profits or
+                revenues, whether incurred directly or indirectly.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                3. Governing Law
+              </h2>
+              <p className="text-slate-600">
+                These Terms shall be governed and construed in accordance with
+                the laws of the Sovereign District, without regard to its
+                conflict of law provisions. Any dispute arising out of or
+                related to these Terms shall be resolved exclusively in the
+                courts of the Sovereign District.
+              </p>
+            </section>
+
+            <section>
+              <h2 className="text-lg font-semibold mb-2 text-[#002147]">
+                4. Data Sovereignty
+              </h2>
+              <p className="text-slate-600">
+                The Sovereign Archive maintains strict protocols for data
+                integrity. Users are responsible for maintaining the
+                confidentiality of their credentials and all activities
+                occurring under their account.
+              </p>
+            </section>
+          </Box>
+        </DialogContent>
+      </Dialog>
     </footer>
   );
 }

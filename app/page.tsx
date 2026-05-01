@@ -268,17 +268,16 @@ export default async function Home() {
           {
             title: "Platform",
             links: [
-              { label: "Litigation Portfolio", href: "#" },
-              { label: "Case Governance", href: "#" },
-              { label: "Security Protocols", href: "#" },
+              { label: "Litigation Portfolio", href: "#portfolio" },
+              { label: "Case Governance", href: "#governance" },
+              { label: "Security Protocols", href: "#security" },
             ],
           },
           {
             title: "Resources",
             links: [
-              { label: "Pricing", href: "#" },
-              { label: "Documentation", href: "#" },
-              { label: "Terms of Service", href: "#" },
+              { label: "Pricing", href: "#pricing" },
+              { label: "Documentation", href: "#features" },
             ],
           },
         ]}

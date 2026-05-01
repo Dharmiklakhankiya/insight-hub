@@ -1,4 +1,4 @@
 ignoredBuiltDependencies:
-  - bcrypt
+  - bcryptjs
   - sharp
   - unrs-resolver
