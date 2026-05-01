@@ -35,6 +35,9 @@ export default function RootLayout({
       lang="en"
       className={`${manrope.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="emotion-insertion-point" content="" />
+      </head>
       <body className="min-h-full">
         <AppThemeProvider>
           <div className="flex min-h-full flex-col">{children}</div>

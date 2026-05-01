@@ -13,18 +13,3 @@
   --font-heading: var(--font-manrope);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), "Segoe UI", sans-serif;
-  min-height: 100%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}

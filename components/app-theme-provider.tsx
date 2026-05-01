@@ -2,6 +2,7 @@
 
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { type PropsWithChildren, useMemo } from "react";
+import NextAppDirEmotionCacheProvider from "./emotion-cache";
 
 export default function AppThemeProvider({ children }: PropsWithChildren) {
   const theme = useMemo(
@@ -74,9 +75,11 @@ export default function AppThemeProvider({ children }: PropsWithChildren) {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
+    <NextAppDirEmotionCacheProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </NextAppDirEmotionCacheProvider>
   );
 }
