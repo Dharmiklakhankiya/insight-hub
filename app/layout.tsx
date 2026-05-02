@@ -37,8 +37,13 @@ export default function RootLayout({
     >
       <head>
         <meta name="emotion-insertion-point" content="" />
+        {/* Material Symbols Outlined icon font */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body className="min-h-full">
+      <body className="min-h-full font-body">
         <AppThemeProvider>
           <div className="flex min-h-full flex-col">{children}</div>
         </AppThemeProvider>

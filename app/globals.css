@@ -3,54 +3,89 @@
 :root {
   --background: #f8f9fa;
   --foreground: #191c1d;
-  --muted: #44474e;
-
-  /* Sovereign Archive Design Tokens */
-  --sa-primary: #000a1e;
-  --sa-primary-container: #002147;
-  --sa-on-primary-container: #708ab5;
-  --sa-secondary: #4c616c;
-  --sa-secondary-container: #cfe6f2;
-  --sa-on-secondary-container: #526772;
-  --sa-surface: #f8f9fa;
-  --sa-surface-container: #edeeef;
-  --sa-surface-container-low: #f3f4f5;
-  --sa-surface-container-high: #e7e8e9;
-  --sa-surface-container-highest: #e1e3e4;
-  --sa-surface-container-lowest: #ffffff;
-  --sa-on-surface: #191c1d;
-  --sa-on-surface-variant: #44474e;
-  --sa-outline: #74777f;
-  --sa-outline-variant: #c4c6cf;
-  --sa-surface-tint: #465f88;
-  --sa-error: #ba1a1a;
-  --sa-error-container: #ffdad6;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-heading: var(--font-manrope);
+  /* ── Primary ── */
+  --color-primary: #000a1e;
+  --color-primary-container: #002147;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #708ab5;
+  --color-primary-fixed: #d6e3ff;
+  --color-primary-fixed-dim: #aec7f6;
+  --color-on-primary-fixed: #001b3d;
+  --color-on-primary-fixed-variant: #2d476f;
+  --color-inverse-primary: #aec7f6;
 
-  /* Sovereign Archive Colors */
-  --color-sa-primary: var(--sa-primary);
-  --color-sa-primary-container: var(--sa-primary-container);
-  --color-sa-on-primary-container: var(--sa-on-primary-container);
-  --color-sa-secondary: var(--sa-secondary);
-  --color-sa-secondary-container: var(--sa-secondary-container);
-  --color-sa-on-secondary-container: var(--sa-on-secondary-container);
-  --color-sa-surface: var(--sa-surface);
-  --color-sa-surface-container: var(--sa-surface-container);
-  --color-sa-surface-low: var(--sa-surface-container-low);
-  --color-sa-surface-high: var(--sa-surface-container-high);
-  --color-sa-surface-highest: var(--sa-surface-container-highest);
-  --color-sa-surface-lowest: var(--sa-surface-container-lowest);
-  --color-sa-on-surface: var(--sa-on-surface);
-  --color-sa-on-surface-variant: var(--sa-on-surface-variant);
-  --color-sa-outline: var(--sa-outline);
-  --color-sa-outline-variant: var(--sa-outline-variant);
-  --color-sa-surface-tint: var(--sa-surface-tint);
-  --color-sa-error: var(--sa-error);
-  --color-sa-error-container: var(--sa-error-container);
+  /* ── Secondary ── */
+  --color-secondary: #4c616c;
+  --color-secondary-container: #cfe6f2;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #526772;
+  --color-secondary-fixed: #cfe6f2;
+  --color-secondary-fixed-dim: #b4cad6;
+  --color-on-secondary-fixed: #071e27;
+  --color-on-secondary-fixed-variant: #354a53;
+
+  /* ── Tertiary ── */
+  --color-tertiary: #120a00;
+  --color-tertiary-container: #2e1f00;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #a68441;
+  --color-tertiary-fixed: #ffdea5;
+  --color-tertiary-fixed-dim: #e9c178;
+  --color-on-tertiary-fixed: #271900;
+  --color-on-tertiary-fixed-variant: #5d4202;
+
+  /* ── Error ── */
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  /* ── Surface ── */
+  --color-surface: #f8f9fa;
+  --color-surface-dim: #d9dadb;
+  --color-surface-bright: #f8f9fa;
+  --color-surface-container: #edeeef;
+  --color-surface-container-low: #f3f4f5;
+  --color-surface-container-high: #e7e8e9;
+  --color-surface-container-highest: #e1e3e4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-variant: #e1e3e4;
+  --color-surface-tint: #465f88;
+  --color-on-surface: #191c1d;
+  --color-on-surface-variant: #44474e;
+  --color-on-background: #191c1d;
+  --color-inverse-surface: #2e3132;
+  --color-inverse-on-surface: #f0f1f2;
+
+  /* ── Outline ── */
+  --color-outline: #74777f;
+  --color-outline-variant: #c4c6cf;
+
+  /* ── Typography ── */
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-manrope), sans-serif;
+  --font-display: var(--font-manrope), sans-serif;
+  --font-headline: var(--font-manrope), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-label: var(--font-inter), sans-serif;
+}
+
+/* Material Symbols baseline settings */
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+  vertical-align: middle;
+}
+
+/* Selection styling */
+::selection {
+  background-color: #d6e3ff;
+  color: #001b3d;
+}
+
+/* Zebra striping for case ledger */
+.case-ledger-stripe:nth-child(even) {
+  background-color: #f3f4f5;
 }

@@ -281,7 +281,7 @@ export default async function Home() {
             ],
           },
         ]}
-        copyright="© 2024 InsightHub. All Rights Reserved."
+        copyright={`© ${new Date().getFullYear()} InsightHub Intelligence. All rights reserved.`}
       />
     </main>
   );

@@ -1,78 +1,15 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Snackbar,
-  Alert,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-  Menu,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import EditIcon from "@mui/icons-material/Edit";
-import LockResetIcon from "@mui/icons-material/LockReset";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
-import DomainIcon from "@mui/icons-material/Domain";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import Avatar from "@/components/ui/avatar";
+import Icon from "@/components/ui/icon";
+import RoleBadge from "@/components/ui/role-badge";
 import { apiDelete, apiGet, apiPatch, apiPost } from "@/lib/client-api";
 import type { User, Tenant } from "@/lib/types";
 import type { UserRole } from "@/lib/constants";
 
-/* ------------------------------------------------------------------ */
-/*  Design constants                                                   */
-/* ------------------------------------------------------------------ */
-
-const C = {
-  primary: "#000a1e",
-  primaryContainer: "#002147",
-  secondary: "#4c616c",
-  secondaryContainer: "#cfe6f2",
-  onSecondaryContainer: "#526772",
-  surface: "#f8f9fa",
-  surfLow: "#f3f4f5",
-  surfHigh: "#e7e8e9",
-  surfHighest: "#e1e3e4",
-  surfLowest: "#ffffff",
-  onSurface: "#191c1d",
-  onSurfaceVar: "#44474e",
-  outline: "#74777f",
-  outlineVar: "#c4c6cf",
-  surfTint: "#465f88",
-} as const;
-
-const ROLE_BADGE: Record<UserRole, { bg: string; label: string }> = {
-  super_admin: { bg: C.primaryContainer, label: "SUPER_ADMIN" },
-  admin: { bg: C.secondary, label: "ADMIN" },
-  lawyer: { bg: "#3b6a5e", label: "LAWYER" },
-  clerk: { bg: "#6d5e3a", label: "CLERK" },
-};
-
-function initials(name: string) {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join("")
-    .toUpperCase();
-}
+/* ── Helpers ── */
 
 function creatableRoles(r: UserRole): UserRole[] {
   if (r === "super_admin") return ["admin", "lawyer", "clerk"];
@@ -86,9 +23,75 @@ function canManage(actor: UserRole, target: UserRole) {
 
 const PER_PAGE = 10;
 
-/* ------------------------------------------------------------------ */
-/*  Component                                                          */
-/* ------------------------------------------------------------------ */
+const ROLE_LABELS: Record<string, string> = {
+  super_admin: "SUPER_ADMIN",
+  admin: "ADMIN",
+  lawyer: "LAWYER",
+  clerk: "CLERK",
+};
+
+/* ── Dialog Shell ── */
+function Dialog({
+  open,
+  title,
+  onClose,
+  children,
+}: {
+  open: boolean;
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+      <div className="bg-surface-container-lowest rounded-lg shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div className="px-8 py-6 border-b border-outline-variant/10 flex justify-between items-center">
+          <h3 className="text-xl font-display font-extrabold text-primary">
+            {title}
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-on-surface-variant hover:text-primary transition-colors"
+          >
+            <Icon name="close" />
+          </button>
+        </div>
+        <div className="px-8 py-6">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Toast ── */
+function Toast({
+  msg,
+  severity,
+  onClose,
+}: {
+  msg: string;
+  severity: "success" | "error";
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const t = setTimeout(onClose, 4000);
+    return () => clearTimeout(t);
+  }, [onClose]);
+
+  return (
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      <div
+        className={`px-6 py-3 rounded-lg shadow-lg text-sm font-medium text-white ${
+          severity === "success" ? "bg-green-600" : "bg-error"
+        }`}
+      >
+        {msg}
+      </div>
+    </div>
+  );
+}
+
+/* ── Page ── */
 
 export default function UserManagementPage() {
   const [me, setMe] = useState<User | null>(null);
@@ -99,7 +102,6 @@ export default function UserManagementPage() {
   const [roleFilter, setRoleFilter] = useState<UserRole | "">("");
   const [page, setPage] = useState(1);
 
-  // Snackbar
   const [toast, setToast] = useState<{
     msg: string;
     sev: "success" | "error";
@@ -129,11 +131,7 @@ export default function UserManagementPage() {
   const [resetUser, setResetUser] = useState<User | null>(null);
   const [newPwd, setNewPwd] = useState("");
 
-  // Context menu
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
-  const [menuUser, setMenuUser] = useState<User | null>(null);
-
-  /* ---- Data fetching ---- */
+  /* ── Data fetching ── */
   const load = useCallback(async () => {
     try {
       setLoading(true);
@@ -158,14 +156,15 @@ export default function UserManagementPage() {
     load();
   }, [load]);
 
-  /* ---- Filtered + paginated ---- */
+  /* ── Filtered + paginated ── */
   const filtered = useMemo(() => {
     let list = users;
     if (search) {
       const q = search.toLowerCase();
       list = list.filter(
         (u) =>
-          u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
+          u.name.toLowerCase().includes(q) ||
+          u.email.toLowerCase().includes(q),
       );
     }
     if (roleFilter) list = list.filter((u) => u.role === roleFilter);
@@ -175,7 +174,7 @@ export default function UserManagementPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const paged = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-  /* ---- Handlers ---- */
+  /* ── Handlers ── */
   async function handleCreate() {
     try {
       await apiPost("/api/users", {
@@ -240,7 +239,6 @@ export default function UserManagementPage() {
     try {
       await apiDelete(`/api/users/${uid}`);
       setToast({ msg: "User deleted", sev: "success" });
-      setMenuAnchor(null);
       await load();
     } catch {
       setToast({ msg: "Failed to delete", sev: "error" });
@@ -252,13 +250,10 @@ export default function UserManagementPage() {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 16 }}>
-        <Typography
-          sx={{ color: C.onSurfaceVar, fontFamily: "var(--font-inter)" }}
-        >
-          Loading…
-        </Typography>
-      </Box>
+      <div className="flex items-center justify-center py-20 text-on-surface-variant">
+        <Icon name="progress_activity" className="animate-spin mr-3" />
+        Loading...
+      </div>
     );
   }
   if (!me) return null;
@@ -268,612 +263,417 @@ export default function UserManagementPage() {
 
   return (
     <>
-      {/* ---- Page Header ---- */}
-      <Box sx={{ mb: 5 }}>
-        <Typography
-          sx={{
-            fontFamily: "var(--font-manrope)",
-            fontWeight: 800,
-            fontSize: "2.25rem",
-            color: C.primary,
-            letterSpacing: "-0.02em",
-            mb: 0.5,
-          }}
-        >
-          User Management
-        </Typography>
-        <Typography
-          sx={{ color: C.onSurfaceVar, maxWidth: 640, lineHeight: 1.7 }}
-        >
-          Oversee access control, manage jurisdictional permissions, and audit
-          system credentials across the archive&apos;s sovereign entities.
-        </Typography>
-      </Box>
-
-      {/* ---- Search & Filter ---- */}
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          gap: 2,
-          mb: 6,
-        }}
-      >
-        <Box sx={{ position: "relative", flex: 1 }}>
-          <SearchIcon
-            sx={{
-              position: "absolute",
-              left: 16,
-              top: "50%",
-              transform: "translateY(-50%)",
-              color: C.outlineVar,
-            }}
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            placeholder="Search by name or email…"
-            style={{
-              width: "100%",
-              paddingLeft: 48,
-              paddingRight: 16,
-              paddingTop: 16,
-              paddingBottom: 16,
-              background: C.surfHighest,
-              border: "none",
-              borderRadius: 2,
-              color: C.onSurface,
-              fontFamily: "var(--font-inter)",
-              fontSize: 14,
-              outline: "none",
-            }}
-          />
-        </Box>
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <FormControl size="small" sx={{ minWidth: 140 }}>
-            <Select
-              displayEmpty
-              value={roleFilter}
+      {/* ── Page Header ── */}
+      <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="font-display text-4xl font-extrabold text-primary tracking-tight mb-2">
+            User Management
+          </h1>
+          <p className="text-on-secondary-container font-body font-medium">
+            Oversee access control and jurisdictional permissions.
+          </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="bg-surface-container-highest flex items-center px-4 rounded border-b-2 border-transparent focus-within:border-surface-tint transition-all">
+            <Icon name="search" className="text-outline" />
+            <input
+              className="bg-transparent border-none focus:ring-0 focus:outline-none text-sm py-3 w-64 placeholder:text-outline"
+              placeholder="Search members..."
+              type="text"
+              value={search}
               onChange={(e) => {
-                setRoleFilter(e.target.value as UserRole | "");
+                setSearch(e.target.value);
                 setPage(1);
               }}
-              sx={{ background: C.surfLow, fontWeight: 600, fontSize: 14 }}
-              startAdornment={<FilterListIcon sx={{ mr: 1, fontSize: 18 }} />}
+            />
+          </div>
+          {roles.length > 0 && (
+            <button
+              onClick={() => setCreateOpen(true)}
+              className="px-6 py-3 bg-gradient-to-r from-primary to-primary-container text-white text-sm font-semibold rounded-md shadow-sm hover:opacity-90 transition-all"
             >
-              <MenuItem value="">All Roles</MenuItem>
-              <MenuItem value="super_admin">Super Admin</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="lawyer">Lawyer</MenuItem>
-              <MenuItem value="clerk">Clerk</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Box>
+              Add New Member
+            </button>
+          )}
+        </div>
+      </header>
 
-      {/* ---- Table Header ---- */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "grid" },
-          gridTemplateColumns: "4fr 2fr 3fr 3fr",
-          gap: 2,
-          px: 3,
-          py: 2,
-          fontSize: 11,
-          fontWeight: 700,
-          color: C.outlineVar,
-          textTransform: "uppercase",
-          letterSpacing: "0.12em",
-          fontFamily: "var(--font-inter)",
-        }}
-      >
-        <Box>User Identity</Box>
-        <Box>Access Level</Box>
-        <Box>Jurisdiction (Tenant)</Box>
-        <Box sx={{ textAlign: "right" }}>Administrative Actions</Box>
-      </Box>
+      {/* ── Filters Bar ── */}
+      <div className="mb-8 flex flex-wrap items-center gap-4">
+        <select
+          className="px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full text-xs font-semibold border-none focus:ring-0"
+          value={roleFilter}
+          onChange={(e) => {
+            setRoleFilter(e.target.value as UserRole | "");
+            setPage(1);
+          }}
+        >
+          <option value="">Role: All Roles</option>
+          <option value="super_admin">Super Admin</option>
+          <option value="admin">Admin</option>
+          <option value="lawyer">Lawyer</option>
+          <option value="clerk">Clerk</option>
+        </select>
+      </div>
 
-      {/* ---- Rows ---- */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-        {paged.map((u, i) => {
-          const manageable = canManage(me.role, u.role);
-          const badge = ROLE_BADGE[u.role];
-          const even = i % 2 === 0;
+      {/* ── Table ── */}
+      <div className="bg-surface-container-lowest overflow-hidden rounded-xl shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse font-body">
+            <thead>
+              <tr className="bg-surface-container-high/50">
+                <th className="px-8 py-5 text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">
+                  Member
+                </th>
+                <th className="px-8 py-5 text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">
+                  Role
+                </th>
+                <th className="px-8 py-5 text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">
+                  Tenant Entity
+                </th>
+                <th className="px-8 py-5 text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant text-right">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-surface-container-low">
+              {paged.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-8 py-12 text-center text-on-surface-variant"
+                  >
+                    No users found
+                  </td>
+                </tr>
+              )}
+              {paged.map((u, i) => {
+                const manageable = canManage(me.role, u.role);
+                return (
+                  <tr
+                    key={u.id}
+                    className={`group transition-colors ${
+                      i % 2 === 0
+                        ? "hover:bg-surface-container-low"
+                        : "bg-surface-container-low hover:bg-surface-container-high"
+                    }`}
+                  >
+                    <td className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <Avatar name={u.name} size="md" />
+                        <div>
+                          <p className="text-sm font-semibold text-on-surface">
+                            {u.name}
+                          </p>
+                          <p className="text-[11px] text-on-surface-variant">
+                            {u.email}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-8 py-6">
+                      <RoleBadge role={u.role} />
+                    </td>
+                    <td className="px-8 py-6 text-sm text-on-surface-variant font-medium">
+                      {isSA ? tenantName(u.tenantId) : tenantName(u.tenantId)}
+                    </td>
+                    <td className="px-8 py-6">
+                      <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {manageable && (
+                          <>
+                            <button
+                              onClick={() => openEdit(u)}
+                              className="p-1 hover:text-primary transition-colors text-on-surface-variant"
+                              title="Edit User"
+                            >
+                              <Icon name="edit" className="text-xl" />
+                            </button>
+                            <button
+                              onClick={() => openReset(u)}
+                              className="p-1 hover:text-primary transition-colors text-on-surface-variant"
+                              title="Reset Password"
+                            >
+                              <Icon name="lock_reset" className="text-xl" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(u.id)}
+                              className="p-1 hover:text-error transition-colors text-on-surface-variant"
+                              title="Delete User"
+                            >
+                              <Icon name="delete" className="text-xl" />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
 
-          return (
-            <Box
-              key={u.id}
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", md: "4fr 2fr 3fr 3fr" },
-                gap: 2,
-                alignItems: "center",
-                px: 3,
-                py: 3,
-                background: even ? C.surfLowest : C.surfLow,
-                boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-                transition: "background 0.15s",
-                "&:hover": { background: "#ffffff" },
-              }}
+        {/* Pagination */}
+        <div className="px-8 py-6 bg-surface-container-low/30 flex items-center justify-between border-t border-outline-variant/10">
+          <p className="text-xs text-on-secondary-container font-medium">
+            Showing {paged.length} of {filtered.length} members
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              disabled={page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+              className="p-2 text-outline hover:text-primary disabled:opacity-30"
             >
-              {/* Identity */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Box
-                  sx={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: "8px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 700,
-                    fontSize: 16,
-                    fontFamily: "var(--font-manrope)",
-                    background: even
-                      ? "rgba(0,33,71,0.08)"
-                      : C.secondaryContainer,
-                    color: even ? C.primary : C.onSecondaryContainer,
-                  }}
-                >
-                  {initials(u.name)}
-                </Box>
-                <Box>
-                  <Typography
-                    sx={{
-                      fontFamily: "var(--font-manrope)",
-                      fontWeight: 700,
-                      color: C.primary,
-                      fontSize: 15,
-                    }}
-                  >
-                    {u.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 13,
-                      color: C.onSurfaceVar,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {u.email}
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Role Badge */}
-              <Box>
-                <Box
-                  component="span"
-                  sx={{
-                    display: "inline-block",
-                    px: 1.5,
-                    py: 0.5,
-                    background: badge.bg,
-                    color: "#fff",
-                    fontSize: 10,
-                    fontWeight: 900,
-                    borderRadius: 99,
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {badge.label}
-                </Box>
-              </Box>
-
-              {/* Tenant */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                  color: C.onSurfaceVar,
-                  fontWeight: 500,
-                  fontSize: 14,
-                }}
-              >
-                <DomainIcon sx={{ fontSize: 16 }} />
-                {isSA ? tenantName(u.tenantId) : tenantName(u.tenantId)}
-              </Box>
-
-              {/* Actions — hidden completely for non-manageable */}
-              <Box
-                sx={{ display: "flex", justifyContent: "flex-end", gap: 0.5 }}
-              >
-                {manageable && (
-                  <>
-                    <Tooltip title="Edit User">
-                      <IconButton
-                        size="small"
-                        onClick={() => openEdit(u)}
-                        sx={{
-                          color: C.onSurfaceVar,
-                          "&:hover": {
-                            background: C.surfHigh,
-                            color: C.primary,
-                          },
-                        }}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Reset Password">
-                      <IconButton
-                        size="small"
-                        onClick={() => openReset(u)}
-                        sx={{
-                          color: C.onSurfaceVar,
-                          "&:hover": {
-                            background: C.surfHigh,
-                            color: C.primary,
-                          },
-                        }}
-                      >
-                        <LockResetIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="More Options">
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          setMenuAnchor(e.currentTarget);
-                          setMenuUser(u);
-                        }}
-                        sx={{
-                          color: C.onSurfaceVar,
-                          "&:hover": {
-                            background: C.surfHigh,
-                            color: C.primary,
-                          },
-                        }}
-                      >
-                        <MoreVertIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </>
-                )}
-              </Box>
-            </Box>
-          );
-        })}
-
-        {paged.length === 0 && (
-          <Box sx={{ textAlign: "center", py: 8, color: C.onSurfaceVar }}>
-            <Typography>No users found</Typography>
-          </Box>
-        )}
-      </Box>
-
-      {/* ---- Pagination ---- */}
-      <Box
-        sx={{
-          mt: 6,
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 3,
-        }}
-      >
-        <Typography sx={{ fontSize: 14, color: C.onSurfaceVar }}>
-          Showing <strong style={{ color: C.primary }}>{paged.length}</strong>{" "}
-          of <strong style={{ color: C.primary }}>{filtered.length}</strong>{" "}
-          verified agents
-        </Typography>
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <IconButton
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            sx={{
-              width: 48,
-              height: 48,
-              background: C.surfLow,
-              borderRadius: "2px",
-            }}
-          >
-            <ChevronLeftIcon />
-          </IconButton>
-          {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => i + 1).map(
-            (p) => (
-              <Button
+              <Icon name="chevron_left" />
+            </button>
+            {Array.from(
+              { length: Math.min(totalPages, 5) },
+              (_, i) => i + 1,
+            ).map((p) => (
+              <button
                 key={p}
                 onClick={() => setPage(p)}
-                sx={{
-                  minWidth: 48,
-                  height: 48,
-                  borderRadius: "2px",
-                  fontWeight: 700,
-                  background: p === page ? C.primaryContainer : C.surfLow,
-                  color: p === page ? "#fff" : C.onSurfaceVar,
-                  "&:hover": {
-                    background: p === page ? C.primaryContainer : C.surfHigh,
-                  },
-                }}
+                className={`w-8 h-8 rounded-full text-xs font-bold transition-colors ${
+                  p === page
+                    ? "bg-primary text-white shadow-sm"
+                    : "hover:bg-surface-container-high text-on-surface"
+                }`}
               >
                 {p}
-              </Button>
-            ),
-          )}
-          <IconButton
-            disabled={page >= totalPages}
-            onClick={() => setPage((p) => p + 1)}
-            sx={{
-              width: 48,
-              height: 48,
-              background: C.surfLow,
-              borderRadius: "2px",
-            }}
-          >
-            <ChevronRightIcon />
-          </IconButton>
-        </Box>
-      </Box>
+              </button>
+            ))}
+            <button
+              disabled={page >= totalPages}
+              onClick={() => setPage((p) => p + 1)}
+              className="p-2 text-outline hover:text-primary disabled:opacity-30"
+            >
+              <Icon name="chevron_right" />
+            </button>
+          </div>
+        </div>
+      </div>
 
-      {/* ---- FAB ---- */}
-      {roles.length > 0 && (
-        <IconButton
-          onClick={() => setCreateOpen(true)}
-          sx={{
-            position: "fixed",
-            bottom: 40,
-            right: 32,
-            width: 64,
-            height: 64,
-            borderRadius: "12px",
-            background: `linear-gradient(135deg, ${C.primary} 0%, ${C.primaryContainer} 100%)`,
-            color: "#fff",
-            boxShadow: "0 8px 32px rgba(0,10,30,0.3)",
-            "&:hover": { transform: "scale(1.05)" },
-            transition: "transform 0.2s",
-            zIndex: 40,
-          }}
-        >
-          <AddIcon sx={{ fontSize: 32 }} />
-        </IconButton>
-      )}
-
-      {/* ---- Context Menu ---- */}
-      <Menu
-        anchorEl={menuAnchor}
-        open={Boolean(menuAnchor)}
-        onClose={() => setMenuAnchor(null)}
-      >
-        <MenuItem
-          onClick={() => {
-            if (menuUser) handleDelete(menuUser.id);
-          }}
-          sx={{ color: C.primary, gap: 1 }}
-        >
-          <DeleteIcon fontSize="small" sx={{ color: "#ba1a1a" }} />
-          <Typography sx={{ color: "#ba1a1a", fontWeight: 600, fontSize: 14 }}>
-            Delete User
-          </Typography>
-        </MenuItem>
-      </Menu>
-
-      {/* ---- Create Dialog ---- */}
+      {/* ── Create Dialog ── */}
       <Dialog
         open={createOpen}
+        title="Create User"
         onClose={() => setCreateOpen(false)}
-        maxWidth="sm"
-        fullWidth
-        slotProps={{ paper: { sx: { borderRadius: "4px" } } }}
       >
-        <DialogTitle
-          sx={{
-            fontFamily: "var(--font-manrope)",
-            fontWeight: 800,
-            color: C.primary,
-          }}
-        >
-          Create User
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField
-              label="Full Name"
+        <div className="space-y-4">
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Full Name *
+            </label>
+            <input
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={cForm.name}
               onChange={(e) =>
                 setCForm((f) => ({ ...f, name: e.target.value }))
               }
-              fullWidth
               required
             />
-            <TextField
-              label="Email"
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Email *
+            </label>
+            <input
               type="email"
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={cForm.email}
               onChange={(e) =>
                 setCForm((f) => ({ ...f, email: e.target.value }))
               }
-              fullWidth
               required
             />
-            <TextField
-              label="Password"
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Password *
+            </label>
+            <input
               type="password"
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={cForm.password}
               onChange={(e) =>
                 setCForm((f) => ({ ...f, password: e.target.value }))
               }
-              helperText="Min 10 chars, uppercase, lowercase, number"
-              fullWidth
               required
             />
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select
-                label="Role"
-                value={cForm.role}
+            <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">
+              Min 10 chars, uppercase, lowercase, number
+            </p>
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Role
+            </label>
+            <select
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
+              value={cForm.role}
+              onChange={(e) =>
+                setCForm((f) => ({ ...f, role: e.target.value as UserRole }))
+              }
+            >
+              {roles.map((r) => (
+                <option key={r} value={r}>
+                  {ROLE_LABELS[r]}
+                </option>
+              ))}
+            </select>
+          </div>
+          {isSA && (
+            <div>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+                Tenant
+              </label>
+              <select
+                className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
+                value={cForm.tenantId}
                 onChange={(e) =>
-                  setCForm((f) => ({ ...f, role: e.target.value as UserRole }))
+                  setCForm((f) => ({ ...f, tenantId: e.target.value }))
                 }
               >
-                {roles.map((r) => (
-                  <MenuItem key={r} value={r}>
-                    {ROLE_BADGE[r].label}
-                  </MenuItem>
+                <option value="">None (Super Admin)</option>
+                {tenants.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
                 ))}
-              </Select>
-            </FormControl>
-            {isSA && (
-              <FormControl fullWidth>
-                <InputLabel>Tenant</InputLabel>
-                <Select
-                  label="Tenant"
-                  value={cForm.tenantId}
-                  onChange={(e) =>
-                    setCForm((f) => ({ ...f, tenantId: e.target.value }))
-                  }
-                >
-                  <MenuItem value="">
-                    <em>None (Super Admin)</em>
-                  </MenuItem>
-                  {tenants.map((t) => (
-                    <MenuItem key={t.id} value={t.id}>
-                      {t.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setCreateOpen(false)}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleCreate}
-            sx={{ background: C.primaryContainer }}
-          >
-            Create
-          </Button>
-        </DialogActions>
+              </select>
+            </div>
+          )}
+          <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/10">
+            <button
+              onClick={() => setCreateOpen(false)}
+              className="px-6 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleCreate}
+              className="px-6 py-2 bg-primary text-white text-sm font-semibold rounded hover:opacity-90"
+            >
+              Create
+            </button>
+          </div>
+        </div>
       </Dialog>
 
-      {/* ---- Edit Dialog ---- */}
+      {/* ── Edit Dialog ── */}
       <Dialog
         open={editOpen}
+        title="Edit User"
         onClose={() => setEditOpen(false)}
-        maxWidth="sm"
-        fullWidth
-        slotProps={{ paper: { sx: { borderRadius: "4px" } } }}
       >
-        <DialogTitle
-          sx={{
-            fontFamily: "var(--font-manrope)",
-            fontWeight: 800,
-            color: C.primary,
-          }}
-        >
-          Edit User
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField
-              label="Full Name"
+        <div className="space-y-4">
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Full Name
+            </label>
+            <input
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={eForm.name}
               onChange={(e) =>
                 setEForm((f) => ({ ...f, name: e.target.value }))
               }
-              fullWidth
             />
-            <TextField
-              label="Email"
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Email
+            </label>
+            <input
               type="email"
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={eForm.email}
               onChange={(e) =>
                 setEForm((f) => ({ ...f, email: e.target.value }))
               }
-              fullWidth
             />
-            <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select
-                label="Role"
-                value={eForm.role}
-                onChange={(e) =>
-                  setEForm((f) => ({ ...f, role: e.target.value as UserRole }))
-                }
-              >
-                {roles.map((r) => (
-                  <MenuItem key={r} value={r}>
-                    {ROLE_BADGE[r].label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setEditOpen(false)}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleEdit}
-            sx={{ background: C.primaryContainer }}
-          >
-            Save
-          </Button>
-        </DialogActions>
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              Role
+            </label>
+            <select
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
+              value={eForm.role}
+              onChange={(e) =>
+                setEForm((f) => ({ ...f, role: e.target.value as UserRole }))
+              }
+            >
+              {roles.map((r) => (
+                <option key={r} value={r}>
+                  {ROLE_LABELS[r]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/10">
+            <button
+              onClick={() => setEditOpen(false)}
+              className="px-6 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleEdit}
+              className="px-6 py-2 bg-primary text-white text-sm font-semibold rounded hover:opacity-90"
+            >
+              Save
+            </button>
+          </div>
+        </div>
       </Dialog>
 
-      {/* ---- Reset Password Dialog ---- */}
+      {/* ── Reset Password Dialog ── */}
       <Dialog
         open={resetOpen}
+        title={`Reset Password — ${resetUser?.name ?? ""}`}
         onClose={() => setResetOpen(false)}
-        maxWidth="sm"
-        fullWidth
-        slotProps={{ paper: { sx: { borderRadius: "4px" } } }}
       >
-        <DialogTitle
-          sx={{
-            fontFamily: "var(--font-manrope)",
-            fontWeight: 800,
-            color: C.primary,
-          }}
-        >
-          Reset Password — {resetUser?.name}
-        </DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField
-              label="New Password"
+        <div className="space-y-4">
+          <div>
+            <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
+              New Password *
+            </label>
+            <input
               type="password"
+              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
               value={newPwd}
               onChange={(e) => setNewPwd(e.target.value)}
-              helperText="Min 10 chars, uppercase, lowercase, number"
-              fullWidth
               required
             />
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setResetOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="warning" onClick={handleReset}>
-            Reset Password
-          </Button>
-        </DialogActions>
+            <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">
+              Min 10 chars, uppercase, lowercase, number
+            </p>
+          </div>
+          <div className="flex justify-end gap-3 pt-4 border-t border-outline-variant/10">
+            <button
+              onClick={() => setResetOpen(false)}
+              className="px-6 py-2 text-sm font-semibold text-on-surface-variant hover:text-primary"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleReset}
+              className="px-6 py-2 bg-tertiary-fixed-dim text-on-tertiary-fixed text-sm font-semibold rounded hover:opacity-90"
+            >
+              Reset Password
+            </button>
+          </div>
+        </div>
       </Dialog>
 
-      {/* ---- Toast ---- */}
-      <Snackbar
-        open={!!toast}
-        autoHideDuration={4000}
-        onClose={() => setToast(null)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          severity={toast?.sev ?? "info"}
+      {/* ── Toast ── */}
+      {toast && (
+        <Toast
+          msg={toast.msg}
+          severity={toast.sev}
           onClose={() => setToast(null)}
-          variant="filled"
-        >
-          {toast?.msg}
-        </Alert>
-      </Snackbar>
+        />
+      )}
     </>
   );
 }

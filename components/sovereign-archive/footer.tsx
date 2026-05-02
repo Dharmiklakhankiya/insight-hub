@@ -48,7 +48,7 @@ export function Footer({
       ],
     },
   ],
-  copyright = `© ${new Date().getFullYear()} InsightHub. All Rights Reserved.`,
+  copyright = `© ${new Date().getFullYear()} InsightHub Intelligence. All rights reserved.`,
   socialLinks = [
     { icon: "share", href: "#" },
     { icon: "public", href: "#" },
