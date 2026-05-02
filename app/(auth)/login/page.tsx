@@ -6,6 +6,8 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LockIcon from "@mui/icons-material/Lock";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import ShieldIcon from "@mui/icons-material/Shield";
 import { useRouter } from "next/navigation";
@@ -44,6 +46,7 @@ export default function LoginPage() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const next = new URLSearchParams(window.location.search).get("next");
@@ -281,19 +284,46 @@ export default function LoginPage() {
                   Security Key
                 </label>
               </Box>
-              <input
-                type="password"
-                required
-                placeholder="••••••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{
-                  ...inputStyle,
-                  borderBottomColor: fieldErrors.password ? "#ba1a1a" : "transparent",
-                }}
-                onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
-                onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.password ? "#ba1a1a" : "transparent")}
-              />
+              <Box sx={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  placeholder="••••••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  style={{
+                    ...inputStyle,
+                    paddingRight: 48,
+                    borderBottomColor: fieldErrors.password ? "#ba1a1a" : "transparent",
+                  }}
+                  onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
+                  onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.password ? "#ba1a1a" : "transparent")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  style={{
+                    position: "absolute",
+                    right: 12,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 4,
+                    display: "flex",
+                    alignItems: "center",
+                    color: C.onSurfaceVar,
+                  }}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <VisibilityOffIcon sx={{ fontSize: 20 }} />
+                  ) : (
+                    <VisibilityIcon sx={{ fontSize: 20 }} />
+                  )}
+                </button>
+              </Box>
               {fieldErrors.password && (
                 <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>{fieldErrors.password}</Typography>
               )}

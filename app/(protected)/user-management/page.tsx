@@ -109,6 +109,7 @@ export default function UserManagementPage() {
 
   // Create dialog
   const [createOpen, setCreateOpen] = useState(false);
+  const [showCreatePwd, setShowCreatePwd] = useState(false);
   const [cForm, setCForm] = useState({
     name: "",
     email: "",
@@ -128,6 +129,7 @@ export default function UserManagementPage() {
 
   // Reset pwd dialog
   const [resetOpen, setResetOpen] = useState(false);
+  const [showResetPwd, setShowResetPwd] = useState(false);
   const [resetUser, setResetUser] = useState<User | null>(null);
   const [newPwd, setNewPwd] = useState("");
 
@@ -491,15 +493,25 @@ export default function UserManagementPage() {
             <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
               Password *
             </label>
-            <input
-              type="password"
-              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
-              value={cForm.password}
-              onChange={(e) =>
-                setCForm((f) => ({ ...f, password: e.target.value }))
-              }
-              required
-            />
+            <div className="relative">
+              <input
+                type={showCreatePwd ? "text" : "password"}
+                className="w-full bg-surface-container-high border-none p-3 pr-12 text-sm rounded focus:ring-1 focus:ring-surface-tint"
+                value={cForm.password}
+                onChange={(e) =>
+                  setCForm((f) => ({ ...f, password: e.target.value }))
+                }
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowCreatePwd((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors p-1"
+                aria-label={showCreatePwd ? "Hide password" : "Show password"}
+              >
+                <Icon name={showCreatePwd ? "visibility_off" : "visibility"} className="text-lg" />
+              </button>
+            </div>
             <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">
               Min 10 chars, uppercase, lowercase, number
             </p>
@@ -638,13 +650,23 @@ export default function UserManagementPage() {
             <label className="text-[10px] uppercase tracking-widest font-bold text-on-surface-variant block mb-1">
               New Password *
             </label>
-            <input
-              type="password"
-              className="w-full bg-surface-container-high border-none p-3 text-sm rounded focus:ring-1 focus:ring-surface-tint"
-              value={newPwd}
-              onChange={(e) => setNewPwd(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showResetPwd ? "text" : "password"}
+                className="w-full bg-surface-container-high border-none p-3 pr-12 text-sm rounded focus:ring-1 focus:ring-surface-tint"
+                value={newPwd}
+                onChange={(e) => setNewPwd(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowResetPwd((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors p-1"
+                aria-label={showResetPwd ? "Hide password" : "Show password"}
+              >
+                <Icon name={showResetPwd ? "visibility_off" : "visibility"} className="text-lg" />
+              </button>
+            </div>
             <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">
               Min 10 chars, uppercase, lowercase, number
             </p>
