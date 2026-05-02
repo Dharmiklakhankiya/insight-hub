@@ -24,6 +24,12 @@ const NAV_ITEMS: NavItem[] = [
     icon: "manage_accounts",
     roles: ["super_admin", "admin"],
   },
+  {
+    href: "/tenant-management",
+    label: "Tenant Management",
+    icon: "corporate_fare",
+    roles: ["super_admin"],
+  },
 ];
 
 export default function Sidebar({
