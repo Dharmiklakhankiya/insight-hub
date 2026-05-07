@@ -1,17 +1,21 @@
 # InsightHub
 
-A full-stack legal case management platform built with **Next.js 16**, **MongoDB**, and **MUI**. InsightHub helps law firms track cases, manage documents, and surface analytics insights — all behind a secure, role-based authentication system.
+A full-stack, multi-tenant legal case management platform built with **Next.js 16**, **MongoDB**, and **MUI**. InsightHub helps law firms track cases, manage documents, and surface analytics insights — all behind a secure, role-based authentication system with tenant isolation.
 
 ---
 
 ## Features
 
-- **Authentication** — JWT-based login with HTTP-only cookies, CSRF protection, and rate limiting
-- **Role-based access control** — Three roles: `admin`, `lawyer`, and `clerk`
-- **Case management** — Create, view, and track cases with statuses (`ongoing`, `pending`, `closed`), assigned lawyers, court/judge details, filing dates, and a timestamped timeline of events
+- **Authentication** — JWT-based login/logout/register with HTTP-only cookies, CSRF protection, and rate limiting
+- **Multi-tenant architecture** — Firms (tenants) are fully isolated; cross-tenant access is blocked at the API layer
+- **Role-based access control** — Four roles: `super_admin`, `admin`, `lawyer`, and `clerk`
+- **Case management** — Create, view, update, and delete cases with statuses (`ongoing`, `pending`, `closed`), assigned lawyers, court/judge details, filing dates, and a timestamped timeline of events
 - **Document uploads** — Attach PDF, DOCX, PNG, or JPEG files (up to 10 MB) to cases, with tag-based organisation
 - **Full-text search** — Search across case titles, client names, and case types
 - **Analytics dashboard** — Live stats including total cases, active/closed counts, average case duration, and deterministic insights
+- **User management** — Admins can create, update, delete, and reset passwords for users within their tenant
+- **Tenant management** — Super admins can create, update, and delete tenants
+- **Public landing page** — Marketing site with hero, features, pricing, workflow, security, and testimonials sections
 - **Docker support** — One-command local MongoDB via Docker Compose
 
 ---
@@ -29,6 +33,18 @@ A full-stack legal case management platform built with **Next.js 16**, **MongoDB
 | File uploads | Multer                                 |
 | HTTP client  | Axios                                  |
 | Testing      | Vitest                                 |
+| Formatting   | Prettier                               |
+
+---
+
+## Role Hierarchy
+
+| Role          | Scope         | Can manage                         |
+| ------------- | ------------- | ---------------------------------- |
+| `super_admin` | Global        | All tenants, all users             |
+| `admin`       | Tenant-scoped | `lawyer` and `clerk` in own tenant |
+| `lawyer`      | Tenant-scoped | No user management                 |
+| `clerk`       | Tenant-scoped | No user management                 |
 
 ---
 
@@ -37,17 +53,29 @@ A full-stack legal case management platform built with **Next.js 16**, **MongoDB
 ```
 insight-hub/
 ├── app/
-│   ├── (auth)/           # Login page (public)
-│   ├── (protected)/      # Dashboard, cases, analytics (requires auth)
-│   └── api/              # API route handlers (auth, cases, documents, analytics, search)
-├── controllers/          # Business-logic controllers
-├── services/             # Data-access services (auth, case, document, analytics, search)
-├── models/               # Mongoose models (User, Case, Document)
-├── lib/                  # Shared utilities (auth, DB, CSRF, rate-limit, validation, etc.)
-├── components/           # Reusable React components
-├── tests/                # Unit and integration tests (Vitest)
-├── docker-compose.yml    # Local MongoDB container
-└── uploads/              # Uploaded files (gitignored)
+│   ├── page.tsx              # Public landing page
+│   ├── privacy/              # Privacy policy page
+│   ├── terms/                # Terms of service page
+│   ├── (auth)/               # Login page (public)
+│   ├── (protected)/          # Dashboard, cases, analytics, user & tenant management (auth required)
+│   └── api/                  # API route handlers
+│       ├── auth/             #   login, logout, me, register
+│       ├── cases/            #   CRUD + document upload
+│       ├── analytics/        #   Analytics summary
+│       ├── search/           #   Full-text search
+│       ├── users/            #   User management + password reset
+│       ├── tenants/          #   Tenant management
+│       └── csrf/             #   CSRF token
+├── controllers/              # Business-logic controllers
+├── services/                 # Data-access services
+├── models/                   # Mongoose models (User, Case, Document, Tenant)
+├── lib/                      # Shared utilities (auth, DB, CSRF, RBAC, rate-limit, validation, etc.)
+├── components/               # Reusable React components
+├── scripts/                  # Utility scripts (e.g. seed-super-admin)
+├── diagrams/                 # Architecture and design diagrams
+├── tests/                    # Unit and integration tests (Vitest)
+├── docker-compose.yml        # Local MongoDB container
+└── uploads/                  # Uploaded files (gitignored)
 ```
 
 ---
@@ -75,9 +103,14 @@ pnpm install
 
 ### 3. Configure environment variables
 
-Create a `.env.local` file in the project root:
+Copy `.env.example` to `.env.local` and fill in the values:
+
+```bash
+cp .env.example .env.local
+```
 
 ```env
+NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/insight_hub
 JWT_SECRET=your_super_secret_key_at_least_32_chars
 JWT_EXPIRES_IN=15m
@@ -94,13 +127,19 @@ docker compose up -d
 
 This starts a MongoDB 7 container on `localhost:27017` with a persistent `mongo_data` volume.
 
-### 5. Run the development server
+### 5. Seed the super admin
+
+```bash
+pnpm tsx scripts/seed-super-admin.ts
+```
+
+### 6. Run the development server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser. You will be redirected to the login page.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
@@ -112,6 +151,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser. You will be
 | `pnpm build`            | Build for production                 |
 | `pnpm start`            | Start the production server          |
 | `pnpm lint`             | Run ESLint                           |
+| `pnpm format`           | Format code with Prettier            |
+| `pnpm check`            | Check formatting with Prettier       |
 | `pnpm test`             | Run all tests with Vitest            |
 | `pnpm test:unit`        | Run unit tests only                  |
 | `pnpm test:integration` | Run integration tests only           |
@@ -121,20 +162,52 @@ Open [http://localhost:3000](http://localhost:3000) in your browser. You will be
 
 ## API Endpoints
 
-| Method   | Path                        | Description                    |
-| -------- | --------------------------- | ------------------------------ |
-| `POST`   | `/api/auth/login`           | Log in and receive auth cookie |
-| `POST`   | `/api/auth/logout`          | Clear auth cookie              |
-| `GET`    | `/api/auth/me`              | Get current authenticated user |
-| `GET`    | `/api/csrf`                 | Get CSRF token                 |
-| `GET`    | `/api/cases`                | List cases                     |
-| `POST`   | `/api/cases`                | Create a new case              |
-| `GET`    | `/api/cases/[id]`           | Get a single case              |
-| `PATCH`  | `/api/cases/[id]`           | Update a case                  |
-| `DELETE` | `/api/cases/[id]`           | Delete a case                  |
-| `POST`   | `/api/cases/[id]/documents` | Upload a document to a case    |
-| `GET`    | `/api/analytics`            | Get analytics summary          |
-| `GET`    | `/api/search`               | Full-text search across cases  |
+### Authentication
+
+| Method | Path                  | Description                    |
+| ------ | --------------------- | ------------------------------ |
+| `POST` | `/api/auth/login`     | Log in and receive auth cookie |
+| `POST` | `/api/auth/logout`    | Clear auth cookie              |
+| `GET`  | `/api/auth/me`        | Get current authenticated user |
+| `POST` | `/api/auth/register`  | Register a new user            |
+| `GET`  | `/api/csrf`           | Get CSRF token                 |
+
+### Cases
+
+| Method   | Path                        | Description                 |
+| -------- | --------------------------- | --------------------------- |
+| `GET`    | `/api/cases`                | List cases                  |
+| `POST`   | `/api/cases`                | Create a new case           |
+| `GET`    | `/api/cases/[id]`           | Get a single case           |
+| `PATCH`  | `/api/cases/[id]`           | Update a case               |
+| `DELETE` | `/api/cases/[id]`           | Delete a case               |
+| `POST`   | `/api/cases/[id]/documents` | Upload a document to a case |
+
+### Users
+
+| Method   | Path                            | Description              |
+| -------- | ------------------------------- | ------------------------ |
+| `GET`    | `/api/users`                    | List users               |
+| `POST`   | `/api/users`                    | Create a user            |
+| `PATCH`  | `/api/users/[userId]`           | Update a user            |
+| `DELETE` | `/api/users/[userId]`           | Delete a user            |
+| `POST`   | `/api/users/reset-password`     | Reset a user's password  |
+
+### Tenants
+
+| Method   | Path                        | Description       |
+| -------- | --------------------------- | ----------------- |
+| `GET`    | `/api/tenants`              | List tenants      |
+| `POST`   | `/api/tenants`              | Create a tenant   |
+| `PATCH`  | `/api/tenants/[tenantId]`   | Update a tenant   |
+| `DELETE` | `/api/tenants/[tenantId]`   | Delete a tenant   |
+
+### Other
+
+| Method | Path             | Description                   |
+| ------ | ---------------- | ----------------------------- |
+| `GET`  | `/api/analytics` | Get analytics summary         |
+| `GET`  | `/api/search`    | Full-text search across cases |
 
 ---
 
@@ -142,12 +215,19 @@ Open [http://localhost:3000](http://localhost:3000) in your browser. You will be
 
 ### User
 
-| Field          | Type                           | Notes             |
-| -------------- | ------------------------------ | ----------------- |
-| `name`         | String                         | 2–80 chars        |
-| `email`        | String                         | Unique, lowercase |
-| `passwordHash` | String                         | bcrypt hash       |
-| `role`         | `admin` \| `lawyer` \| `clerk` | Default: `clerk`  |
+| Field        | Type                                           | Notes             |
+| ------------ | ---------------------------------------------- | ----------------- |
+| `name`       | String                                         | 2–80 chars        |
+| `email`      | String                                         | Unique, lowercase |
+| `passwordHash` | String                                       | bcrypt hash       |
+| `role`       | `super_admin` \| `admin` \| `lawyer` \| `clerk` | Default: `clerk`  |
+| `tenantId`   | ObjectId                                       | Ref → Tenant      |
+
+### Tenant
+
+| Field  | Type   | Notes          |
+| ------ | ------ | -------------- |
+| `name` | String | 2–120 chars, unique |
 
 ### Case
 
