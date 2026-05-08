@@ -16,12 +16,7 @@ export default defineConfig([
 
   {
     rules: {
-      // 🔥 Disable overly aggressive React rule
       "react-hooks/set-state-in-effect": "off",
-
-      // (Optional sanity tweaks — uncomment if needed)
-      // "@typescript-eslint/no-explicit-any": "warn",
-      // "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     },
   },
 ]);

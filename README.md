@@ -32,7 +32,6 @@ A full-stack, multi-tenant legal case management platform built with **Next.js 1
 | Validation   | Zod                                    |
 | File uploads | Multer                                 |
 | HTTP client  | Axios                                  |
-| Testing      | Vitest                                 |
 | Formatting   | Prettier                               |
 
 ---
@@ -73,7 +72,6 @@ insight-hub/
 ├── components/               # Reusable React components
 ├── scripts/                  # Utility scripts (e.g. seed-super-admin)
 ├── diagrams/                 # Architecture and design diagrams
-├── tests/                    # Unit and integration tests (Vitest)
 ├── docker-compose.yml        # Local MongoDB container
 └── uploads/                  # Uploaded files (gitignored)
 ```
@@ -145,18 +143,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## Available Scripts
 
-| Command                 | Description                          |
-| ----------------------- | ------------------------------------ |
-| `pnpm dev`              | Start the Next.js development server |
-| `pnpm build`            | Build for production                 |
-| `pnpm start`            | Start the production server          |
-| `pnpm lint`             | Run ESLint                           |
-| `pnpm format`           | Format code with Prettier            |
-| `pnpm check`            | Check formatting with Prettier       |
-| `pnpm test`             | Run all tests with Vitest            |
-| `pnpm test:unit`        | Run unit tests only                  |
-| `pnpm test:integration` | Run integration tests only           |
-| `pnpm test:coverage`    | Run tests with coverage report       |
+| Command       | Description                          |
+| ------------- | ------------------------------------ |
+| `pnpm dev`    | Start the Next.js development server |
+| `pnpm build`  | Build for production                 |
+| `pnpm start`  | Start the production server          |
+| `pnpm lint`   | Run ESLint                           |
+| `pnpm format` | Format code with Prettier            |
+| `pnpm check`  | Check formatting with Prettier       |
 
 ---
 
@@ -261,8 +255,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Contributing
 
 1. Fork the repository and create a feature branch.
-2. Make your changes, add tests where applicable.
-3. Ensure all tests pass: `pnpm test`
+2. Make your changes locally.
+3. Ensure no linting or formatting errors: `pnpm lint` && `pnpm check`.
 4. Submit a pull request with a clear description of your changes.
 
 ---
