@@ -171,7 +171,7 @@ export default function DashboardPage() {
                   href="/cases"
                   className="flex items-center gap-3 p-3 bg-white/10 rounded hover:bg-white/20 transition-colors"
                 >
-                  <Icon name="gavel" className="text-tertiary-fixed-dim" />
+                  <Icon name="scale" className="text-tertiary-fixed-dim" />
                   <span className="text-sm font-medium">View Case Ledger</span>
                 </Link>
                 <Link

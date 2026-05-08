@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import ArrowForward from "@mui/icons-material/ArrowForward";
+import { ArrowRight } from "lucide-react";
 
 export interface HeroProps {
   badge?: string;
@@ -71,7 +71,7 @@ export function HeroSection({
               className="inline-flex items-center justify-center gap-2 rounded-full border border-amber-200 bg-amber-400 px-6 py-3.5 text-base font-extrabold text-[#002147] shadow-[0_18px_40px_rgba(245,158,11,0.28)] transition hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-[0_22px_50px_rgba(245,158,11,0.34)]"
             >
               {primaryCTA.label}
-              <ArrowForward fontSize="small" />
+              <ArrowRight className="h-5 w-5" />
             </Link>
             {secondaryCTA && (
               <Link

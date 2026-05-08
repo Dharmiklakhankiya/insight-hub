@@ -1,19 +1,14 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Alert,
-  Box,
-  Card,
-  CardContent,
-  CircularProgress,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
-} from "@mui/material";
+} from "@/components/ui/table";
 import { useEffect, useState } from "react";
 
 import { apiGet } from "@/lib/client-api";
@@ -54,53 +49,51 @@ export default function AnalyticsPage() {
 
   if (loading) {
     return (
-      <Stack
-        direction="row"
-        spacing={2}
-        className="py-10"
-        sx={{ alignItems: "center" }}
-      >
-        <CircularProgress size={24} />
-        <Typography>Loading analytics...</Typography>
-      </Stack>
+      <div className="flex items-center gap-2 py-10">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900"></div>
+        <span>Loading analytics...</span>
+      </div>
     );
   }
 
   if (error || !data) {
     return (
-      <Alert severity="error">{error ?? "Failed to load analytics."}</Alert>
+      <Alert variant="destructive">
+        <AlertDescription>
+          {error ?? "Failed to load analytics."}
+        </AlertDescription>
+      </Alert>
     );
   }
 
   return (
-    <Stack spacing={3}>
-      <Typography variant="h4" sx={{ fontWeight: 800 }}>
-        Analytics
-      </Typography>
+    <div className="space-y-3">
+      <h1 className="text-4xl font-extrabold">Analytics</h1>
 
-      <Card elevation={0}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Case Type Distribution</CardTitle>
+        </CardHeader>
         <CardContent>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-            Case Type Distribution
-          </Typography>
-
           {data.caseTypeDistribution.length === 0 ? (
-            <Alert severity="info">
-              No case type distribution data available.
+            <Alert>
+              <AlertDescription>
+                No case type distribution data available.
+              </AlertDescription>
             </Alert>
           ) : (
-            <Table size="small">
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Case Type</TableCell>
-                  <TableCell align="right">Count</TableCell>
+                  <TableCell className="text-right">Count</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.caseTypeDistribution.map((item) => (
                   <TableRow key={item.case_type}>
                     <TableCell>{item.case_type}</TableCell>
-                    <TableCell align="right">{item.count}</TableCell>
+                    <TableCell className="text-right">{item.count}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -109,27 +102,32 @@ export default function AnalyticsPage() {
         </CardContent>
       </Card>
 
-      <Card elevation={0}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Lawyer Workload</CardTitle>
+        </CardHeader>
         <CardContent>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-            Lawyer Workload
-          </Typography>
-
           {data.lawyerWorkload.length === 0 ? (
-            <Alert severity="info">No lawyer workload data available.</Alert>
+            <Alert>
+              <AlertDescription>
+                No lawyer workload data available.
+              </AlertDescription>
+            </Alert>
           ) : (
-            <Table size="small">
+            <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Lawyer</TableCell>
-                  <TableCell align="right">Assigned Cases</TableCell>
+                  <TableCell className="text-right">Assigned Cases</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {data.lawyerWorkload.map((item) => (
                   <TableRow key={item.lawyer}>
                     <TableCell>{item.lawyer}</TableCell>
-                    <TableCell align="right">{item.caseCount}</TableCell>
+                    <TableCell className="text-right">
+                      {item.caseCount}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -138,27 +136,23 @@ export default function AnalyticsPage() {
         </CardContent>
       </Card>
 
-      <Card elevation={0}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Insight Generator</CardTitle>
+        </CardHeader>
         <CardContent>
-          <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
-            Insight Generator
-          </Typography>
-          <Stack spacing={1}>
+          <div className="space-y-1">
             {data.insights.map((insight) => (
-              <Box
+              <div
                 key={insight}
-                className="rounded-lg px-3 py-2"
-                sx={{
-                  backgroundColor: "rgba(0,33,71,0.05)",
-                  border: "none",
-                }}
+                className="rounded-lg bg-[rgba(0,33,71,0.05)] px-3 py-2 border-none"
               >
-                <Typography>{insight}</Typography>
-              </Box>
+                <p>{insight}</p>
+              </div>
             ))}
-          </Stack>
+          </div>
         </CardContent>
       </Card>
-    </Stack>
+    </div>
   );
 }

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
-
-import AppThemeProvider from "@/components/app-theme-provider";
+import { Inter, Manrope, Geist } from "next/font/google";
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -33,15 +34,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${inter.variable} h-full antialiased`}
+      className={cn(
+        "h-full",
+        "antialiased",
+        manrope.variable,
+        inter.variable,
+        "font-sans",
+        geist.variable,
+      )}
     >
-      <head>
-        <meta name="emotion-insertion-point" content="" />
-      </head>
+      <head />
       <body className="min-h-full font-body">
-        <AppThemeProvider>
-          <div className="flex min-h-full flex-col">{children}</div>
-        </AppThemeProvider>
+        <div className="flex min-h-full flex-col">{children}</div>
       </body>
     </html>
   );

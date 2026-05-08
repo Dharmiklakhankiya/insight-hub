@@ -2,15 +2,15 @@
 
 import * as React from "react";
 import Link from "next/link";
-import GavelOutlined from "@mui/icons-material/GavelOutlined";
-import CloseIcon from "@mui/icons-material/Close";
+import Image from "next/image";
+import { X } from "lucide-react";
 import {
-  Box,
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
-  IconButton,
-} from "@mui/material";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export interface FooterLink {
   label: string;
@@ -78,11 +78,21 @@ export function Footer({
 
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 px-6 py-16 md:grid-cols-4 md:px-8 relative z-10">
         <div className="col-span-2 md:col-span-1">
-          <Link href="#top" className="mb-6 flex items-center gap-3 group">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#002147] to-[#003875] text-white shadow-lg shadow-blue-900/20 transition-transform group-hover:scale-105 group-hover:rotate-3 duration-300">
-              <GavelOutlined fontSize="small" />
+          <Link
+            href="#top"
+            className="flex items-center gap-3 transition-opacity hover:opacity-80"
+          >
+            <span className="relative flex h-14 w-14 items-center justify-center ">
+              <Image
+                src="/icon.svg"
+                alt="InsightHub Logo"
+                fill
+                className="object-contain"
+                sizes="56px"
+              />
             </span>
-            <span className="text-xl font-bold text-[#002147] dark:text-white tracking-tight">
+
+            <span className="font-['Manrope'] text-xl font-black uppercase tracking-tighter text-[#002147]">
               InsightHub
             </span>
           </Link>
@@ -168,62 +178,21 @@ export function Footer({
         </div>
       </div>
 
-      <Dialog
-        open={isPrivacyOpen}
-        onClose={() => setIsPrivacyOpen(false)}
-        maxWidth="md"
-        fullWidth
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: 3,
-              overflow: "hidden",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
-              background: "#fff",
-            },
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            pr: 6,
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            background: "linear-gradient(to right, #002147, #003875)",
-            color: "white",
-            fontWeight: 600,
-            letterSpacing: "0.02em",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          Privacy Policy
-          <IconButton
-            onClick={() => setIsPrivacyOpen(false)}
-            sx={{
-              color: "white",
-              "&:hover": {
-                backgroundColor: "rgba(255,255,255,0.15)",
-              },
-            }}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+      <Dialog open={isPrivacyOpen} onOpenChange={setIsPrivacyOpen}>
+        <DialogContent className="max-w-md rounded-3xl overflow-hidden px-0 py-0">
+          <DialogHeader className="sticky top-0 z-10 bg-gradient-to-r from-[#002147] to-[#003875] text-white font-semibold tracking-[0.02em] flex items-center justify-between px-6 py-4">
+            <DialogTitle className="text-white">Privacy Policy</DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsPrivacyOpen(false)}
+              className="text-white hover:bg-white/15"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </DialogHeader>
 
-        <DialogContent
-          dividers
-          sx={{
-            px: { xs: 2.5, md: 4 },
-            py: 3,
-            lineHeight: 1.75,
-            background: "#f8fafc",
-          }}
-        >
-          <Box className="space-y-8">
+          <div className="px-4 md:px-6 py-3 leading-7 bg-[#f8fafc] space-y-8">
             <section>
               <h2 className="text-lg font-semibold mb-2 text-[#002147]">
                 1. Information We Collect
@@ -267,67 +236,27 @@ export function Footer({
                 disclosure, alteration, and destruction.
               </p>
             </section>
-          </Box>
+          </div>
         </DialogContent>
       </Dialog>
 
       {/* ================= TERMS ================= */}
 
-      <Dialog
-        open={isTermsOpen}
-        onClose={() => setIsTermsOpen(false)}
-        maxWidth="md"
-        fullWidth
-        slotProps={{
-          paper: {
-            sx: {
-              borderRadius: 3,
-              overflow: "hidden",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
-              background: "#fff",
-            },
-          },
-        }}
-      >
-        <DialogTitle
-          sx={{
-            pr: 6,
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            background: "linear-gradient(to right, #002147, #003875)",
-            color: "white",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          Terms of Service
-          <IconButton
-            onClick={() => setIsTermsOpen(false)}
-            sx={{
-              color: "white",
-              "&:hover": {
-                backgroundColor: "rgba(255,255,255,0.15)",
-              },
-            }}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+      <Dialog open={isTermsOpen} onOpenChange={setIsTermsOpen}>
+        <DialogContent className="max-w-md rounded-3xl overflow-hidden px-0 py-0">
+          <DialogHeader className="sticky top-0 z-10 bg-gradient-to-r from-[#002147] to-[#003875] text-white font-semibold tracking-[0.02em] flex items-center justify-between px-6 py-4">
+            <DialogTitle className="text-white">Terms of Service</DialogTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsTermsOpen(false)}
+              className="text-white hover:bg-white/15"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </DialogHeader>
 
-        <DialogContent
-          dividers
-          sx={{
-            px: { xs: 2.5, md: 4 },
-            py: 3,
-            lineHeight: 1.75,
-            background: "#f8fafc",
-          }}
-        >
-          <Box className="space-y-8">
+          <div className="px-4 md:px-6 py-3 leading-7 bg-[#f8fafc] space-y-8">
             <section>
               <h2 className="text-lg font-semibold mb-2 text-[#002147]">
                 1. Acceptance of Terms
@@ -381,7 +310,7 @@ export function Footer({
                 occurring under their account.
               </p>
             </section>
-          </Box>
+          </div>
         </DialogContent>
       </Dialog>
     </footer>

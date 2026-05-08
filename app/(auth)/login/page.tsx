@@ -1,12 +1,13 @@
 "use client";
 
-import { Box, Typography } from "@mui/material";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import LockIcon from "@mui/icons-material/Lock";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
-import ShieldIcon from "@mui/icons-material/Shield";
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  Shield,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useEffect, useState } from "react";
 import { ZodError } from "zod";
@@ -89,201 +90,123 @@ export default function LoginPage() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-      }}
-    >
+    <div className="flex min-h-screen flex-col md:flex-row">
       {/* ---- Left: Visual Anchor ---- */}
-      <Box
-        sx={{
-          display: { xs: "none", md: "flex" },
-          width: "50%",
-          position: "relative",
-          overflow: "hidden",
+      <div
+        className="hidden md:flex w-1/2 relative overflow-hidden flex-col justify-end p-8"
+        style={{
           background: `linear-gradient(160deg, ${C.primaryContainer} 0%, ${C.primary} 100%)`,
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          p: 8,
         }}
       >
         {/* Decorative pattern overlay */}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            opacity: 0.06,
+        <div
+          className="absolute inset-0 opacity-6 pointer-events-none"
+          style={{
             backgroundImage:
               "repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.1) 40px, rgba(255,255,255,0.1) 42px)",
           }}
         />
         {/* Subtle radial glow */}
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
+        <div
+          className="absolute inset-0"
+          style={{
             background:
               "radial-gradient(ellipse at 30% 80%, rgba(70,95,136,0.35) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(174,199,246,0.12) 0%, transparent 50%)",
           }}
         />
 
-        <Box sx={{ position: "relative", zIndex: 1 }}>
-          <Typography
-            sx={{
-              fontFamily: "var(--font-manrope)",
-              fontWeight: 800,
-              fontSize: "3.5rem",
-              color: "#fff",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.1,
-              mb: 3,
-              maxWidth: 420,
-            }}
+        <div className="relative z-10">
+          <h1
+            className="font-['Manrope'] font-black text-5xl text-white mb-3 max-w-96"
+            style={{ letterSpacing: "-0.03em", lineHeight: 1.1 }}
           >
             InsightHub.
-          </Typography>
-          <Typography
-            sx={{
+          </h1>
+          <p
+            className="text-base leading-7 max-w-96"
+            style={{
               color: C.onPrimaryContainer,
-              fontSize: 16,
-              lineHeight: 1.7,
-              maxWidth: 400,
               opacity: 0.9,
             }}
           >
             Precision in record-keeping, unshakeable in security. Welcome to the
             centralized intelligence hub for the modern legal professional.
-          </Typography>
+          </p>
 
-          <Box sx={{ display: "flex", gap: 6, mt: 8 }}>
-            <Box>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontFamily: "var(--font-manrope)",
-                  fontWeight: 700,
-                  fontSize: "1.5rem",
-                }}
-              >
+          <div className="flex gap-12 mt-8">
+            <div>
+              <h2 className="font-['Manrope'] font-bold text-2xl text-white">
                 256-bit
-              </Typography>
-              <Typography
-                sx={{
-                  color: C.onPrimaryContainer,
-                  fontSize: 10,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.15em",
-                  fontWeight: 600,
-                }}
+              </h2>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mt-2"
+                style={{ color: C.onPrimaryContainer }}
               >
                 End-to-End Encryption
-              </Typography>
-            </Box>
-            <Box>
-              <Typography
-                sx={{
-                  color: "#fff",
-                  fontFamily: "var(--font-manrope)",
-                  fontWeight: 700,
-                  fontSize: "1.5rem",
-                }}
-              >
+              </p>
+            </div>
+            <div>
+              <h2 className="font-['Manrope'] font-bold text-2xl text-white">
                 RBAC
-              </Typography>
-              <Typography
-                sx={{
-                  color: C.onPrimaryContainer,
-                  fontSize: 10,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.15em",
-                  fontWeight: 600,
-                }}
+              </h2>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mt-2"
+                style={{ color: C.onPrimaryContainer }}
               >
                 Role-Based Access Control
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* ---- Right: Login Form ---- */}
-      <Box
-        sx={{
-          width: { xs: "100%", md: "50%" },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          p: { xs: 4, md: 10 },
-          background: C.surface,
-        }}
+      <div
+        className="w-full md:w-1/2 flex items-center justify-center p-4 md:p-10"
+        style={{ background: C.surface }}
       >
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
+        <div className="w-full max-w-96">
           {/* Heading */}
-          <Box sx={{ mb: 6 }}>
+          <div className="mb-6">
             {/* Mobile-only branding */}
-            <Typography
-              sx={{
-                display: { xs: "block", md: "none" },
-                fontFamily: "var(--font-manrope)",
-                fontWeight: 800,
-                fontSize: "1.5rem",
-                color: C.primary,
-                mb: 3,
-              }}
+            <h2
+              className="md:hidden font-['Manrope'] font-black text-2xl mb-3"
+              style={{ color: C.primary }}
             >
               InsightHub
-            </Typography>
-            <Typography
-              sx={{
-                fontFamily: "var(--font-manrope)",
-                fontWeight: 700,
-                fontSize: "2rem",
-                color: C.primary,
-                mb: 1,
-              }}
+            </h2>
+            <h1
+              className="font-['Manrope'] font-bold text-3xl mb-1"
+              style={{ color: C.primary }}
             >
               Secure Archive Access
-            </Typography>
-            <Typography sx={{ color: C.onSurfaceVar, fontSize: 14 }}>
+            </h1>
+            <p className="text-sm" style={{ color: C.onSurfaceVar }}>
               Please verify your credentials to enter the sovereign database.
-            </Typography>
-          </Box>
+            </p>
+          </div>
 
           {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: 28 }}
-          >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-7">
             {/* API Error */}
             {apiError && (
-              <Box
-                sx={{
+              <div
+                className="px-2 py-1.5 rounded text-sm font-medium"
+                style={{
                   background: "#ffdad6",
                   color: "#93000a",
-                  px: 2,
-                  py: 1.5,
-                  borderRadius: "4px",
-                  fontSize: 13,
-                  fontWeight: 500,
                 }}
               >
                 {apiError}
-              </Box>
+              </div>
             )}
 
             {/* Email */}
-            <Box>
+            <div>
               <label
+                className="block text-xs font-semibold uppercase tracking-widest mb-2"
                 style={{
-                  display: "block",
-                  fontSize: 11,
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
                   color: C.onSurfaceVar,
-                  marginBottom: 8,
                   fontFamily: "var(--font-inter)",
                 }}
               >
@@ -309,36 +232,26 @@ export default function LoginPage() {
                 }
               />
               {fieldErrors.email && (
-                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>
+                <p className="text-xs mt-1" style={{ color: "#ba1a1a" }}>
                   {fieldErrors.email}
-                </Typography>
+                </p>
               )}
-            </Box>
+            </div>
 
             {/* Password */}
-            <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mb: 1,
-                }}
-              >
+            <div>
+              <div className="flex justify-between items-center mb-1">
                 <label
+                  className="text-xs font-semibold uppercase tracking-widest"
                   style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.12em",
                     color: C.onSurfaceVar,
                     fontFamily: "var(--font-inter)",
                   }}
                 >
                   Security Key
                 </label>
-              </Box>
-              <Box sx={{ position: "relative" }}>
+              </div>
+              <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   required
@@ -364,130 +277,81 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  style={{
-                    position: "absolute",
-                    right: 12,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 4,
-                    display: "flex",
-                    alignItems: "center",
-                    color: C.onSurfaceVar,
-                  }}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer p-1 flex items-center"
+                  style={{ color: C.onSurfaceVar }}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <VisibilityOffIcon sx={{ fontSize: 20 }} />
+                    <EyeOff className="h-5 w-5" />
                   ) : (
-                    <VisibilityIcon sx={{ fontSize: 20 }} />
+                    <Eye className="h-5 w-5" />
                   )}
                 </button>
-              </Box>
+              </div>
               {fieldErrors.password && (
-                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>
+                <p className="text-xs mt-1" style={{ color: "#ba1a1a" }}>
                   {fieldErrors.password}
-                </Typography>
+                </p>
               )}
-            </Box>
+            </div>
 
             {/* Submit */}
-            <Box
-              sx={{ pt: 1, display: "flex", flexDirection: "column", gap: 1.5 }}
-            >
+            <div className="pt-1 flex flex-col gap-1.5">
               <button
                 type="submit"
                 disabled={isSubmitting}
+                className="w-full flex justify-between items-center px-6 py-4 text-white border-none rounded text-base font-bold transition-opacity"
                 style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "16px 24px",
                   background: `linear-gradient(to right, ${C.primary}, ${C.primaryContainer})`,
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
                   fontFamily: "var(--font-manrope)",
-                  fontWeight: 700,
-                  fontSize: 15,
                   cursor: isSubmitting ? "not-allowed" : "pointer",
                   opacity: isSubmitting ? 0.7 : 1,
-                  transition: "opacity 0.2s, transform 0.1s",
                 }}
               >
                 <span>{isSubmitting ? "Verifying…" : "Verify Identity"}</span>
-                <ArrowForwardIcon sx={{ fontSize: 20 }} />
+                <ArrowRight className="h-5 w-5" />
               </button>
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  color: C.onSurfaceVar,
-                  fontSize: 13,
-                  mt: 1,
-                }}
+              <p
+                className="text-center text-sm mt-1"
+                style={{ color: C.onSurfaceVar }}
               >
                 User accounts are managed by your organization administrator.
-              </Typography>
-            </Box>
+              </p>
+            </div>
           </form>
 
           {/* Trust Signals */}
-          <Box
-            sx={{
-              mt: 10,
-              pt: 4,
-              borderTop: `1px solid ${C.outlineVar}33`,
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 3,
-              justifyContent: "space-between",
-            }}
+          <div
+            className="mt-10 pt-4 flex flex-wrap gap-3 justify-between"
+            style={{ borderTop: `1px solid ${C.outlineVar}33` }}
           >
             {[
               {
-                icon: <LockIcon sx={{ fontSize: 18 }} />,
+                icon: <Lock className="h-4 w-4" />,
                 label: "256-bit Encryption",
               },
               {
-                icon: <VerifiedUserIcon sx={{ fontSize: 18 }} />,
+                icon: <CheckCircle2 className="h-4 w-4" />,
                 label: "RBAC Protocol",
               },
               {
-                icon: <ShieldIcon sx={{ fontSize: 18 }} />,
+                icon: <Shield className="h-4 w-4" />,
                 label: "Tenant Isolation",
               },
             ].map((item) => (
-              <Box
+              <div
                 key={item.label}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 0.75,
-                  opacity: 0.4,
-                  filter: "grayscale(1)",
-                  transition: "all 0.2s",
-                  "&:hover": { opacity: 1, filter: "grayscale(0)" },
-                }}
+                className="flex items-center gap-0.75 transition-all opacity-40 grayscale hover:opacity-100 hover:grayscale-0"
               >
                 {item.icon}
-                <Typography
-                  sx={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
+                <p className="text-xs font-bold uppercase tracking-tighter">
                   {item.label}
-                </Typography>
-              </Box>
+                </p>
+              </div>
             ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
