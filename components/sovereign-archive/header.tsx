@@ -32,7 +32,7 @@ export function Header({
         >
           <span className="relative flex h-14 w-14 items-center justify-center">
             <Image
-              src="/icon.svg"
+              src="/icon.png"
               alt="InsightHub Logo"
               fill
               className="object-contain"
