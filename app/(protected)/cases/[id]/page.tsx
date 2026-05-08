@@ -272,9 +272,7 @@ export default function CaseDetailPage() {
                 className="bg-surface-container-high border-none p-3 text-sm rounded"
                 value={timelineType}
                 onChange={(e) =>
-                  setTimelineType(
-                    e.target.value as typeof timelineType,
-                  )
+                  setTimelineType(e.target.value as typeof timelineType)
                 }
               >
                 <option value="filing">Filing</option>
@@ -392,9 +390,7 @@ export default function CaseDetailPage() {
               className="px-8 py-4 border-b border-outline-variant/10 flex flex-wrap gap-3 items-end"
             >
               {uploadError && (
-                <span className="text-xs text-error w-full">
-                  {uploadError}
-                </span>
+                <span className="text-xs text-error w-full">{uploadError}</span>
               )}
               {uploadSuccess && (
                 <span className="text-xs text-green-600 w-full">
@@ -406,9 +402,7 @@ export default function CaseDetailPage() {
                 <input
                   hidden
                   type="file"
-                  onChange={(e) =>
-                    setSelectedFile(e.target.files?.[0] ?? null)
-                  }
+                  onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
                 />
               </label>
               <input
@@ -488,12 +482,13 @@ export default function CaseDetailPage() {
                   </p>
                 ) : (
                   [...record.timeline].reverse().map((evt, i) => (
-                    <div key={`${evt.type}-${evt.date}-${i}`} className="flex gap-6 items-start">
+                    <div
+                      key={`${evt.type}-${evt.date}-${i}`}
+                      className="flex gap-6 items-start"
+                    >
                       <div
                         className={`w-6 h-6 rounded-full flex-shrink-0 z-10 flex items-center justify-center border-4 border-surface-container-low ${
-                          i === 0
-                            ? "bg-primary"
-                            : "bg-outline-variant"
+                          i === 0 ? "bg-primary" : "bg-outline-variant"
                         }`}
                       >
                         <div className="w-2 h-2 rounded-full bg-white" />

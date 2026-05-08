@@ -37,7 +37,6 @@ export default function RootLayout({
     >
       <head>
         <meta name="emotion-insertion-point" content="" />
-
       </head>
       <body className="min-h-full font-body">
         <AppThemeProvider>

@@ -227,10 +227,7 @@ export default function CasesPage() {
               </div>
             </div>
             <div className="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4">
-              <Icon
-                name="notification_important"
-                className="text-8xl"
-              />
+              <Icon name="notification_important" className="text-8xl" />
             </div>
           </div>
         </div>
@@ -238,10 +235,7 @@ export default function CasesPage() {
 
       {/* ── Search & Filter Bar ── */}
       <section className="mb-6 flex flex-wrap gap-4 items-center">
-        <form
-          onSubmit={handleSearch}
-          className="flex-1 min-w-[300px] relative"
-        >
+        <form onSubmit={handleSearch} className="flex-1 min-w-[300px] relative">
           <Icon
             name="search"
             className="absolute left-4 top-1/2 -translate-y-1/2 text-outline"

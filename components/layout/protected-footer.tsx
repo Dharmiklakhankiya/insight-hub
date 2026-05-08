@@ -8,21 +8,25 @@ export default function ProtectedFooter() {
           InsightHub
         </span>
         <span className="font-label text-xs uppercase tracking-widest text-on-surface-variant opacity-50">
-          © {new Date().getFullYear()} InsightHub Intelligence. All rights reserved.
+          © {new Date().getFullYear()} InsightHub Intelligence. All rights
+          reserved.
         </span>
       </div>
       <div className="flex gap-8">
-        {["Legal Documentation", "Privacy Policy", "Terms of Service", "Security Whitepaper"].map(
-          (label) => (
-            <Link
-              key={label}
-              href="#"
-              className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-50 hover:text-primary-container hover:opacity-100 transition-all"
-            >
-              {label}
-            </Link>
-          ),
-        )}
+        {[
+          "Legal Documentation",
+          "Privacy Policy",
+          "Terms of Service",
+          "Security Whitepaper",
+        ].map((label) => (
+          <Link
+            key={label}
+            href="#"
+            className="font-label text-[10px] uppercase tracking-widest text-on-surface-variant opacity-50 hover:text-primary-container hover:opacity-100 transition-all"
+          >
+            {label}
+          </Link>
+        ))}
       </div>
     </footer>
   );

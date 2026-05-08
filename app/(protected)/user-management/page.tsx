@@ -165,8 +165,7 @@ export default function UserManagementPage() {
       const q = search.toLowerCase();
       list = list.filter(
         (u) =>
-          u.name.toLowerCase().includes(q) ||
-          u.email.toLowerCase().includes(q),
+          u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q),
       );
     }
     if (roleFilter) list = list.filter((u) => u.role === roleFilter);
@@ -509,7 +508,10 @@ export default function UserManagementPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors p-1"
                 aria-label={showCreatePwd ? "Hide password" : "Show password"}
               >
-                <Icon name={showCreatePwd ? "visibility_off" : "visibility"} className="text-lg" />
+                <Icon
+                  name={showCreatePwd ? "visibility_off" : "visibility"}
+                  className="text-lg"
+                />
               </button>
             </div>
             <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">
@@ -664,7 +666,10 @@ export default function UserManagementPage() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors p-1"
                 aria-label={showResetPwd ? "Hide password" : "Show password"}
               >
-                <Icon name={showResetPwd ? "visibility_off" : "visibility"} className="text-lg" />
+                <Icon
+                  name={showResetPwd ? "visibility_off" : "visibility"}
+                  className="text-lg"
+                />
               </button>
             </div>
             <p className="text-[10px] text-on-surface-variant mt-1 opacity-60">

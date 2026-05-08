@@ -164,13 +164,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Authentication
 
-| Method | Path                  | Description                    |
-| ------ | --------------------- | ------------------------------ |
-| `POST` | `/api/auth/login`     | Log in and receive auth cookie |
-| `POST` | `/api/auth/logout`    | Clear auth cookie              |
-| `GET`  | `/api/auth/me`        | Get current authenticated user |
-| `POST` | `/api/auth/register`  | Register a new user            |
-| `GET`  | `/api/csrf`           | Get CSRF token                 |
+| Method | Path                 | Description                    |
+| ------ | -------------------- | ------------------------------ |
+| `POST` | `/api/auth/login`    | Log in and receive auth cookie |
+| `POST` | `/api/auth/logout`   | Clear auth cookie              |
+| `GET`  | `/api/auth/me`       | Get current authenticated user |
+| `POST` | `/api/auth/register` | Register a new user            |
+| `GET`  | `/api/csrf`          | Get CSRF token                 |
 
 ### Cases
 
@@ -185,22 +185,22 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### Users
 
-| Method   | Path                            | Description              |
-| -------- | ------------------------------- | ------------------------ |
-| `GET`    | `/api/users`                    | List users               |
-| `POST`   | `/api/users`                    | Create a user            |
-| `PATCH`  | `/api/users/[userId]`           | Update a user            |
-| `DELETE` | `/api/users/[userId]`           | Delete a user            |
-| `POST`   | `/api/users/reset-password`     | Reset a user's password  |
+| Method   | Path                        | Description             |
+| -------- | --------------------------- | ----------------------- |
+| `GET`    | `/api/users`                | List users              |
+| `POST`   | `/api/users`                | Create a user           |
+| `PATCH`  | `/api/users/[userId]`       | Update a user           |
+| `DELETE` | `/api/users/[userId]`       | Delete a user           |
+| `POST`   | `/api/users/reset-password` | Reset a user's password |
 
 ### Tenants
 
-| Method   | Path                        | Description       |
-| -------- | --------------------------- | ----------------- |
-| `GET`    | `/api/tenants`              | List tenants      |
-| `POST`   | `/api/tenants`              | Create a tenant   |
-| `PATCH`  | `/api/tenants/[tenantId]`   | Update a tenant   |
-| `DELETE` | `/api/tenants/[tenantId]`   | Delete a tenant   |
+| Method   | Path                      | Description     |
+| -------- | ------------------------- | --------------- |
+| `GET`    | `/api/tenants`            | List tenants    |
+| `POST`   | `/api/tenants`            | Create a tenant |
+| `PATCH`  | `/api/tenants/[tenantId]` | Update a tenant |
+| `DELETE` | `/api/tenants/[tenantId]` | Delete a tenant |
 
 ### Other
 
@@ -215,18 +215,18 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ### User
 
-| Field        | Type                                           | Notes             |
-| ------------ | ---------------------------------------------- | ----------------- |
-| `name`       | String                                         | 2–80 chars        |
-| `email`      | String                                         | Unique, lowercase |
-| `passwordHash` | String                                       | bcrypt hash       |
-| `role`       | `super_admin` \| `admin` \| `lawyer` \| `clerk` | Default: `clerk`  |
-| `tenantId`   | ObjectId                                       | Ref → Tenant      |
+| Field          | Type                                            | Notes             |
+| -------------- | ----------------------------------------------- | ----------------- |
+| `name`         | String                                          | 2–80 chars        |
+| `email`        | String                                          | Unique, lowercase |
+| `passwordHash` | String                                          | bcrypt hash       |
+| `role`         | `super_admin` \| `admin` \| `lawyer` \| `clerk` | Default: `clerk`  |
+| `tenantId`     | ObjectId                                        | Ref → Tenant      |
 
 ### Tenant
 
-| Field  | Type   | Notes          |
-| ------ | ------ | -------------- |
+| Field  | Type   | Notes               |
+| ------ | ------ | ------------------- |
 | `name` | String | 2–120 chars, unique |
 
 ### Case

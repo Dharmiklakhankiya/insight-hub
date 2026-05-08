@@ -66,10 +66,10 @@ export default function TermsPage() {
                   1. Acceptance of Terms
                 </h2>
                 <p>
-                  By accessing the Sovereign Archive (the &ldquo;System&rdquo;), you
-                  acknowledge that you have read, understood, and agree to be
-                  bound by these Terms of Service. If you do not agree to these
-                  terms, you must cease all use of the System immediately.
+                  By accessing the Sovereign Archive (the &ldquo;System&rdquo;),
+                  you acknowledge that you have read, understood, and agree to
+                  be bound by these Terms of Service. If you do not agree to
+                  these terms, you must cease all use of the System immediately.
                 </p>
                 <p>
                   We reserve the right to modify these terms at any time. Your

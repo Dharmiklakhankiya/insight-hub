@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LockIcon from "@mui/icons-material/Lock";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -69,7 +66,9 @@ export default function LoginPage() {
       router.push(nextPath);
       router.refresh();
     } catch {
-      setApiError("Authentication failed. Verify your credentials and try again.");
+      setApiError(
+        "Authentication failed. Verify your credentials and try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -90,7 +89,13 @@ export default function LoginPage() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+      }}
+    >
       {/* ---- Left: Visual Anchor ---- */}
       <Box
         sx={{
@@ -148,23 +153,54 @@ export default function LoginPage() {
               opacity: 0.9,
             }}
           >
-            Precision in record-keeping, unshakeable in security. Welcome to the centralized intelligence hub for the modern legal professional.
+            Precision in record-keeping, unshakeable in security. Welcome to the
+            centralized intelligence hub for the modern legal professional.
           </Typography>
 
           <Box sx={{ display: "flex", gap: 6, mt: 8 }}>
             <Box>
-              <Typography sx={{ color: "#fff", fontFamily: "var(--font-manrope)", fontWeight: 700, fontSize: "1.5rem" }}>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontFamily: "var(--font-manrope)",
+                  fontWeight: 700,
+                  fontSize: "1.5rem",
+                }}
+              >
                 256-bit
               </Typography>
-              <Typography sx={{ color: C.onPrimaryContainer, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600 }}>
+              <Typography
+                sx={{
+                  color: C.onPrimaryContainer,
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.15em",
+                  fontWeight: 600,
+                }}
+              >
                 End-to-End Encryption
               </Typography>
             </Box>
             <Box>
-              <Typography sx={{ color: "#fff", fontFamily: "var(--font-manrope)", fontWeight: 700, fontSize: "1.5rem" }}>
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontFamily: "var(--font-manrope)",
+                  fontWeight: 700,
+                  fontSize: "1.5rem",
+                }}
+              >
                 RBAC
               </Typography>
-              <Typography sx={{ color: C.onPrimaryContainer, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: 600 }}>
+              <Typography
+                sx={{
+                  color: C.onPrimaryContainer,
+                  fontSize: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.15em",
+                  fontWeight: 600,
+                }}
+              >
                 Role-Based Access Control
               </Typography>
             </Box>
@@ -216,7 +252,10 @@ export default function LoginPage() {
           </Box>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <form
+            onSubmit={handleSubmit}
+            style={{ display: "flex", flexDirection: "column", gap: 28 }}
+          >
             {/* API Error */}
             {apiError && (
               <Box
@@ -258,19 +297,34 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 style={{
                   ...inputStyle,
-                  borderBottomColor: fieldErrors.email ? "#ba1a1a" : "transparent",
+                  borderBottomColor: fieldErrors.email
+                    ? "#ba1a1a"
+                    : "transparent",
                 }}
                 onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
-                onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.email ? "#ba1a1a" : "transparent")}
+                onBlur={(e) =>
+                  (e.target.style.borderBottomColor = fieldErrors.email
+                    ? "#ba1a1a"
+                    : "transparent")
+                }
               />
               {fieldErrors.email && (
-                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>{fieldErrors.email}</Typography>
+                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>
+                  {fieldErrors.email}
+                </Typography>
               )}
             </Box>
 
             {/* Password */}
             <Box>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 1,
+                }}
+              >
                 <label
                   style={{
                     fontSize: 11,
@@ -294,10 +348,18 @@ export default function LoginPage() {
                   style={{
                     ...inputStyle,
                     paddingRight: 48,
-                    borderBottomColor: fieldErrors.password ? "#ba1a1a" : "transparent",
+                    borderBottomColor: fieldErrors.password
+                      ? "#ba1a1a"
+                      : "transparent",
                   }}
-                  onFocus={(e) => (e.target.style.borderBottomColor = C.surfTint)}
-                  onBlur={(e) => (e.target.style.borderBottomColor = fieldErrors.password ? "#ba1a1a" : "transparent")}
+                  onFocus={(e) =>
+                    (e.target.style.borderBottomColor = C.surfTint)
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.borderBottomColor = fieldErrors.password
+                      ? "#ba1a1a"
+                      : "transparent")
+                  }
                 />
                 <button
                   type="button"
@@ -325,12 +387,16 @@ export default function LoginPage() {
                 </button>
               </Box>
               {fieldErrors.password && (
-                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>{fieldErrors.password}</Typography>
+                <Typography sx={{ color: "#ba1a1a", fontSize: 12, mt: 0.5 }}>
+                  {fieldErrors.password}
+                </Typography>
               )}
             </Box>
 
             {/* Submit */}
-            <Box sx={{ pt: 1, display: "flex", flexDirection: "column", gap: 1.5 }}>
+            <Box
+              sx={{ pt: 1, display: "flex", flexDirection: "column", gap: 1.5 }}
+            >
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -381,9 +447,18 @@ export default function LoginPage() {
             }}
           >
             {[
-              { icon: <LockIcon sx={{ fontSize: 18 }} />, label: "256-bit Encryption" },
-              { icon: <VerifiedUserIcon sx={{ fontSize: 18 }} />, label: "RBAC Protocol" },
-              { icon: <ShieldIcon sx={{ fontSize: 18 }} />, label: "Tenant Isolation" },
+              {
+                icon: <LockIcon sx={{ fontSize: 18 }} />,
+                label: "256-bit Encryption",
+              },
+              {
+                icon: <VerifiedUserIcon sx={{ fontSize: 18 }} />,
+                label: "RBAC Protocol",
+              },
+              {
+                icon: <ShieldIcon sx={{ fontSize: 18 }} />,
+                label: "Tenant Isolation",
+              },
             ].map((item) => (
               <Box
                 key={item.label}
@@ -398,7 +473,14 @@ export default function LoginPage() {
                 }}
               >
                 {item.icon}
-                <Typography sx={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "-0.02em" }}>
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "-0.02em",
+                  }}
+                >
                   {item.label}
                 </Typography>
               </Box>

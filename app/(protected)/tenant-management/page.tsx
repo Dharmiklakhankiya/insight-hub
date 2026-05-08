@@ -174,8 +174,7 @@ export default function TenantManagementPage() {
 
   /* ── Member count per tenant ── */
   const memberCount = useCallback(
-    (tenantId: string) =>
-      users.filter((u) => u.tenantId === tenantId).length,
+    (tenantId: string) => users.filter((u) => u.tenantId === tenantId).length,
     [users],
   );
 
