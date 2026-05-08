@@ -5,6 +5,7 @@ const isDev = process.env.NODE_ENV !== "production";
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' ${isDev ? "'unsafe-eval' 'unsafe-inline'" : ""};
+  style-src 'self' 'unsafe-inline';
   connect-src 'self';
   media-src 'self';
   object-src 'none';
