@@ -24,8 +24,8 @@ export function PortfolioSection({
   title = "Matter Overview",
   subtitle = "Comprehensive view of all active matters and filing statuses across your organization.",
   stats = [
-    { label: "Active Matters", value: "248" },
-    { label: "Filed Sports", value: "91" },
+    { label: "Active Matters", value: "248", color: "#002147" },
+    { label: "Filed Sports", value: "91", color: "#002147" },
     { label: "Open Tasks", value: "12", color: "#331d00" },
   ],
   activities = [
@@ -83,7 +83,7 @@ export function PortfolioSection({
                 <div key={idx} className="rounded-[1rem] bg-[#f6f4ef] p-6">
                   <div
                     className="text-[40px] font-black leading-none"
-                    style={{ color: stat.color || "#002147" }}
+                    style={{ color: stat.color }}
                   >
                     {stat.value}
                   </div>
