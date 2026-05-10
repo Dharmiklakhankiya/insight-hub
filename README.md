@@ -1,6 +1,6 @@
 # InsightHub
 
-A full-stack, multi-tenant legal case management platform built with **Next.js 16**, **MongoDB**, and **MUI**. InsightHub helps law firms track cases, manage documents, and surface analytics insights — all behind a secure, role-based authentication system with tenant isolation.
+A full-stack, multi-tenant legal case management platform built with **Next.js 16**, **MongoDB**, and **shadcn/ui**. InsightHub helps law firms track cases, manage documents, and surface analytics insights — all behind a secure, role-based authentication system with tenant isolation.
 
 ---
 
@@ -26,7 +26,7 @@ A full-stack, multi-tenant legal case management platform built with **Next.js 1
 | ------------ | -------------------------------------- |
 | Framework    | Next.js 16 (App Router)                |
 | Language     | TypeScript                             |
-| UI           | MUI (Material UI) v9 + Tailwind CSS v4 |
+| UI           | shadcn/ui + Tailwind CSS v4            |
 | Database     | MongoDB via Mongoose                   |
 | Auth         | JWT (`jsonwebtoken`) + `bcryptjs`      |
 | Validation   | Zod                                    |
