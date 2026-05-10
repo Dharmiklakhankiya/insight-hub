@@ -1,6 +1,6 @@
 "use client";
 
-import TrendingUpOutlined from "@mui/icons-material/TrendingUpOutlined";
+import { TrendingUp } from "lucide-react";
 
 export interface PortfolioActivity {
   icon: string;
@@ -62,7 +62,7 @@ export function PortfolioSection({
               Quarterly View
             </span>
             <span className="flex items-center gap-1 rounded border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-[#002147]">
-              <TrendingUpOutlined fontSize="small" /> Filters
+              <TrendingUp className="h-4 w-4" /> Filters
             </span>
           </div>
         </div>
@@ -74,7 +74,7 @@ export function PortfolioSection({
                 Matter Overview
               </h3>
               <span className="flex items-center gap-1 text-sm font-bold text-[#006d42]">
-                <TrendingUpOutlined fontSize="small" /> +12% this month
+                <TrendingUp className="h-4 w-4" /> +12% this month
               </span>
             </div>
 

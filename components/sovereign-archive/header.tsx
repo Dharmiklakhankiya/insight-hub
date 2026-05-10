@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import GavelOutlined from "@mui/icons-material/GavelOutlined";
+import Image from "next/image";
 
 export interface NavLink {
   label: string;
@@ -30,9 +30,16 @@ export function Header({
           href="#top"
           className="flex items-center gap-3 transition-opacity hover:opacity-80"
         >
-          <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#002147] text-white shadow-lg shadow-slate-950/20">
-            <GavelOutlined fontSize="small" />
+          <span className="relative flex h-14 w-14 items-center justify-center">
+            <Image
+              src="/icon.png"
+              alt="InsightHub Logo"
+              fill
+              className="object-contain"
+              sizes="56px"
+            />
           </span>
+
           <span className="font-['Manrope'] text-xl font-black uppercase tracking-tighter text-[#002147]">
             InsightHub
           </span>

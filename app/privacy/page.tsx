@@ -4,11 +4,11 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogHeader,
   DialogTitle,
-  IconButton,
-  Box,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function PrivacyPage() {
@@ -27,40 +27,20 @@ export default function PrivacyPage() {
   return (
     <>
       {open && (
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          maxWidth="md"
-          fullWidth
-          slotProps={{
-            paper: {
-              sx: {
-                borderRadius: 2,
-              },
-            },
-          }}
-        >
-          <DialogTitle sx={{ pr: 6 }}>
-            Privacy Policy
-            <IconButton
-              aria-label="close"
-              onClick={handleClose}
-              sx={{
-                position: "absolute",
-                right: 12,
-                top: 12,
-                color: (theme) => theme.palette.grey[500],
-                "&:hover": {
-                  backgroundColor: (theme) => theme.palette.action.hover,
-                },
-              }}
-              size="small"
-            >
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Box sx={{ py: 1 }} className="space-y-6">
+        <Dialog open={open} onOpenChange={handleClose}>
+          <DialogContent className="max-w-md rounded-lg">
+            <DialogHeader className="flex justify-between items-center pr-6">
+              <DialogTitle>Privacy Policy</DialogTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleClose}
+                className="absolute right-4 top-4"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </DialogHeader>
+            <div className="space-y-6 py-1">
               <section>
                 <h2 className="text-lg font-semibold mb-2">
                   1. Information We Collect
@@ -100,7 +80,7 @@ export default function PrivacyPage() {
                   disclosure, alteration, and destruction.
                 </p>
               </section>
-            </Box>
+            </div>
           </DialogContent>
         </Dialog>
       )}
