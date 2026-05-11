@@ -72,8 +72,12 @@ export default function Sidebar({
                   : "text-on-surface-variant hover:bg-surface-container-lowest/50"
               }`}
             >
-              <Icon name={item.icon} filled={isActive} />
-              <span className="font-body text-sm font-medium">
+              {/* Icon — shrink-0 prevents flex from squishing it */}
+              <span className="text-[20px] shrink-0 leading-none">
+                <Icon name={item.icon} filled={isActive} />
+              </span>
+              {/* Label — min-w-0 + truncate keeps it on one line */}
+              <span className="font-body text-sm font-medium min-w-0 truncate">
                 {item.label}
               </span>
             </Link>
@@ -87,27 +91,33 @@ export default function Sidebar({
           href="/cases"
           className="w-full bg-gradient-to-r from-primary to-primary-container text-white py-3 rounded-md font-body text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
         >
-          <Icon name="add" className="text-sm" />
+          <span className="text-[18px] leading-none shrink-0">
+            <Icon name="add" />
+          </span>
           New Case
         </Link>
 
         {currentUser && (
           <div className="flex items-center gap-3 mt-6">
-            <Avatar name={currentUser.name} size="md" />
+            <div className="shrink-0">
+              <Avatar name={currentUser.name} size="md" />
+            </div>
             <div className="flex flex-col flex-1 min-w-0">
               <span className="text-sm font-bold text-primary truncate">
                 {currentUser.name}
               </span>
-              <span className="text-[10px] uppercase text-on-surface-variant tracking-wider">
+              <span className="text-[10px] uppercase text-on-surface-variant tracking-wider truncate">
                 {currentUser.role.replace("_", " ")}
               </span>
             </div>
             <button
               onClick={onLogout}
-              className="text-on-surface-variant hover:text-error transition-colors p-1 shrink-0"
+              className="text-on-surface-variant hover:text-error transition-colors p-1 shrink-0 flex items-center justify-center"
               title="Sign out"
             >
-              <Icon name="logout" className="text-lg" />
+              <span className="text-[20px] leading-none">
+                <Icon name="logout" />
+              </span>
             </button>
           </div>
         )}
