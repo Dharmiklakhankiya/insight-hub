@@ -7,6 +7,7 @@ import {
   TableBody,
   TableCell,
   TableHead,
+  TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState } from "react";
@@ -83,12 +84,12 @@ export default function AnalyticsPage() {
             </Alert>
           ) : (
             <Table>
-              <TableHead>
+              <TableHeader>
                 <TableRow>
                   <TableCell>Case Type</TableCell>
                   <TableCell className="text-right">Count</TableCell>
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {data.caseTypeDistribution.map((item) => (
                   <TableRow key={item.case_type}>
@@ -115,12 +116,12 @@ export default function AnalyticsPage() {
             </Alert>
           ) : (
             <Table>
-              <TableHead>
+              <TableHeader>
                 <TableRow>
                   <TableCell>Lawyer</TableCell>
                   <TableCell className="text-right">Assigned Cases</TableCell>
                 </TableRow>
-              </TableHead>
+              </TableHeader>
               <TableBody>
                 {data.lawyerWorkload.map((item) => (
                   <TableRow key={item.lawyer}>
